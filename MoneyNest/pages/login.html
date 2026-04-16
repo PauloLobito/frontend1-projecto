@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoneyNest - Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/auth.css">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <div class="auth-header">
+          <div class="auth-logo">$</div>
+          <h1>Bem-vindo de volta</h1>
+          <p>Entre para gerenciar suas finanças</p>
+        </div>
+
+        <div id="message-container"></div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉</span>
+              <input type="email" class="form-input with-icon" id="email" placeholder="seu@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Senha</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" class="form-input with-icon" id="password" placeholder="••••••••" required>
+              <button type="button" class="password-toggle" onclick="togglePassword('password', this)">
+                <span>👁</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember">
+              <div class="checkbox-custom"></div>
+              <span>Lembrar-me</span>
+            </label>
+            <a href="#" class="forgot-link">Esqueceu a senha?</a>
+          </div>
+
+          <button type="submit" class="btn-auth" id="login-btn">Entrar</button>
+        </form>
+
+        <div class="divider">
+          <span>ou continue com</span>
+        </div>
+
+        <div class="social-login">
+          <button type="button" class="btn-social">
+            <span>G</span>
+            <span>Google</span>
+          </button>
+          <button type="button" class="btn-social">
+            <span></span>
+            <span>Apple</span>
+          </button>
+        </div>
+
+        <div class="auth-footer">
+          <p>Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/auth.js"></script>
+</body>
+</html>

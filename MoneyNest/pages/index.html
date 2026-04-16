@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoneyNest - Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">$</div>
+      <div class="brand">Money<br>Nest</div>
+
+      <ul class="months">
+        <li>Jan</li>
+        <li>Fev</li>
+        <li>Mar</li>
+        <li>Abr</li>
+        <li>Mai</li>
+        <li class="active">Jun</li>
+        <li>Jul</li>
+        <li>Ago</li>
+        <li>Set</li>
+        <li>Out</li>
+        <li>Nov</li>
+        <li>Dez</li>
+      </ul>
+
+      <ul class="nav-links">
+        <li class="active">📊</li>
+        <li>💳</li>
+        <li>📈</li>
+        <li>👥</li>
+        <li>⚙️</li>
+      </ul>
+
+      <div class="nav-bottom">
+        <a href="login.html" style="text-decoration: none; color: var(--muted); font-size: 13px; text-align: center; padding: 8px;">Sair</a>
+        <div class="profile-mini"></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="header">
+        <div class="header-left">
+          <h1>Dashboard</h1>
+          <p>Visão geral das suas finanças</p>
+        </div>
+        <div class="header-right">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="Buscar...">
+          </div>
+          <div class="notifications">🔔</div>
+          <a href="login.html" class="btn-auth" style="width: auto; padding: 12px 24px; font-size: 13px; text-decoration: none; display: inline-block;">Entrar</a>
+        </div>
+      </header>
+
+      <div class="dashboard-grid">
+        <div class="balance-card">
+          <div class="balance-header">
+            <h2>Saldo Total</h2>
+            <div class="period">
+              <span>Junho 2025</span>
+              <span>▼</span>
+            </div>
+          </div>
+          
+          <div class="balance-amount">
+            <span class="currency">R$</span>
+            <span class="amount">14.822<span class="decimal">,00</span></span>
+          </div>
+          
+          <div class="balance-change">
+            <div class="change-icon">▲</div>
+            <span class="change-value">+2,5%</span>
+            <span class="change-period">vs mês anterior</span>
+          </div>
+          
+          <div class="chart-area">
+            <svg class="chart-svg" viewBox="0 0 600 180" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#18d2eb;stop-opacity:0.4"/>
+                  <stop offset="100%" style="stop-color:#18d2eb;stop-opacity:0"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,140 C50,120 100,80 150,90 S250,130 300,100 S400,40 450,60 S550,90 600,50 V180 H0 Z" fill="url(#chartGradient)"/>
+              <path d="M0,140 C50,120 100,80 150,90 S250,130 300,100 S400,40 450,60 S550,90 600,50" fill="none" stroke="#18d2eb" stroke-width="3"/>
+              <circle cx="450" cy="60" r="6" fill="#18d2eb"/>
+              <circle cx="450" cy="60" r="12" fill="rgba(24,210,235,0.3)"/>
+            </svg>
+          </div>
+          
+          <div class="chart-legend">
+            <div class="legend-item income">
+              <div class="dot"></div>
+              <span>Receitas</span>
+            </div>
+            <div class="legend-item expense">
+              <div class="dot"></div>
+              <span>Despesas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-widgets">
+          <div class="quick-transfer">
+            <h3>Transferência Rápida</h3>
+            <div class="transfer-amount">
+              <span class="currency">R$</span>
+              <input type="text" placeholder="0,00">
+            </div>
+            <div class="transfer-to">
+              <div class="contact-avatars">
+                <div class="avatar add">+</div>
+                <div class="avatar"><img src="https://i.pravatar.cc/100?img=1" alt=""></div>
+                <div class="avatar"><img src="https://i.pravatar.cc/100?img=2" alt=""></div>
+                <div class="avatar"><img src="https://i.pravatar.cc/100?img=3" alt=""></div>
+              </div>
+            </div>
+            <div class="selected-contact">
+              <div class="avatar"><img src="https://i.pravatar.cc/100?img=1" alt=""></div>
+              <div class="info">
+                <div class="name">Sarah Anderson</div>
+                <div class="role">Conta Corrente</div>
+              </div>
+            </div>
+            <button class="btn-transfer">Transferir</button>
+          </div>
+
+          <div class="recent-transactions">
+            <div class="section-header">
+              <h3>Transações Recentes</h3>
+              <a href="#">Ver todas</a>
+            </div>
+            <div class="transactions-list">
+              <div class="transaction-item">
+                <div class="transaction-left">
+                  <div class="transaction-icon shopping">🛒</div>
+                  <div class="transaction-info">
+                    <div class="name">Amazon</div>
+                    <div class="date">Hoje, 14:30</div>
+                  </div>
+                </div>
+                <div class="transaction-amount">
+                  <div class="amount expense">-R$ 299,90</div>
+                  <div class="card">••••4820</div>
+                </div>
+              </div>
+              <div class="transaction-item">
+                <div class="transaction-left">
+                  <div class="transaction-icon food">🍔</div>
+                  <div class="transaction-info">
+                    <div class="name">Ifood</div>
+                    <div class="date">Ontem, 20:15</div>
+                  </div>
+                </div>
+                <div class="transaction-amount">
+                  <div class="amount expense">-R$ 87,50</div>
+                  <div class="card">••••4820</div>
+                </div>
+              </div>
+              <div class="transaction-item">
+                <div class="transaction-left">
+                  <div class="transaction-icon salary">💰</div>
+                  <div class="transaction-info">
+                    <div class="name">Salário</div>
+                    <div class="date">15 Jun, 09:00</div>
+                  </div>
+                </div>
+                <div class="transaction-amount">
+                  <div class="amount income">+R$ 8.500,00</div>
+                  <div class="card">NuConta</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="expense-categories">
+        <div class="section-header">
+          <h3>Categorias de Despesas</h3>
+          <a href="#">Detalhes</a>
+        </div>
+        <div class="categories-grid">
+          <div class="category-item">
+            <div class="category-icon" style="background: rgba(124,77,255,.2);">🏠</div>
+            <div class="category-info">
+              <div class="name">Moradia</div>
+              <div class="amount">R$ 3.452</div>
+            </div>
+          </div>
+          <div class="category-item">
+            <div class="category-icon" style="background: rgba(255,77,148,.2);">👗</div>
+            <div class="category-info">
+              <div class="name">Vestuário</div>
+              <div class="amount">R$ 892</div>
+            </div>
+          </div>
+          <div class="category-item">
+            <div class="category-icon" style="background: rgba(24,210,235,.2);">🍔</div>
+            <div class="category-info">
+              <div class="name">Alimentação</div>
+              <div class="amount">R$ 1.847</div>
+            </div>
+          </div>
+          <div class="category-item">
+            <div class="category-icon" style="background: rgba(255,138,42,.2);">🚗</div>
+            <div class="category-info">
+              <div class="name">Transporte</div>
+              <div class="amount">R$ 2.190</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-card">
+        <div class="profile-avatar">
+          <img src="https://i.pravatar.cc/200?img=11" alt="Profile">
+        </div>
+        <div class="profile-info">
+          <div class="name">Simon K. Jimmy</div>
+          <div class="role">Consultor Financeiro</div>
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <div class="value">R$ 278k</div>
+              <div class="label">Patrimônio</div>
+            </div>
+            <div class="profile-stat">
+              <div class="value">+12%</div>
+              <div class="label">Crescimento</div>
+            </div>
+            <div class="profile-stat">
+              <div class="value">24</div>
+              <div class="label">Transações</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="#" class="active">🏠</a>
+    <a href="#">📊</a>
+    <a href="#">📈</a>
+    <a href="#">👤</a>
+  </nav>
+</body>
+</html>
