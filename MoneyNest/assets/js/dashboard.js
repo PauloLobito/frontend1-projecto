@@ -461,9 +461,9 @@ function renderChart() {
       <rect x="${expenseX}" y="${expenseY}" width="${barWidth}" height="${expenseHeight}" fill="#ff5722" rx="4"/>
     `;
     
-    const labelY = chartBottom + 15;
+    const labelY = chartBottom + 18;
     barsHTML += `
-      <text x="${groupX}" y="${labelY}" text-anchor="middle" fill="var(--text-muted)" font-size="12">${monthNames[months[i].month]}</text>
+      <text x="${groupX}" y="${labelY}" text-anchor="middle" fill="#888" font-size="14" font-weight="600">${monthNames[months[i].month]} ${months[i].year}</text>
     `;
   });
   
