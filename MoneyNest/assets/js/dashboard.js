@@ -278,6 +278,15 @@ function updateDashboardWithRecords() {
     revenueEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
   }
   
+  // Património Total (todos os registos)
+  const totalAllIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const totalAllExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  const totalPatrimony = totalAllIncome - totalAllExpense;
+  const patrimonyEl = document.querySelector('.hero .value');
+  if (patrimonyEl) {
+    patrimonyEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalPatrimony)}`;
+  }
+   
   // Meta de receita
   const goalAmount = settings.revenueGoal || 0;
   const progressPercent = goalAmount > 0 ? Math.min(Math.round((totalIncome / goalAmount) * 100), 100) : 0;
