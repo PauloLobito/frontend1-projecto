@@ -490,17 +490,25 @@ function onCategoryChange(modal) {
   
   if (!categorySelect) return;
   
-  const category = categorySelect.value.toLowerCase();
-  const isPets = category.includes('pet') || category.includes('animais') || category.includes('pets');
+  const category = categorySelect.value;
+  if (!category) return;
+  
+  const categoryLower = category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  
+  // Verificar se a categoria é relacionada a pets/animais
+  const petKeywords = ['pet', 'pets', 'animal', 'animais', 'cao', 'cão', 'gato', 'passeio', 'veterin', 'clinic'];
+  const isPets = petKeywords.some(keyword => categoryLower.includes(keyword));
   
   if (isPets) {
     textGroup.style.display = 'none';
     selectGroup.style.display = '';
     textInput.value = '';
+    if (selectInput) selectInput.value = '';
   } else {
     textGroup.style.display = '';
     selectGroup.style.display = 'none';
-    selectInput.value = '';
+    textInput.value = '';
+    if (selectInput) selectInput.value = '';
   }
 }
 
