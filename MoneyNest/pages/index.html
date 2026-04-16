@@ -48,9 +48,9 @@
 
         <div class="date-box" id="currentDate"></div>
 
-        <div class="auth-header">
-          <a href="login.html" class="btn-auth-outline">Iniciar Sessão</a>
-          <a href="register.html" class="btn-auth-primary">Registar</a>
+        <div class="auth-header" id="authSection">
+          <a href="login.html" class="btn-auth-outline" id="loginBtn">Iniciar Sessão</a>
+          <a href="register.html" class="btn-auth-primary" id="registerBtn">Registar</a>
         </div>
       </section>
 
@@ -224,6 +224,31 @@
         li.classList.add('active');
       }
     });
+
+    // Verifica se o utilizador está logado
+    const loggedInUser = localStorage.getItem('moneynest_loggedIn');
+    
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      const authSection = document.getElementById('authSection');
+      
+      authSection.innerHTML = `
+        <div class="user-profile">
+          <div class="user-info">
+            <span class="user-name">${user.firstName} ${user.lastName}</span>
+            <span class="user-email">${user.email}</span>
+          </div>
+          <div class="user-avatar">${user.firstName.charAt(0).toUpperCase()}</div>
+          <button class="btn-logout" onclick="logout()">Sair</button>
+        </div>
+      `;
+    }
+
+    // Função para fazer logout
+    function logout() {
+      localStorage.removeItem('moneynest_loggedIn');
+      window.location.reload();
+    }
   </script>
 </body>
 </html>
