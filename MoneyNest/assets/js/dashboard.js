@@ -384,6 +384,9 @@ function updateDashboardWithRecords() {
       }
     });
   }
+  
+  // Renderizar gráfico de barras "Receitas e Despesas"
+  renderChart();
 }
 
 // ================================================
@@ -392,6 +395,82 @@ function updateDashboardWithRecords() {
 function logout() {
   localStorage.removeItem('moneynest_loggedIn');
   window.location.reload();
+}
+
+// ================================================
+// FUNÇÃO: renderChart
+// ================================================
+function renderChart() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const records = settings.records || [];
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
+  
+  const months = [];
+  const hoje = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+    months.push({
+      month: d.getMonth(),
+      year: d.getFullYear()
+    });
+  }
+  
+  const monthlyData = months.map(m => {
+    const monthRecords = records.filter(r => {
+      const d = new Date(r.date);
+      return d.getMonth() === m.month && d.getFullYear() === m.year;
+    });
+    const income = monthRecords.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
+    const expense = monthRecords.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
+    return { income, expense };
+  });
+  
+  const maxValue = Math.max(...monthlyData.map(d => Math.max(d.income, d.expense)), 1);
+  const chartHeight = 200;
+  const chartWidth = 760;
+  const chartLeft = 40;
+  const chartRight = 730;
+  const chartTop = 20;
+  const chartBottom = 220;
+  const barGroupWidth = (chartRight - chartLeft) / months.length;
+  const barWidth = barGroupWidth * 0.35;
+  
+  let barsHTML = `
+    <g opacity="0.18" stroke="#b9c4ff">
+      <path d="M40 20 H730"/><path d="M40 60 H730"/><path d="M40 100 H730"/><path d="M40 140 H730"/><path d="M40 180 H730"/><path d="M40 220 H730"/>
+      <path d="M40 20 V220"/><path d="M100 20 V220"/><path d="M160 20 V220"/><path d="M220 20 V220"/><path d="M280 20 V220"/><path d="M340 20 V220"/><path d="M400 20 V220"/><path d="M460 20 V220"/><path d="M520 20 V220"/><path d="M580 20 V220"/><path d="M640 20 V220"/><path d="M700 20 V220"/>
+    </g>
+  `;
+  
+  const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  
+  monthlyData.forEach((data, i) => {
+    const groupX = chartLeft + (i + 0.5) * barGroupWidth;
+    const incomeHeight = (data.income / maxValue) * (chartBottom - chartTop);
+    const expenseHeight = (data.expense / maxValue) * (chartBottom - chartTop);
+    
+    const incomeY = chartBottom - incomeHeight;
+    const expenseY = chartBottom - expenseHeight;
+    
+    const incomeX = groupX - barWidth - 2;
+    const expenseX = groupX + 2;
+    
+    barsHTML += `
+      <rect x="${incomeX}" y="${incomeY}" width="${barWidth}" height="${incomeHeight}" fill="#00c853" rx="4"/>
+      <rect x="${expenseX}" y="${expenseY}" width="${barWidth}" height="${expenseHeight}" fill="#ff5722" rx="4"/>
+    `;
+    
+    const labelY = chartBottom + 15;
+    barsHTML += `
+      <text x="${groupX}" y="${labelY}" text-anchor="middle" fill="var(--text-muted)" font-size="12">${monthNames[months[i].month]}</text>
+    `;
+  });
+  
+  const svg = document.querySelector('.chart-wrap svg');
+  if (svg) {
+    svg.innerHTML = barsHTML;
+  }
 }
 
 // ================================================
