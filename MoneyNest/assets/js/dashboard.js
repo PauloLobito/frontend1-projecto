@@ -406,15 +406,8 @@ function renderChart() {
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
   
-  const months = [];
-  const hoje = new Date();
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
-    months.push({
-      month: d.getMonth(),
-      year: d.getFullYear()
-    });
-  }
+  const currentYear = new Date().getFullYear();
+  const months = Array.from({ length: 12 }, (_, i) => ({ month: i, year: currentYear }));
   
   const monthlyData = months.map(m => {
     const monthRecords = records.filter(r => {
@@ -428,24 +421,23 @@ function renderChart() {
   
   const maxValue = Math.max(...monthlyData.map(d => Math.max(d.income, d.expense)), 1);
   const chartHeight = 200;
-  const chartWidth = 760;
   const chartLeft = 40;
-  const chartRight = 730;
+  const chartRight = 760;
   const chartTop = 20;
   const chartBottom = 220;
-  const barGroupWidth = (chartRight - chartLeft) / months.length;
+  const barGroupWidth = (chartRight - chartLeft) / 12;
   const barWidth = barGroupWidth * 0.35;
   
   let barsHTML = `
     <g opacity="0.18" stroke="#b9c4ff">
-      <path d="M40 20 H730"/><path d="M40 60 H730"/><path d="M40 100 H730"/><path d="M40 140 H730"/><path d="M40 180 H730"/><path d="M40 220 H730"/>
-      <path d="M40 20 V220"/><path d="M100 20 V220"/><path d="M160 20 V220"/><path d="M220 20 V220"/><path d="M280 20 V220"/><path d="M340 20 V220"/><path d="M400 20 V220"/><path d="M460 20 V220"/><path d="M520 20 V220"/><path d="M580 20 V220"/><path d="M640 20 V220"/><path d="M700 20 V220"/>
+      <path d="M40 20 H760"/><path d="M40 60 H760"/><path d="M40 100 H760"/><path d="M40 140 H760"/><path d="M40 180 H760"/><path d="M40 220 H760"/>
     </g>
   `;
   
   const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   
-  monthlyData.forEach((data, i) => {
+  months.forEach((m, i) => {
+    const data = monthlyData[i];
     const groupX = chartLeft + (i + 0.5) * barGroupWidth;
     const incomeHeight = (data.income / maxValue) * (chartBottom - chartTop);
     const expenseHeight = (data.expense / maxValue) * (chartBottom - chartTop);
@@ -463,13 +455,14 @@ function renderChart() {
     
     const labelY = chartBottom + 18;
     barsHTML += `
-      <text x="${groupX}" y="${labelY}" text-anchor="middle" fill="#888" font-size="14" font-weight="600">${monthNames[months[i].month]} ${months[i].year}</text>
+      <text x="${groupX}" y="${labelY}" text-anchor="middle" fill="#888" font-size="14" font-weight="600">${monthNames[i]}</text>
     `;
   });
   
   const svg = document.querySelector('.chart-wrap svg');
   if (svg) {
     svg.innerHTML = barsHTML;
+    svg.setAttribute('viewBox', `0 0 ${chartRight} 260`);
   }
 }
 
