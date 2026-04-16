@@ -242,6 +242,68 @@
   border-color: var(--cyan);
 }
 
+.input-with-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-with-btn .setting-input {
+  width: 200px;
+}
+
+.input-with-btn .setting-input:disabled {
+  background: var(--panel-dark);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.input-with-btn .setting-input:not(:disabled) {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.btn-edit {
+  padding: 8px 12px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.btn-edit:hover {
+  background: rgba(24,210,235,.1);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.btn-edit.active {
+  background: rgba(35, 224, 161, 0.15);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.btn-save-profile {
+  padding: 8px 16px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .3s ease;
+  display: none;
+}
+
+.btn-save-profile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 210, 235, 0.3);
+}
+
 @media (max-width: 768px) {
   .settings-buttons {
     flex-direction: column;

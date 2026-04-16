@@ -59,7 +59,10 @@
                 <span class="setting-label">Nome</span>
                 <span class="setting-desc">O seu nome completo</span>
               </div>
-              <input type="text" class="setting-input" value="Utilizador" id="settingName">
+              <div class="input-with-btn">
+                <input type="text" class="setting-input" id="settingName" disabled>
+                <button class="btn-edit" onclick="toggleEditProfile()" id="editNameBtn">✏️</button>
+              </div>
             </div>
             
             <div class="setting-item">
@@ -67,7 +70,10 @@
                 <span class="setting-label">Email</span>
                 <span class="setting-desc">Email associado à conta</span>
               </div>
-              <input type="email" class="setting-input" value="utilizador@email.com" id="settingEmail">
+              <div class="input-with-btn">
+                <input type="email" class="setting-input" id="settingEmail" disabled>
+                <button class="btn-edit" onclick="toggleEditProfile()" id="editEmailBtn">✏️</button>
+              </div>
             </div>
             
             <div class="setting-item">

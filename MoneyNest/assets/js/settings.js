@@ -54,7 +54,14 @@ const translations = {
     wrongPassword: 'Palavra-passe atual incorreta.',
     passwordTooShort: 'A nova palavra-passe deve ter pelo menos 6 caracteres.',
     passwordMismatch: 'As palavras-passe não coincidem.',
-    passwordChanged: 'Palavra-passe alterada com sucesso!'
+    passwordChanged: 'Palavra-passe alterada com sucesso!',
+    editProfile: 'Editar perfil',
+    saveProfile: 'Guardar',
+    cancelEdit: 'Cancelar',
+    profileUpdated: 'Perfil atualizado com sucesso!',
+    notLoggedInProfile: 'Inicie sessão para ver o seu perfil.',
+    guestUser: 'Visitante',
+    guestEmail: 'visitante@moneynest.com'
   },
   'pt-BR': {
     title: 'Configurações',
@@ -106,7 +113,14 @@ const translations = {
     wrongPassword: 'Senha atual incorreta.',
     passwordTooShort: 'A nova senha deve ter pelo menos 6 caracteres.',
     passwordMismatch: 'As senhas não coincidem.',
-    passwordChanged: 'Senha alterada com sucesso!'
+    passwordChanged: 'Senha alterada com sucesso!',
+    editProfile: 'Editar perfil',
+    saveProfile: 'Guardar',
+    cancelEdit: 'Cancelar',
+    profileUpdated: 'Perfil atualizado com sucesso!',
+    notLoggedInProfile: 'Faça login para ver o seu perfil.',
+    guestUser: 'Visitante',
+    guestEmail: 'visitante@moneynest.com'
   },
   'en': {
     title: 'Settings',
@@ -158,7 +172,14 @@ const translations = {
     wrongPassword: 'Current password is incorrect.',
     passwordTooShort: 'New password must be at least 6 characters.',
     passwordMismatch: 'Passwords do not match.',
-    passwordChanged: 'Password changed successfully!'
+    passwordChanged: 'Password changed successfully!',
+    editProfile: 'Edit profile',
+    saveProfile: 'Save',
+    cancelEdit: 'Cancel',
+    profileUpdated: 'Profile updated successfully!',
+    notLoggedInProfile: 'Log in to view your profile.',
+    guestUser: 'Guest',
+    guestEmail: 'guest@moneynest.com'
   },
   'es': {
     title: 'Configuración',
@@ -210,7 +231,14 @@ const translations = {
     wrongPassword: 'Contraseña actual incorrecta.',
     passwordTooShort: 'La nueva contraseña debe tener al menos 6 caracteres.',
     passwordMismatch: 'Las contraseñas no coinciden.',
-    passwordChanged: '¡Contraseña cambiada con éxito!'
+    passwordChanged: '¡Contraseña cambiada con éxito!',
+    editProfile: 'Editar perfil',
+    saveProfile: 'Guardar',
+    cancelEdit: 'Cancelar',
+    profileUpdated: '¡Perfil actualizado con éxito!',
+    notLoggedInProfile: 'Inicia sesión para ver tu perfil.',
+    guestUser: 'Invitado',
+    guestEmail: 'invitado@moneynest.com'
   }
 };
 
@@ -308,6 +336,119 @@ function loadAndApplyTheme() {
       }
     }, 60000);
   }
+}
+
+// ================================================
+// FUNÇÃO: loadUserProfile
+// ================================================
+function loadUserProfile() {
+  const loggedInUser = localStorage.getItem('moneynest_loggedIn');
+  const nameInput = document.getElementById('settingName');
+  const emailInput = document.getElementById('settingEmail');
+  
+  if (loggedInUser) {
+    const user = JSON.parse(loggedInUser);
+    nameInput.value = `${user.firstName} ${user.lastName}`;
+    emailInput.value = user.email;
+  } else {
+    nameInput.value = '';
+    emailInput.value = '';
+  }
+}
+
+// ================================================
+// VARIÁVEL: isEditingProfile
+// ================================================
+let isEditingProfile = false;
+
+// ================================================
+// FUNÇÃO: toggleEditProfile
+// ================================================
+function toggleEditProfile() {
+  const nameInput = document.getElementById('settingName');
+  const emailInput = document.getElementById('settingEmail');
+  const editBtns = document.querySelectorAll('.btn-edit');
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  const loggedInUser = localStorage.getItem('moneynest_loggedIn');
+  
+  if (!loggedInUser) {
+    return;
+  }
+  
+  isEditingProfile = !isEditingProfile;
+  
+  if (isEditingProfile) {
+    nameInput.disabled = false;
+    emailInput.disabled = false;
+    editBtns.forEach(btn => {
+      btn.textContent = '✓';
+      btn.classList.add('active');
+    });
+    nameInput.focus();
+  } else {
+    nameInput.disabled = true;
+    emailInput.disabled = true;
+    editBtns.forEach(btn => {
+      btn.textContent = '✏️';
+      btn.classList.remove('active');
+    });
+  }
+}
+
+// ================================================
+// FUNÇÃO: saveProfileChanges
+// ================================================
+function saveProfileChanges() {
+  const nameInput = document.getElementById('settingName');
+  const emailInput = document.getElementById('settingEmail');
+  const editBtns = document.querySelectorAll('.btn-edit');
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  const loggedInUser = localStorage.getItem('moneynest_loggedIn');
+  
+  if (!loggedInUser) {
+    return;
+  }
+  
+  const user = JSON.parse(loggedInUser);
+  const nameParts = nameInput.value.trim().split(' ');
+  const firstName = nameParts[0] || '';
+  const lastName = nameParts.slice(1).join(' ') || '';
+  
+  user.firstName = firstName;
+  user.lastName = lastName;
+  user.email = emailInput.value.trim();
+  
+  localStorage.setItem('moneynest_loggedIn', JSON.stringify(user));
+  
+  const users = JSON.parse(localStorage.getItem('moneynest_users') || '[]');
+  const userIndex = users.findIndex(u => u.email === user.email || u.email === emailInput.dataset.originalEmail);
+  if (userIndex !== -1) {
+    users[userIndex].firstName = firstName;
+    users[userIndex].lastName = lastName;
+    users[userIndex].email = emailInput.value.trim();
+    localStorage.setItem('moneynest_users', JSON.stringify(users));
+  }
+  
+  nameInput.disabled = true;
+  emailInput.disabled = true;
+  editBtns.forEach(btn => {
+    btn.textContent = '✏️';
+    btn.classList.remove('active');
+  });
+  isEditingProfile = false;
+  
+  const btn = document.querySelector('.btn-save');
+  const originalText = btn.textContent;
+  btn.textContent = '✓';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => {
+    btn.textContent = originalText;
+    btn.style.background = '';
+  }, 2000);
 }
 
 // ================================================
@@ -493,6 +634,7 @@ function loadSettings() {
 // ================================================
 document.addEventListener('DOMContentLoaded', function() {
   loadSettings();
+  loadUserProfile();
   loadAndApplyTheme();
   applyLanguageSettings();
   
@@ -516,6 +658,18 @@ document.addEventListener('DOMContentLoaded', function() {
     currentSettings.theme = this.value;
     localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
     applyTheme(this.value);
+  });
+
+  document.getElementById('settingName').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && isEditingProfile) {
+      saveProfileChanges();
+    }
+  });
+
+  document.getElementById('settingEmail').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && isEditingProfile) {
+      saveProfileChanges();
+    }
   });
 
   document.getElementById('passwordModal').addEventListener('click', function(e) {
