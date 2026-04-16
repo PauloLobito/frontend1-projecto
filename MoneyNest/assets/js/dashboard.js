@@ -161,10 +161,10 @@ function applySettings() {
     el.textContent = symbol;
   });
 
-  // Atualizar idioma - Mês atual no sidebar
+  // Atualizar idioma - Mês atual no sidebar (usa top-level months)
   const mesesSidebar = document.querySelectorAll('.months li');
   mesesSidebar.forEach((li, index) => {
-    li.textContent = t.months[index];
+    li.textContent = translations[lang].months[index];
   });
 
   // Destaca o mês atual na sidebar
