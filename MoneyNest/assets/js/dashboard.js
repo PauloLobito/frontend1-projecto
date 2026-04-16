@@ -478,10 +478,17 @@ function renderChart() {
   const assetsBalance = document.getElementById('assetsBalance');
   const assetsPatrimony = document.getElementById('assetsPatrimony');
   
-  if (assetsIncome) assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
+  if (assetsIncome) {
+    assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
+    console.log('assetsIncome updated');
+  } else {
+    console.log('assetsIncome NOT FOUND');
+  }
   if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
   if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
   if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
+  
+  console.log('All assets updated');
   
   console.log('Chart rendered, records:', records.length, 'barsHTML length:', barsHTML.length);
 }
