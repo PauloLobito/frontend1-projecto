@@ -185,7 +185,16 @@ const currencies = {
 // FUNÇÃO: applyTheme
 // ================================================
 function applyTheme(theme) {
-  if (theme === 'light') {
+  const hour = new Date().getHours();
+  const isDaytime = hour >= 6 && hour < 18;
+
+  if (theme === 'auto') {
+    if (isDaytime) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  } else if (theme === 'light') {
     document.documentElement.setAttribute('data-theme', 'light');
   } else {
     document.documentElement.removeAttribute('data-theme');
@@ -199,6 +208,15 @@ function loadAndApplyTheme() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const theme = settings.theme || 'dark';
   applyTheme(theme);
+  
+  if (theme === 'auto') {
+    setInterval(() => {
+      const currentSettings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+      if (currentSettings.theme === 'auto') {
+        applyTheme('auto');
+      }
+    }, 60000);
+  }
 }
 
 // ================================================
