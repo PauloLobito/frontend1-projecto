@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="../assets/css/auth.css">
   <style>
     .settings-container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       padding: 40px 20px;
     }
@@ -28,39 +28,50 @@
       color: var(--muted);
     }
 
-    .settings-grid {
-      display: grid;
-      grid-template-columns: 240px 1fr;
-      gap: 32px;
-    }
-
-    .settings-nav {
+    .settings-buttons {
       display: flex;
-      flex-direction: column;
-      gap: 8px;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
     }
 
-    .settings-nav-item {
-      padding: 14px 18px;
+    .btn-save {
+      flex: 1;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--cyan), var(--purple));
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(24,210,235,.3);
+    }
+
+    .btn-reset {
+      padding: 16px 24px;
+      background: var(--panel-dark);
+      border: 1px solid var(--line);
       border-radius: 12px;
       color: var(--muted);
-      font-weight: 500;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all .2s ease;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      transition: all .3s ease;
     }
 
-    .settings-nav-item:hover {
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-    }
-
-    .settings-nav-item.active {
-      background: linear-gradient(135deg, rgba(24,210,235,.15), rgba(124,77,255,.15));
-      color: var(--cyan);
-      border: 1px solid rgba(24,210,235,.2);
+    .btn-reset:hover {
+      background: rgba(255,91,114,.1);
+      border-color: var(--red);
+      color: var(--red);
     }
 
     .settings-content {
@@ -172,6 +183,7 @@
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       cursor: pointer;
+      min-width: 180px;
     }
 
     .setting-select:focus {
@@ -187,7 +199,7 @@
       color: var(--text);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
-      width: 200px;
+      width: 220px;
     }
 
     .setting-input:focus {
@@ -195,55 +207,37 @@
       border-color: var(--cyan);
     }
 
-    .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 24px;
-      background: var(--panel);
+    .btn-change {
+      padding: 10px 20px;
+      background: var(--panel-dark);
       border: 1px solid var(--line);
-      border-radius: 12px;
-      color: var(--muted);
+      border-radius: 10px;
+      color: var(--cyan);
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: all .3s ease;
-      margin-bottom: 24px;
     }
 
-    .btn-back:hover {
-      background: var(--panel-soft);
-      color: var(--text);
-    }
-
-    .btn-save {
-      padding: 14px 32px;
-      background: linear-gradient(135deg, var(--cyan), var(--purple));
-      border: none;
-      border-radius: 12px;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .3s ease;
-    }
-
-    .btn-save:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(24,210,235,.3);
+    .btn-change:hover {
+      background: rgba(24,210,235,.1);
+      border-color: var(--cyan);
     }
 
     @media (max-width: 768px) {
-      .settings-grid {
-        grid-template-columns: 1fr;
+      .settings-buttons {
+        flex-direction: column;
       }
       
-      .settings-nav {
-        flex-direction: row;
-        overflow-x: auto;
-        gap: 8px;
+      .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
       }
       
-      .settings-nav-item {
-        white-space: nowrap;
+      .setting-input,
+      .setting-select {
+        width: 100%;
       }
     }
   </style>
@@ -284,198 +278,237 @@
 
     <main class="main-content">
       <div class="settings-container">
-        <a href="index.html" class="btn-back">← Voltar</a>
-
         <div class="settings-header">
           <h1>Definições</h1>
           <p>Gerir as suas preferências e configurações</p>
         </div>
 
-        <div class="settings-grid">
-          <nav class="settings-nav">
-            <div class="settings-nav-item active" onclick="showSection('account')">👤 Conta</div>
-            <div class="settings-nav-item" onclick="showSection('notifications')">🔔 Notificações</div>
-            <div class="settings-nav-item" onclick="showSection('security')">🔒 Segurança</div>
-            <div class="settings-nav-item" onclick="showSection('appearance')">🎨 Aspeto</div>
-            <div class="settings-nav-item" onclick="showSection('language')">🌐 Idioma</div>
-          </nav>
+        <div class="settings-buttons">
+          <button class="btn-save" onclick="saveSettings()">Guardar Alterações</button>
+          <button class="btn-reset" onclick="resetSettings()">Restaurar Padrão</button>
+        </div>
 
-          <div class="settings-content">
-            <section class="settings-section" id="account">
-              <h2>👤 Conta</h2>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Nome</span>
-                  <span class="setting-desc">O seu nome completo</span>
-                </div>
-                <input type="text" class="setting-input" value="Utilizador" id="settingName">
+        <div class="settings-content">
+          <section class="settings-section" id="account">
+            <h2>👤 Conta</h2>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Nome</span>
+                <span class="setting-desc">O seu nome completo</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Email</span>
-                  <span class="setting-desc">Email associado à conta</span>
-                </div>
-                <input type="email" class="setting-input" value="utilizador@email.com" id="settingEmail">
+              <input type="text" class="setting-input" value="Utilizador" id="settingName">
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Email</span>
+                <span class="setting-desc">Email associado à conta</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Moeda</span>
-                  <span class="setting-desc">Moeda preferida para visualização</span>
-                </div>
-                <select class="setting-select" id="settingCurrency">
-                  <option value="BRL" selected>Real (R$)</option>
-                  <option value="EUR">Euro (€)</option>
-                  <option value="USD">Dólar ($)</option>
-                </select>
+              <input type="email" class="setting-input" value="utilizador@email.com" id="settingEmail">
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Moeda</span>
+                <span class="setting-desc">Moeda preferida para visualização</span>
               </div>
-            </section>
+              <select class="setting-select" id="settingCurrency">
+                <option value="BRL" selected>Real (R$)</option>
+                <option value="EUR">Euro (€)</option>
+                <option value="USD">Dólar ($)</option>
+              </select>
+            </div>
+          </section>
 
-            <section class="settings-section" id="notifications" style="display:none;">
-              <h2>🔔 Notificações</h2>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Notificações por email</span>
-                  <span class="setting-desc">Receber alertas por email</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked id="notifEmail">
-                  <span class="toggle-slider"></span>
-                </label>
+          <section class="settings-section" id="notifications">
+            <h2>🔔 Notificações</h2>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Notificações por email</span>
+                <span class="setting-desc">Receber alertas por email</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Alertas de despesas</span>
-                  <span class="setting-desc">Notificar quando gastar acima do limite</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" checked id="notifExpense">
-                  <span class="toggle-slider"></span>
-                </label>
+              <label class="toggle-switch">
+                <input type="checkbox" checked id="notifEmail">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Alertas de despesas</span>
+                <span class="setting-desc">Notificar quando gastar acima do limite</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Relatórios mensais</span>
-                  <span class="setting-desc">Resumo do mês por email</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="notifReport">
-                  <span class="toggle-slider"></span>
-                </label>
+              <label class="toggle-switch">
+                <input type="checkbox" checked id="notifExpense">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Relatórios mensais</span>
+                <span class="setting-desc">Resumo do mês por email</span>
               </div>
-            </section>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notifReport">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </section>
 
-            <section class="settings-section" id="security" style="display:none;">
-              <h2>🔒 Segurança</h2>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Autenticação de dois fatores</span>
-                  <span class="setting-desc">Adicionar uma camada extra de segurança</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="2fa">
-                  <span class="toggle-slider"></span>
-                </label>
+          <section class="settings-section" id="security">
+            <h2>🔒 Segurança</h2>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Autenticação de dois fatores</span>
+                <span class="setting-desc">Adicionar uma camada extra de segurança</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Bloqueio de sessão</span>
-                  <span class="setting-desc">Bloquear após 15 minutos de inatividade</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="sessionLock">
-                  <span class="toggle-slider"></span>
-                </label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="2fa">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Bloqueio de sessão</span>
+                <span class="setting-desc">Bloquear após 15 minutos de inatividade</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Alterar palavra-passe</span>
-                  <span class="setting-desc">Atualizar a sua palavra-passe</span>
-                </div>
-                <button class="btn-back" style="margin:0;">Alterar</button>
+              <label class="toggle-switch">
+                <input type="checkbox" id="sessionLock">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Alterar palavra-passe</span>
+                <span class="setting-desc">Atualizar a sua palavra-passe</span>
               </div>
-            </section>
+              <button class="btn-change">Alterar</button>
+            </div>
+          </section>
 
-            <section class="settings-section" id="appearance" style="display:none;">
-              <h2>🎨 Aspeto</h2>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Tema</span>
-                  <span class="setting-desc">Escolher o tema da aplicação</span>
-                </div>
-                <select class="setting-select" id="settingTheme">
-                  <option value="dark" selected>Escuro</option>
-                  <option value="light">Claro</option>
-                  <option value="auto">Automático</option>
-                </select>
+          <section class="settings-section" id="appearance">
+            <h2>🎨 Aspeto</h2>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Tema</span>
+                <span class="setting-desc">Escolher o tema da aplicação</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Modo de economia</span>
-                  <span class="setting-desc">Reducao do consumo de energia</span>
-                </div>
-                <label class="toggle-switch">
-                  <input type="checkbox" id="ecoMode">
-                  <span class="toggle-slider"></span>
-                </label>
+              <select class="setting-select" id="settingTheme">
+                <option value="dark" selected>Escuro</option>
+                <option value="light">Claro</option>
+                <option value="auto">Automático</option>
+              </select>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Modo de economia</span>
+                <span class="setting-desc">Redução do consumo de energia</span>
               </div>
-            </section>
+              <label class="toggle-switch">
+                <input type="checkbox" id="ecoMode">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </section>
 
-            <section class="settings-section" id="language" style="display:none;">
-              <h2>🌐 Idioma</h2>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Idioma da interface</span>
-                  <span class="setting-desc">Idioma utilizado na aplicação</span>
-                </div>
-                <select class="setting-select" id="settingLang">
-                  <option value="pt-PT" selected>Português (Portugal)</option>
-                  <option value="pt-BR">Português (Brasil)</option>
-                  <option value="en">English</option>
-                  <option value="es">Español</option>
-                </select>
+          <section class="settings-section" id="language">
+            <h2>🌐 Idioma</h2>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Idioma da interface</span>
+                <span class="setting-desc">Idioma utilizado na aplicação</span>
               </div>
-              
-              <div class="setting-item">
-                <div class="setting-info">
-                  <span class="setting-label">Formato de data</span>
-                  <span class="setting-desc">Formato de apresentação das datas</span>
-                </div>
-                <select class="setting-select" id="settingDateFormat">
-                  <option value="dd/mm/yyyy" selected>DD/MM/YYYY</option>
-                  <option value="mm/dd/yyyy">MM/DD/YYYY</option>
-                  <option value="yyyy-mm-dd">YYYY-MM-DD</option>
-                </select>
+              <select class="setting-select" id="settingLang">
+                <option value="pt-PT" selected>Português (Portugal)</option>
+                <option value="pt-BR">Português (Brasil)</option>
+                <option value="en">English</option>
+                <option value="es">Español</option>
+              </select>
+            </div>
+            
+            <div class="setting-item">
+              <div class="setting-info">
+                <span class="setting-label">Formato de data</span>
+                <span class="setting-desc">Formato de apresentação das datas</span>
               </div>
-            </section>
-          </div>
+              <select class="setting-select" id="settingDateFormat">
+                <option value="dd/mm/yyyy" selected>DD/MM/YYYY</option>
+                <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+              </select>
+            </div>
+          </section>
         </div>
       </div>
     </main>
   </div>
 
   <script>
-    function showSection(sectionId) {
-      document.querySelectorAll('.settings-section').forEach(s => s.style.display = 'none');
-      document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+    function saveSettings() {
+      const settings = {
+        name: document.getElementById('settingName').value,
+        email: document.getElementById('settingEmail').value,
+        currency: document.getElementById('settingCurrency').value,
+        notifEmail: document.getElementById('notifEmail').checked,
+        notifExpense: document.getElementById('notifExpense').checked,
+        notifReport: document.getElementById('notifReport').checked,
+        twoFactor: document.getElementById('2fa').checked,
+        sessionLock: document.getElementById('sessionLock').checked,
+        theme: document.getElementById('settingTheme').value,
+        ecoMode: document.getElementById('ecoMode').checked,
+        language: document.getElementById('settingLang').value,
+        dateFormat: document.getElementById('settingDateFormat').value
+      };
       
-      document.getElementById(sectionId).style.display = 'block';
-      event.target.classList.add('active');
+      localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+      
+      const btn = document.querySelector('.btn-save');
+      btn.textContent = '✓ Guardado!';
+      btn.style.background = 'var(--green)';
+      setTimeout(() => {
+        btn.textContent = 'Guardar Alterações';
+        btn.style.background = '';
+      }, 2000);
+    }
+
+    function resetSettings() {
+      if (confirm('Tem a certeza que deseja restaurar as definições padrão?')) {
+        localStorage.removeItem('moneynest_settings');
+        location.reload();
+      }
+    }
+
+    function loadSettings() {
+      const saved = localStorage.getItem('moneynest_settings');
+      if (saved) {
+        const settings = JSON.parse(saved);
+        document.getElementById('settingName').value = settings.name || 'Utilizador';
+        document.getElementById('settingEmail').value = settings.email || 'utilizador@email.com';
+        document.getElementById('settingCurrency').value = settings.currency || 'BRL';
+        document.getElementById('notifEmail').checked = settings.notifEmail !== undefined ? settings.notifEmail : true;
+        document.getElementById('notifExpense').checked = settings.notifExpense !== undefined ? settings.notifExpense : true;
+        document.getElementById('notifReport').checked = settings.notifReport || false;
+        document.getElementById('2fa').checked = settings.twoFactor || false;
+        document.getElementById('sessionLock').checked = settings.sessionLock || false;
+        document.getElementById('settingTheme').value = settings.theme || 'dark';
+        document.getElementById('ecoMode').checked = settings.ecoMode || false;
+        document.getElementById('settingLang').value = settings.language || 'pt-PT';
+        document.getElementById('settingDateFormat').value = settings.dateFormat || 'dd/mm/yyyy';
+      }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+      loadSettings();
+      
       const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
       const hoje = new Date();
       const mesAtual = hoje.getMonth();
