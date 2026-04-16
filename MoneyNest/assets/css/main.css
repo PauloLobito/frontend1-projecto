@@ -905,3 +905,444 @@ h1 {
   background: rgba(255,91,114,.2);
   color: var(--red);
 }
+
+/* ================================================
+   REPORTS VIEW
+   ================================================ */
+
+.reports-view {
+  padding: 0 20px;
+}
+
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.reports-header h2 {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.btn-add-record {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.btn-add-record span {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.btn-add-record:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(24, 210, 235, 0.3);
+}
+
+.records-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.summary-icon {
+  font-size: 32px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,.05);
+  border-radius: 14px;
+}
+
+.summary-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-label {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.summary-card.income .summary-value {
+  color: var(--green);
+}
+
+.summary-card.expense .summary-value {
+  color: var(--red);
+}
+
+.summary-card.balance .summary-value {
+  color: var(--cyan);
+}
+
+.records-section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.records-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.filter-btn {
+  padding: 10px 20px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--cyan);
+  color: var(--text);
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border-color: transparent;
+  color: #fff;
+}
+
+.records-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.no-records {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.no-records p {
+  margin-bottom: 8px;
+}
+
+.record-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  transition: all .3s ease;
+}
+
+.record-item:hover {
+  border-color: var(--cyan);
+}
+
+.record-item.income {
+  border-left: 4px solid var(--green);
+}
+
+.record-item.expense {
+  border-left: 4px solid var(--red);
+}
+
+.record-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.record-description {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.record-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.record-category {
+  padding: 4px 10px;
+  background: rgba(255,255,255,.05);
+  border-radius: 6px;
+}
+
+.record-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.record-item.income .record-value {
+  color: var(--green);
+}
+
+.record-item.expense .record-value {
+  color: var(--red);
+}
+
+.record-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.record-delete {
+  padding: 8px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all .3s ease;
+}
+
+.record-delete:hover {
+  background: rgba(255,91,114,.2);
+  color: var(--red);
+}
+
+/* ================================================
+   RECORD MODAL
+   ================================================ */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 440px;
+  padding: 28px;
+  animation: modalSlideIn .3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color .3s ease;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
+
+.record-type-selector {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.type-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  background: var(--panel-dark);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.type-btn:hover {
+  border-color: var(--cyan);
+}
+
+.type-btn.active {
+  border-color: transparent;
+  color: #fff;
+}
+
+.type-btn.active[data-type="income"] {
+  background: linear-gradient(135deg, var(--green), var(--cyan));
+}
+
+.type-btn.active[data-type="expense"] {
+  background: linear-gradient(135deg, var(--red), var(--orange));
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: 'Inter', sans-serif;
+}
+
+.form-input.with-icon {
+  padding-left: 44px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--cyan);
+}
+
+.form-input[type="number"]::-webkit-outer-spin-button,
+.form-input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-cancel {
+  flex: 1;
+  padding: 14px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.btn-cancel:hover {
+  background: rgba(255,91,114,.1);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.btn-confirm {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.btn-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(24,210,235,.3);
+}
+
+select.form-input {
+  cursor: pointer;
+}
