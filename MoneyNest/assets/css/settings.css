@@ -497,20 +497,108 @@
   color: var(--red);
 }
 
-.btn-confirm {
-  flex: 1;
-  padding: 14px 24px;
+.btn-confirm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(24, 210, 235, 0.3);
+}
+
+/* ================================================
+   CATEGORY STYLES
+   ================================================ */
+
+.category-section {
+  margin-bottom: 24px;
+}
+
+.category-section:last-child {
+  margin-bottom: 0;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.category-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.btn-add-category {
+  padding: 8px 16px;
   background: linear-gradient(135deg, var(--cyan), var(--purple));
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   color: #fff;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all .3s ease;
 }
 
-.btn-confirm:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(24, 210, 235, 0.3);
+.btn-add-category:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 210, 235, 0.3);
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.category-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.category-tag .delete-category {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px;
+  font-size: 14px;
+  line-height: 1;
+  transition: color .3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-tag .delete-category:hover {
+  color: var(--red);
+}
+
+.modal-small {
+  max-width: 360px !important;
+}
+
+.category-type-info {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 8px;
 }

@@ -61,7 +61,21 @@ const translations = {
     profileUpdated: 'Perfil atualizado com sucesso!',
     notLoggedInProfile: 'Inicie sessão para ver o seu perfil.',
     guestUser: 'Visitante',
-    guestEmail: 'visitante@moneynest.com'
+    guestEmail: 'visitante@moneynest.com',
+    categories: 'Categorias',
+    incomeCategories: 'Receitas',
+    expenseCategories: 'Despesas',
+    addCategory: 'Adicionar',
+    categoryName: 'Nome da categoria',
+    addIncomeCategory: 'Adicionar Categoria de Receita',
+    addExpenseCategory: 'Adicionar Categoria de Despesa',
+    categoryPlaceholder: 'Ex: Salário',
+    incomeTypeInfo: 'Esta categoria será adicionada às receitas.',
+    expenseTypeInfo: 'Esta categoria será adicionada às despesas.',
+    categoryRequired: 'O nome da categoria é obrigatório.',
+    categoryExists: 'Esta categoria já existe.',
+    categoryAdded: 'Categoria adicionada com sucesso!',
+    categoryDeleted: 'Categoria eliminada.'
   },
   'pt-BR': {
     title: 'Configurações',
@@ -120,7 +134,21 @@ const translations = {
     profileUpdated: 'Perfil atualizado com sucesso!',
     notLoggedInProfile: 'Faça login para ver o seu perfil.',
     guestUser: 'Visitante',
-    guestEmail: 'visitante@moneynest.com'
+    guestEmail: 'visitante@moneynest.com',
+    categories: 'Categorias',
+    incomeCategories: 'Receitas',
+    expenseCategories: 'Despesas',
+    addCategory: 'Adicionar',
+    categoryName: 'Nome da categoria',
+    addIncomeCategory: 'Adicionar Categoria de Receita',
+    addExpenseCategory: 'Adicionar Categoria de Despesa',
+    categoryPlaceholder: 'Ex: Salário',
+    incomeTypeInfo: 'Esta categoria será adicionada às receitas.',
+    expenseTypeInfo: 'Esta categoria será adicionada às despesas.',
+    categoryRequired: 'O nome da categoria é obrigatório.',
+    categoryExists: 'Esta categoria já existe.',
+    categoryAdded: 'Categoria adicionada com sucesso!',
+    categoryDeleted: 'Categoria eliminada.'
   },
   'en': {
     title: 'Settings',
@@ -179,7 +207,21 @@ const translations = {
     profileUpdated: 'Profile updated successfully!',
     notLoggedInProfile: 'Log in to view your profile.',
     guestUser: 'Guest',
-    guestEmail: 'guest@moneynest.com'
+    guestEmail: 'guest@moneynest.com',
+    categories: 'Categories',
+    incomeCategories: 'Income',
+    expenseCategories: 'Expenses',
+    addCategory: 'Add',
+    categoryName: 'Category name',
+    addIncomeCategory: 'Add Income Category',
+    addExpenseCategory: 'Add Expense Category',
+    categoryPlaceholder: 'Ex: Salary',
+    incomeTypeInfo: 'This category will be added to income.',
+    expenseTypeInfo: 'This category will be added to expenses.',
+    categoryRequired: 'Category name is required.',
+    categoryExists: 'This category already exists.',
+    categoryAdded: 'Category added successfully!',
+    categoryDeleted: 'Category deleted.'
   },
   'es': {
     title: 'Configuración',
@@ -238,7 +280,21 @@ const translations = {
     profileUpdated: '¡Perfil actualizado con éxito!',
     notLoggedInProfile: 'Inicia sesión para ver tu perfil.',
     guestUser: 'Invitado',
-    guestEmail: 'invitado@moneynest.com'
+    guestEmail: 'invitado@moneynest.com',
+    categories: 'Categorías',
+    incomeCategories: 'Ingresos',
+    expenseCategories: 'Gastos',
+    addCategory: 'Añadir',
+    categoryName: 'Nombre de la categoría',
+    addIncomeCategory: 'Añadir Categoría de Ingreso',
+    addExpenseCategory: 'Añadir Categoría de Gasto',
+    categoryPlaceholder: 'Ej: Salario',
+    incomeTypeInfo: 'Esta categoría se añadirá a los ingresos.',
+    expenseTypeInfo: 'Esta categoría se añadirá a los gastos.',
+    categoryRequired: 'El nombre de la categoría es obligatorio.',
+    categoryExists: 'Esta categoría ya existe.',
+    categoryAdded: '¡Categoría añadida con éxito!',
+    categoryDeleted: 'Categoría eliminada.'
   }
 };
 
@@ -297,6 +353,13 @@ function applyLanguageSettings() {
 
   if (lang === 'pt-PT' || lang === 'pt-BR') {
     document.querySelector('.btn-reset').setAttribute('onclick', "if(confirm('" + t.resetConfirm + "')){localStorage.removeItem('moneynest_settings');location.reload();}");
+  }
+
+  if (document.getElementById('incomeCategoriesTitle')) {
+    document.getElementById('incomeCategoriesTitle').textContent = t.incomeCategories;
+  }
+  if (document.getElementById('expenseCategoriesTitle')) {
+    document.getElementById('expenseCategoriesTitle').textContent = t.expenseCategories;
   }
 }
 
@@ -608,6 +671,168 @@ function submitPasswordChange() {
 }
 
 // ================================================
+// VARIÁVEL: currentCategoryType
+// ================================================
+let currentCategoryType = 'income';
+
+// ================================================
+// FUNÇÃO: getDefaultCategories
+// ================================================
+function getDefaultCategories() {
+  return {
+    income: ['Salário', 'E-commerce', 'Anúncios', 'Loja', 'Freelance', 'Investimentos'],
+    expense: ['Habitação', 'Pessoal', 'Transportes', 'Alimentação', 'Saúde', 'Lazer']
+  };
+}
+
+// ================================================
+// FUNÇÃO: loadCategories
+// ================================================
+function loadCategories() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  
+  let categories = settings.categories;
+  if (!categories) {
+    categories = getDefaultCategories();
+  }
+  
+  const incomeList = document.getElementById('incomeCategoryList');
+  const expenseList = document.getElementById('expenseCategoryList');
+  
+  incomeList.innerHTML = '';
+  expenseList.innerHTML = '';
+  
+  categories.income.forEach((cat, index) => {
+    const tag = createCategoryTag(cat, 'income', index);
+    incomeList.appendChild(tag);
+  });
+  
+  categories.expense.forEach((cat, index) => {
+    const tag = createCategoryTag(cat, 'expense', index);
+    expenseList.appendChild(tag);
+  });
+  
+  if (document.getElementById('incomeCategoriesTitle')) {
+    document.getElementById('incomeCategoriesTitle').textContent = t.incomeCategories;
+  }
+  if (document.getElementById('expenseCategoriesTitle')) {
+    document.getElementById('expenseCategoriesTitle').textContent = t.expenseCategories;
+  }
+}
+
+// ================================================
+// FUNÇÃO: createCategoryTag
+// ================================================
+function createCategoryTag(name, type, index) {
+  const tag = document.createElement('div');
+  tag.className = 'category-tag';
+  tag.innerHTML = `
+    <span>${name}</span>
+    <button class="delete-category" onclick="deleteCategory('${type}', ${index})" title="Eliminar">×</button>
+  `;
+  return tag;
+}
+
+// ================================================
+// FUNÇÃO: openAddCategoryModal
+// ================================================
+function openAddCategoryModal(type) {
+  const modal = document.getElementById('categoryModal');
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  
+  currentCategoryType = type;
+  
+  document.getElementById('newCategoryName').value = '';
+  
+  if (type === 'income') {
+    document.getElementById('categoryModalTitle').textContent = t.addIncomeCategory;
+    document.getElementById('categoryTypeInfo').textContent = t.incomeTypeInfo;
+  } else {
+    document.getElementById('categoryModalTitle').textContent = t.addExpenseCategory;
+    document.getElementById('categoryTypeInfo').textContent = t.expenseTypeInfo;
+  }
+  
+  document.getElementById('categoryNameLabel').textContent = t.categoryName;
+  document.getElementById('newCategoryName').placeholder = t.categoryPlaceholder;
+  
+  const cancelBtn = modal.querySelector('.btn-cancel');
+  const confirmBtn = modal.querySelector('.btn-confirm');
+  cancelBtn.textContent = t.cancel || 'Cancelar';
+  confirmBtn.textContent = t.addCategory || 'Adicionar';
+  
+  modal.classList.add('active');
+  document.getElementById('newCategoryName').focus();
+}
+
+// ================================================
+// FUNÇÃO: closeCategoryModal
+// ================================================
+function closeCategoryModal() {
+  document.getElementById('categoryModal').classList.remove('active');
+}
+
+// ================================================
+// FUNÇÃO: addCategory
+// ================================================
+function addCategory() {
+  const input = document.getElementById('newCategoryName');
+  const name = input.value.trim();
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  
+  if (!name) {
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      input.style.borderColor = '';
+    }, 2000);
+    return;
+  }
+  
+  let categories = settings.categories;
+  if (!categories) {
+    categories = getDefaultCategories();
+  }
+  
+  if (categories[currentCategoryType].some(c => c.toLowerCase() === name.toLowerCase())) {
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      input.style.borderColor = '';
+    }, 2000);
+    return;
+  }
+  
+  categories[currentCategoryType].push(name);
+  settings.categories = categories;
+  localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+  
+  closeCategoryModal();
+  loadCategories();
+}
+
+// ================================================
+// FUNÇÃO: deleteCategory
+// ================================================
+function deleteCategory(type, index) {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  let categories = settings.categories;
+  
+  if (!categories) {
+    categories = getDefaultCategories();
+  }
+  
+  categories[type].splice(index, 1);
+  settings.categories = categories;
+  localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+  
+  loadCategories();
+}
+
+// ================================================
 // FUNÇÃO: loadSettings
 // ================================================
 function loadSettings() {
@@ -637,6 +862,7 @@ document.addEventListener('DOMContentLoaded', function() {
   loadUserProfile();
   loadAndApplyTheme();
   applyLanguageSettings();
+  loadCategories();
   
   const hoje = new Date();
   document.querySelectorAll('.months li').forEach((li, index) => {
@@ -650,6 +876,7 @@ document.addEventListener('DOMContentLoaded', function() {
     currentSettings.language = this.value;
     localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
     applyLanguageSettings();
+    loadCategories();
   });
 
   document.getElementById('settingTheme').addEventListener('change', function() {
@@ -678,9 +905,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  document.getElementById('categoryModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closeCategoryModal();
+    }
+  });
+
+  document.getElementById('newCategoryName').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      addCategory();
+    }
+  });
+
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       closePasswordModal();
+      closeCategoryModal();
     }
   });
 });

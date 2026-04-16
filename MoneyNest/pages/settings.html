@@ -215,9 +215,52 @@
               </select>
             </div>
           </section>
+
+          <section class="settings-section" id="categories">
+            <h2>📁 Categorias</h2>
+            
+            <div class="category-section">
+              <div class="category-header">
+                <span class="category-title" id="incomeCategoriesTitle">Receitas</span>
+                <button class="btn-add-category" onclick="openAddCategoryModal('income')">+ Adicionar</button>
+              </div>
+              <div class="category-list" id="incomeCategoryList"></div>
+            </div>
+            
+            <div class="category-section">
+              <div class="category-header">
+                <span class="category-title" id="expenseCategoriesTitle">Despesas</span>
+                <button class="btn-add-category" onclick="openAddCategoryModal('expense')">+ Adicionar</button>
+              </div>
+              <div class="category-list" id="expenseCategoryList"></div>
+            </div>
+          </section>
         </div>
       </div>
     </main>
+  </div>
+
+  <div class="modal-overlay" id="categoryModal">
+    <div class="modal-content modal-small">
+      <div class="modal-header">
+        <h2 id="categoryModalTitle">Adicionar Categoria</h2>
+        <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" id="categoryNameLabel">Nome da categoria</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📁</span>
+            <input type="text" class="form-input with-icon" id="newCategoryName" placeholder="Ex: Salário">
+          </div>
+        </div>
+        <div class="category-type-info" id="categoryTypeInfo"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeCategoryModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="addCategory()">Adicionar</button>
+      </div>
+    </div>
   </div>
 
   <div class="modal-overlay" id="passwordModal">
