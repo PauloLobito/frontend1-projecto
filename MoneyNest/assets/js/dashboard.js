@@ -205,10 +205,6 @@ function applySettings() {
   document.querySelector('.notification').textContent = t.noNotification;
   document.querySelectorAll('h3')[5].textContent = t.incomeExpense;
   document.querySelectorAll('h3')[6].textContent = t.assets;
-  document.querySelectorAll('.asset-list div')[0].innerHTML = `${t.gold}<strong><span class="currency-symbol">${symbol}</span> 0</strong>`;
-  document.querySelectorAll('.asset-list div')[1].innerHTML = `${t.warehouse}<strong><span class="currency-symbol">${symbol}</span> 0</strong>`;
-  document.querySelectorAll('.asset-list div')[2].innerHTML = `${t.stocks}<strong><span class="currency-symbol">${symbol}</span> 0</strong>`;
-  document.querySelectorAll('.asset-list div')[3].innerHTML = `${t.land}<strong><span class="currency-symbol">${symbol}</span> 0</strong>`;
   document.querySelectorAll('h3')[7].textContent = t.petExpenses;
   document.querySelector('.muted-link').textContent = t.petSummary;
   document.querySelectorAll('.expense-name')[0].textContent = t.vet;
@@ -373,18 +369,6 @@ function updateDashboardWithRecords() {
     const totals = chartHeader.querySelectorAll('div[style*="color"]');
     if (totals[0]) totals[0].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
     if (totals[1]) totals[1].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
-  }
-  
-  // Atualizar "Ativos" (património total)
-  const assetList = document.querySelector('.asset-list');
-  if (assetList) {
-    const assetDivs = assetList.querySelectorAll('div');
-    assetDivs.forEach((div, index) => {
-      const strong = div.querySelector('strong');
-      if (strong) {
-        strong.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalPatrimony)}`;
-      }
-    });
   }
   
   // Renderizar gráfico de barras "Receitas e Despesas"
