@@ -309,17 +309,24 @@ function updateDashboardWithRecords() {
     const barLabel = col.querySelector('.bar-label');
     const bar = col.querySelector('.bar');
     
-    if (barValue) {
-      barValue.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
-    }
-    
-    if (barLabel) {
-      barLabel.textContent = category || '';
-    }
-    
-    if (bar) {
-      const barHeight = amount > 0 ? Math.max((amount / maxIncome) * 80, 4) : 0;
-      bar.style.height = barHeight + 'px';
+    // Só mostra se tiver valor
+    if (amount > 0) {
+      col.style.display = '';
+      
+      if (barValue) {
+        barValue.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+      }
+      
+      if (barLabel) {
+        barLabel.textContent = category || '';
+      }
+      
+      if (bar) {
+        const barHeight = Math.max((amount / maxIncome) * 80, 4);
+        bar.style.height = barHeight + 'px';
+      }
+    } else {
+      col.style.display = 'none';
     }
   });
   
@@ -329,17 +336,23 @@ function updateDashboardWithRecords() {
     expenseByCategory[r.category] = (expenseByCategory[r.category] || 0) + r.amount;
   });
   
-  const itemNames = document.querySelectorAll('.item-name');
-  const itemAmounts = document.querySelectorAll('.item-amount');
+  const listItems = document.querySelectorAll('.list-item');
   
-  itemNames.forEach((el, index) => {
+  listItems.forEach((item, index) => {
     const category = categories.expense[index] || '';
-    el.textContent = category;
-    
     const amount = expenseByCategory[category] || 0;
-    const amountEl = itemAmounts[index];
-    if (amountEl) {
-      amountEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+    
+    if (amount > 0) {
+      item.style.display = '';
+      const itemName = item.querySelector('.item-name');
+      const itemAmount = item.querySelector('.item-amount');
+      
+      if (itemName) itemName.textContent = category;
+      if (itemAmount) {
+        itemAmount.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+      }
+    } else {
+      item.style.display = 'none';
     }
   });
 }
