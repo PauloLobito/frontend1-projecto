@@ -104,9 +104,17 @@
               <div style="font-size: 28px; font-weight: 800; margin-top: 2px;">Meta de Receita</div>
               <div class="progress-text">Progresso do mês</div>
             </div>
-            <div class="progress-total"><span class="currency-symbol">R$</span> 0 <span style="color: var(--muted); font-size: 18px;">/ 0</span></div>
+            <div class="progress-total"><span class="currency-symbol">R$</span> <span id="currentRevenue">0</span> <span style="color: var(--muted); font-size: 18px;">/ <span class="currency-symbol">R$</span><span id="goalAmount">0</span></span></div>
           </div>
-          <div class="track"><div class="fill"></div></div>
+          <div class="track"><div class="fill" id="progressFill"></div></div>
+          <div class="goal-setting">
+            <label class="goal-label">Definir meta:</label>
+            <div class="goal-input-wrapper">
+              <span class="currency-symbol">R$</span>
+              <input type="number" class="goal-input" id="goalInput" placeholder="0,00" min="0" step="0.01">
+            </div>
+            <button class="btn-set-goal" onclick="setRevenueGoal()">Definir</button>
+          </div>
         </article>
 
         <article class="card">

@@ -470,9 +470,87 @@ h1 {
 
 .fill {
   height: 100%;
-  width: 61%;
+  width: 0%;
   background: linear-gradient(90deg, #7a39ff, #7f5cff, #8c4dff);
   border-radius: inherit;
+  transition: width 0.5s ease;
+}
+
+.goal-setting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.goal-label {
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.goal-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--panel-dark);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 14px;
+  flex: 1;
+  min-width: 150px;
+  max-width: 200px;
+}
+
+.goal-input-wrapper .currency-symbol {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.goal-input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  width: 100%;
+  outline: none;
+}
+
+.goal-input::placeholder {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.goal-input::-webkit-outer-spin-button,
+.goal-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.goal-input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.btn-set-goal {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.btn-set-goal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(24, 210, 235, 0.3);
 }
 
 .notification {

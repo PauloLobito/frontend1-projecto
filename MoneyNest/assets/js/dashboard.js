@@ -220,6 +220,78 @@ function loadAndApplyTheme() {
 }
 
 // ================================================
+// FUNÇÃO: formatCurrency
+// ================================================
+function formatCurrency(value) {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const currency = settings.currency || 'BRL';
+  
+  return new Intl.NumberFormat(currency === 'BRL' ? 'pt-BR' : currency === 'EUR' ? 'de-DE' : 'en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value);
+}
+
+// ================================================
+// FUNÇÃO: loadRevenueGoal
+// ================================================
+function loadRevenueGoal() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const goal = settings.revenueGoal || 0;
+  const revenue = settings.currentRevenue || 0;
+  const currency = settings.currency || 'BRL';
+  const symbol = currencies[currency].symbol;
+  
+  document.getElementById('goalAmount').textContent = formatCurrency(goal);
+  document.getElementById('currentRevenue').textContent = formatCurrency(revenue);
+  document.getElementById('goalInput').placeholder = '0,00';
+  
+  const percentEl = document.querySelector('.percent');
+  let percent = 0;
+  if (goal > 0) {
+    percent = Math.min(Math.round((revenue / goal) * 100), 100);
+  }
+  percentEl.textContent = percent + '%';
+  
+  const fillEl = document.getElementById('progressFill');
+  if (fillEl) {
+    fillEl.style.width = percent + '%';
+  }
+}
+
+// ================================================
+// FUNÇÃO: setRevenueGoal
+// ================================================
+function setRevenueGoal() {
+  const input = document.getElementById('goalInput');
+  const value = parseFloat(input.value.replace(',', '.')) || 0;
+  
+  if (value <= 0) {
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      input.style.borderColor = '';
+    }, 2000);
+    return;
+  }
+  
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  settings.revenueGoal = value;
+  localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+  
+  input.value = '';
+  loadRevenueGoal();
+  
+  const btn = document.querySelector('.btn-set-goal');
+  const originalText = btn.textContent;
+  btn.textContent = '✓';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => {
+    btn.textContent = originalText;
+    btn.style.background = '';
+  }, 1500);
+}
+
+// ================================================
 // FUNÇÃO: applySettings
 // ================================================
 function applySettings() {
@@ -338,4 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Aplicar definições
   applySettings();
+  
+  // Carregar meta de receita
+  loadRevenueGoal();
 });
