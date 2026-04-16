@@ -552,80 +552,78 @@ h1 {
   margin-top: 2px;
 }
 
-.pet-card {
-  background: linear-gradient(180deg, rgba(128, 125, 255, .16), rgba(128, 125, 255, .11));
-  min-height: 300px;
-}
-
-.pet-layout {
-  display: grid;
-  grid-template-columns: 1fr 150px;
-  gap: 12px;
-  align-items: end;
-  height: 100%;
-}
-
-.pet-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  padding-top: 14px;
-}
-
-.pet-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: flex-start;
-  font-size: 15px;
-  color: #eef1ff;
-  font-weight: 700;
-  min-width: 0;
-}
-
-.pet-list {
-  min-width: 0;
-}
-
-.pet-row span {
-  min-width: 0;
-}
-
-.pet-row span:first-child {
-  flex: 0 0 46px;
-}
-
-.pet-row span:last-child {
-  flex: 1 1 0;
-  display: block;
-  max-width: 100%;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  min-width: 0;
-}
-
-.pet-row span:first-child {
-  color: #ffffff;
-  opacity: .9;
-  min-width: 46px;
-  flex-shrink: 0;
-}
-
-.pet-emoji {
-  font-size: 118px;
-  line-height: 1;
-  text-align: right;
-  filter: drop-shadow(0 18px 32px rgba(0,0,0,.22));
+.expenses-card {
+  padding: 24px;
 }
 
 .muted-link {
   color: var(--muted);
   font-size: 12px;
   margin-top: -4px;
-  margin-bottom: 14px;
+  margin-bottom: 20px;
   display: inline-block;
+}
+
+.expenses-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.expense-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: all .2s ease;
+}
+
+.expense-row:hover {
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.12);
+}
+
+.expense-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(24,210,235,.15), rgba(124,77,255,.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.expense-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.expense-name {
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expense-category {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.expense-value {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--red);
+  flex-shrink: 0;
 }
 
 @media (max-width: 1280px) {
@@ -681,8 +679,7 @@ h1 {
 
   .topbar,
   .grid,
-  .assets-layout,
-  .pet-layout {
+  .assets-layout {
     grid-template-columns: 1fr;
   }
 
