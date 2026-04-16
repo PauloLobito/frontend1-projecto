@@ -249,9 +249,7 @@ function saveSettings() {
   
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   
-  const savedSettings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
-  const lang = savedSettings.language || 'pt-PT';
-  const t = translations[lang];
+  applyLanguageSettings();
   
   const btn = document.querySelector('.btn-save');
   const originalText = btn.textContent;
@@ -306,12 +304,17 @@ document.addEventListener('DOMContentLoaded', function() {
   loadSettings();
   applyLanguageSettings();
   
-  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
-  const lang = settings.language || 'pt-PT';
-  
   const hoje = new Date();
   document.querySelectorAll('.months li').forEach((li, index) => {
     li.classList.remove('active');
     if (index === hoje.getMonth()) li.classList.add('active');
+  });
+
+  document.getElementById('settingLang').addEventListener('change', function() {
+    const saved = localStorage.getItem('moneynest_settings');
+    const currentSettings = saved ? JSON.parse(saved) : {};
+    currentSettings.language = this.value;
+    localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
+    applyLanguageSettings();
   });
 });
