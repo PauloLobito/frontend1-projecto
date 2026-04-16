@@ -512,6 +512,134 @@ function addRecord() {
   updateDashboardWithRecords();
 }
 
+// ================================================
+// VARIÁVEL: editingRecordId
+// ================================================
+let editingRecordId = null;
+
+// ================================================
+// FUNÇÕES: EDITAR REGISTOS
+// ================================================
+
+/**
+ * Abre o modal para editar um registo
+ * @param {number} id - ID do registo a editar
+ */
+function openEditModal(id) {
+  const modal = document.getElementById('editModal');
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const record = settings.records.find(r => r.id === id);
+  
+  if (!record) return;
+  
+  editingRecordId = id;
+  
+  document.getElementById('editRecordAmount').value = record.amount;
+  document.getElementById('editRecordDescription').value = record.description;
+  document.getElementById('editRecordDate').value = record.date;
+  
+  setEditRecordType(record.type);
+  loadEditRecordCategories(record.type, record.category);
+  
+  modal.classList.add('active');
+}
+
+/**
+ * Fecha o modal de edição
+ */
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('active');
+  editingRecordId = null;
+}
+
+/**
+ * Define o tipo de registo no modal de edição
+ * @param {string} type - Tipo (income ou expense)
+ */
+function setEditRecordType(type) {
+  const buttons = document.querySelectorAll('#editModal .type-btn');
+  buttons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.type === type) {
+      btn.classList.add('active');
+    }
+  });
+  
+  loadEditRecordCategories(type);
+}
+
+/**
+ * Carrega as categorias no select do modal de edição
+ * @param {string} type - Tipo de registo
+ * @param {string} selectedCategory - Categoria selecionada
+ */
+function loadEditRecordCategories(type, selectedCategory) {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const categories = settings.categories || getDefaultCategories();
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
+  const select = document.getElementById('editRecordCategory');
+  
+  select.innerHTML = '';
+  const catList = type === 'income' ? categories.income : categories.expense;
+  
+  catList.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    if (cat === selectedCategory) {
+      option.selected = true;
+    }
+    select.appendChild(option);
+  });
+  
+  // Atualizar símbolo da moeda no modal
+  const modalCurrencyIcon = document.querySelector('#editModal .input-icon');
+  if (modalCurrencyIcon) {
+    modalCurrencyIcon.textContent = currencySymbol;
+  }
+}
+
+/**
+ * Guarda as alterações de um registo
+ */
+function saveEditRecord() {
+  const amount = parseFloat(document.getElementById('editRecordAmount').value) || 0;
+  const description = document.getElementById('editRecordDescription').value.trim();
+  const category = document.getElementById('editRecordCategory').value;
+  const date = document.getElementById('editRecordDate').value;
+  const typeBtn = document.querySelector('#editModal .type-btn.active');
+  const type = typeBtn ? typeBtn.dataset.type : 'expense';
+  
+  if (amount <= 0) {
+    document.getElementById('editRecordAmount').style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      document.getElementById('editRecordAmount').style.borderColor = '';
+    }, 2000);
+    return;
+  }
+  
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const recordIndex = settings.records.findIndex(r => r.id === editingRecordId);
+  
+  if (recordIndex !== -1) {
+    settings.records[recordIndex] = {
+      id: editingRecordId,
+      type: type,
+      amount: amount,
+      description: description || category,
+      category: category,
+      date: date
+    };
+    
+    localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+  }
+  
+  closeEditModal();
+  loadRecords();
+  updateDashboardWithRecords();
+}
+
 /**
  * Filtra os registos por tipo
  * @param {string} filter - Filtro (all, income, expense)
@@ -580,6 +708,7 @@ function loadRecords() {
       </div>
       <div class="record-actions">
         <span class="record-value">${record.type === 'income' ? '+' : '-'}${currencySymbol} ${formatCurrencyValue(record.amount)}</span>
+        <button class="record-edit" onclick="openEditModal(${record.id})" title="Editar">✏️</button>
         <button class="record-delete" onclick="deleteRecord(${record.id})" title="Eliminar">🗑️</button>
       </div>
     </div>
@@ -673,11 +802,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.target === this) closeRecordModal();
   });
   
+  document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+  });
+  
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeRecordModal();
+    if (e.key === 'Escape') {
+      closeRecordModal();
+      closeEditModal();
+    }
   });
   
   document.getElementById('recordAmount').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') addRecord();
+  });
+  
+  document.getElementById('editRecordAmount').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveEditRecord();
   });
 });

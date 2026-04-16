@@ -1142,6 +1142,21 @@ h1 {
   color: var(--red);
 }
 
+.record-edit {
+  padding: 8px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all .3s ease;
+}
+
+.record-edit:hover {
+  background: rgba(24,210,235,.2);
+  color: var(--cyan);
+}
+
 /* ================================================
    RECORD MODAL
    ================================================ */
