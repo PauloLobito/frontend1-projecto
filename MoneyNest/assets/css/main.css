@@ -127,7 +127,7 @@ body {
 .sidebar-footer {
   margin-top: auto;
   width: 100%;
-  padding: 14px;
+  aspect-ratio: 1;
   border-radius: 16px;
   background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
   display: flex;
@@ -135,20 +135,16 @@ body {
   justify-content: center;
 }
 
-.settings-link {
+.settings-icon {
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 22px;
   text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all .2s ease;
+  transition: all .3s ease;
 }
 
-.settings-link:hover {
+.settings-icon:hover {
   color: var(--cyan);
-  transform: translateX(4px);
+  transform: rotate(90deg);
 }
 
 .main {
