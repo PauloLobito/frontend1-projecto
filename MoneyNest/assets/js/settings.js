@@ -229,6 +229,26 @@ function applyLanguageSettings() {
 }
 
 // ================================================
+// FUNÇÃO: applyTheme
+// ================================================
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
+// ================================================
+// FUNÇÃO: loadAndApplyTheme
+// ================================================
+function loadAndApplyTheme() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const theme = settings.theme || 'dark';
+  applyTheme(theme);
+}
+
+// ================================================
 // FUNÇÃO: saveSettings
 // ================================================
 function saveSettings() {
@@ -302,6 +322,7 @@ function loadSettings() {
 // ================================================
 document.addEventListener('DOMContentLoaded', function() {
   loadSettings();
+  loadAndApplyTheme();
   applyLanguageSettings();
   
   const hoje = new Date();
@@ -316,5 +337,13 @@ document.addEventListener('DOMContentLoaded', function() {
     currentSettings.language = this.value;
     localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
     applyLanguageSettings();
+  });
+
+  document.getElementById('settingTheme').addEventListener('change', function() {
+    const saved = localStorage.getItem('moneynest_settings');
+    const currentSettings = saved ? JSON.parse(saved) : {};
+    currentSettings.theme = this.value;
+    localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
+    applyTheme(this.value);
   });
 });

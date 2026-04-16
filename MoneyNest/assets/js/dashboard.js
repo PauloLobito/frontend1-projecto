@@ -182,6 +182,26 @@ const currencies = {
 };
 
 // ================================================
+// FUNÇÃO: applyTheme
+// ================================================
+function applyTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+
+// ================================================
+// FUNÇÃO: loadAndApplyTheme
+// ================================================
+function loadAndApplyTheme() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const theme = settings.theme || 'dark';
+  applyTheme(theme);
+}
+
+// ================================================
 // FUNÇÃO: applySettings
 // ================================================
 function applySettings() {
@@ -274,6 +294,9 @@ function logout() {
 // EVENTO: DOMContentLoaded
 // ================================================
 document.addEventListener('DOMContentLoaded', function() {
+  // Aplicar tema
+  loadAndApplyTheme();
+
   // Verifica se o utilizador está logado
   const loggedInUser = localStorage.getItem('moneynest_loggedIn');
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');

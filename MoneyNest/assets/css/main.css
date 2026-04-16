@@ -19,6 +19,18 @@
   --radius-md: 16px;
 }
 
+[data-theme="light"] {
+  --bg: #f0f2f8;
+  --sidebar: #e4e7f2;
+  --panel: #ffffff;
+  --panel-soft: #f5f7fc;
+  --panel-dark: #e8ecf4;
+  --text: #1a1f36;
+  --muted: #6b7394;
+  --line: rgba(0,0,0,.08);
+  --shadow: 0 18px 40px rgba(0, 0, 0, .08);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
