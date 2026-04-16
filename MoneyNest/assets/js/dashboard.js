@@ -245,6 +245,7 @@ function loadRevenueGoal() {
   document.getElementById('goalAmount').textContent = formatCurrency(goal);
   document.getElementById('currentRevenue').textContent = formatCurrency(revenue);
   document.getElementById('goalInput').placeholder = '0,00';
+  document.getElementById('goalInput').min = '0';
   
   const percentEl = document.querySelector('.percent');
   let percent = 0;
@@ -264,14 +265,10 @@ function loadRevenueGoal() {
 // ================================================
 function setRevenueGoal() {
   const input = document.getElementById('goalInput');
-  const value = parseFloat(input.value.replace(',', '.')) || 0;
+  let value = parseFloat(input.value.replace(',', '.'));
   
-  if (value <= 0) {
-    input.style.borderColor = 'var(--red)';
-    setTimeout(() => {
-      input.style.borderColor = '';
-    }, 2000);
-    return;
+  if (isNaN(value)) {
+    value = 0;
   }
   
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
