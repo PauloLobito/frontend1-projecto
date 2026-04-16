@@ -6,9 +6,9 @@
  * com o login e registo de utilizadores.
  * 
  * Funcionalidades:
- * - Toggle de visibilidade da senha
+ * - Toggle de visibilidade da palavra-passe
  * - Validação de formulários
- * - Indicador de força da senha
+ * - Indicador de força da palavra-passe
  * - Mensagens de sucesso/erro
  */
 
@@ -16,11 +16,11 @@
 // FUNÇÃO: togglePassword
 // ================================================
 /**
- * Alterna a visibilidade da senha entre visível e oculta.
+ * Alterna a visibilidade da palavra-passe entre visível e oculta.
  * Quando clicada, muda o tipo do input de 'password' para 'text'
- * e vice-versa, permitindo ao utilizador ver ou esconder a senha.
+ * e vice-versa, permitindo ao utilizador ver ou esconder a palavra-passe.
  * 
- * @param {string} inputId - O ID do campo de input da senha
+ * @param {string} inputId - O ID do campo de input da palavra-passe
  * @param {HTMLElement} btn - O botão que foi clicado (para mudar o ícone)
  * 
  * Como funciona:
@@ -68,7 +68,7 @@ function showMessage(type, text) {
 // FUNÇÃO: checkPasswordStrength
 // ================================================
 /**
- * Analisa a força da senha digitada e atualiza a barra
+ * Analisa a força da palavra-passe digitada e atualiza a barra
  * de progresso visualmente.
  * 
  * A força é calculada com base em 4 critérios:
@@ -83,7 +83,7 @@ function showMessage(type, text) {
  * - 3 critérios = Boa (verde)
  * - 4 critérios = Forte (cyan)
  * 
- * @param {string} password - A senha a ser analisada
+ * @param {string} password - A palavra-passe a ser analisada
  * 
  * @example
  * checkPasswordStrength('abc');        // Fraca (só 3 caracteres)
@@ -96,39 +96,25 @@ function checkPasswordStrength(password) {
   
   if (!strengthFill || !strengthText) return;
   
-  // Reseta as classes de força
   strengthFill.className = 'strength-fill';
   strengthText.className = 'strength-text';
   
-  // Se não houver senha, mostra texto inicial
   if (!password) {
-    strengthText.textContent = 'Digite uma senha';
+    strengthText.textContent = 'Digite uma palavra-passe';
     return;
   }
 
-  // Contador de critérios cumpridos
   let strength = 0;
-  
-  // Verifica se tem pelo menos 8 caracteres
   if (password.length >= 8) strength++;
-  
-  // Verifica se tem pelo menos uma letra maiúscula (A-Z)
   if (/[A-Z]/.test(password)) strength++;
-  
-  // Verifica se tem pelo menos um número (0-9)
   if (/[0-9]/.test(password)) strength++;
-  
-  // Verifica se tem pelo menos um caractere especial (!@#$%...)
   if (/[^A-Za-z0-9]/.test(password)) strength++;
 
-  // Mapeia o nível para as classes CSS correspondentes
   const levels = ['weak', 'fair', 'good', 'strong'];
   const texts = ['Fraca', 'Razoável', 'Boa', 'Forte'];
   
-  // Aplica a classe de força (ou 'weak' se não cumprir nenhum)
-  const level = levels[strength - 1] || 'weak';
-  strengthFill.classList.add(level);
-  strengthText.classList.add(level);
+  strengthFill.classList.add(levels[strength - 1] || 'weak');
+  strengthText.classList.add(levels[strength - 1] || 'weak');
   strengthText.textContent = texts[strength - 1] || 'Muito fraca';
 }
 
@@ -151,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (loginForm) {
     /**
-     * Quando o utilizador clica em "Entrar" (submit):
+     * Quando o utilizador clica em "Iniciar Sessão" (submit):
      * 1. Previne o comportamento padrão do formulário
      * 2. Mostra o estado de loading no botão
      * 3. Aguarda 1.5 segundos (simula chamada à API)
@@ -159,32 +145,25 @@ document.addEventListener('DOMContentLoaded', function() {
      * 5. Mostra mensagem de sucesso ou erro
      */
     loginForm.addEventListener('submit', async function(e) {
-      // Previne o recarregamento da página
       e.preventDefault();
       
-      // Pega o botão e coloca em modo loading
       const btn = document.getElementById('login-btn');
       btn.classList.add('loading');
       btn.textContent = '';
 
-      // Pega os valores dos campos
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      // Simula um atraso de rede (1.5 segundos)
       await new Promise(r => setTimeout(r, 1500));
 
-      // Remove o estado de loading
       btn.classList.remove('loading');
-      btn.textContent = 'Entrar';
+      btn.textContent = 'Iniciar Sessão';
 
-      // Verifica as credenciais (demo: demo@moneynest.com / demo123)
       if (email === 'demo@moneynest.com' && password === 'demo123') {
-        showMessage('success', '✓ Login realizado com sucesso! Redirecionando...');
-        // Redireciona para o dashboard após 1.5 segundos
+        showMessage('success', '✓ Sessão iniciada com sucesso! A redirecionar...');
         setTimeout(() => window.location.href = '../pages/index.html', 1500);
       } else {
-        showMessage('error', '✗ Email ou senha incorretos. Tente demo@moneynest.com / demo123');
+        showMessage('error', '✗ Email ou palavra-passe incorretos. Tente demo@moneynest.com / demo123');
       }
     });
   }
@@ -195,14 +174,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const registerForm = document.getElementById('register-form');
   
   if (registerForm) {
-    // Liga o indicador de força da senha em tempo real
     const passwordInput = document.getElementById('password');
     if (passwordInput) {
-      /**
-       * Cada vez que o utilizador digita algo no campo senha,
-       * a função checkPasswordStrength é chamada para atualizar
-       * a barra visual de força.
-       */
       passwordInput.addEventListener('input', function(e) {
         checkPasswordStrength(e.target.value);
       });
@@ -210,17 +183,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /**
      * Quando o utilizador clica em "Criar Conta" (submit):
-     * 1. Valida se as senhas coincidem
+     * 1. Valida se as palavras-passe coincidem
      * 2. Valida se os termos foram aceites
      * 3. Mostra estado de loading
      * 4. Simula criação de conta
      * 5. Redireciona para login
      */
     registerForm.addEventListener('submit', async function(e) {
-      // Previne o recarregamento da página
       e.preventDefault();
       
-      // Pega todos os valores do formulário
       const firstName = document.getElementById('firstName').value;
       const lastName = document.getElementById('lastName').value;
       const email = document.getElementById('email').value;
@@ -228,32 +199,26 @@ document.addEventListener('DOMContentLoaded', function() {
       const confirmPassword = document.getElementById('confirmPassword').value;
       const terms = document.getElementById('terms').checked;
 
-      // Validação: As senhas devem ser iguais
       if (password !== confirmPassword) {
-        showMessage('error', '✗ As senhas não coincidem');
-        return; // Para a execução aqui
+        showMessage('error', '✗ As palavras-passe não coincidem');
+        return;
       }
 
-      // Validação: Deve aceitar os termos
       if (!terms) {
-        showMessage('error', '✗ Você precisa aceitar os termos para continuar');
-        return; // Para a execução aqui
+        showMessage('error', '✗ Tem de aceitar os termos para continuar');
+        return;
       }
 
-      // Mostra estado de loading
       const btn = document.getElementById('register-btn');
       btn.classList.add('loading');
       btn.textContent = '';
 
-      // Simula o tempo de criação da conta
       await new Promise(r => setTimeout(r, 2000));
 
-      // Remove o loading
       btn.classList.remove('loading');
       btn.textContent = 'Criar Conta';
 
-      // Mostra sucesso e redireciona
-      showMessage('success', '✓ Conta criada com sucesso! Redirecionando...');
+      showMessage('success', '✓ Conta criada com sucesso! A redirecionar...');
       setTimeout(() => window.location.href = 'login.html', 1500);
     });
   }

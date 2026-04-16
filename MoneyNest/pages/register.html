@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-PT">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoneyNest - Cadastro</title>
+  <title>MoneyNest - Registo</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="stylesheet" href="../assets/css/auth.css">
@@ -15,7 +15,7 @@
         <div class="auth-header register-header">
           <div class="auth-logo register-logo">$</div>
           <h1>Criar conta</h1>
-          <p>Comece a gerenciar suas finanças hoje</p>
+          <p>Comece a gerir as suas finanças hoje</p>
         </div>
 
         <div id="message-container"></div>
@@ -26,13 +26,13 @@
               <label class="form-label small">Nome</label>
               <div class="input-wrapper">
                 <span class="input-icon">👤</span>
-                <input type="text" class="form-input with-icon register-input" id="firstName" placeholder="Seu nome" required>
+                <input type="text" class="form-input with-icon register-input" id="firstName" placeholder="O seu nome" required>
               </div>
             </div>
             <div class="form-group register-group">
-              <label class="form-label small">Sobrenome</label>
+              <label class="form-label small">Apelido</label>
               <div class="input-wrapper">
-                <input type="text" class="form-input register-input" id="lastName" placeholder="Sobrenome" required>
+                <input type="text" class="form-input register-input" id="lastName" placeholder="Apelido" required>
               </div>
             </div>
           </div>
@@ -46,7 +46,7 @@
           </div>
 
           <div class="form-group register-group">
-            <label class="form-label small">Senha</label>
+            <label class="form-label small">Palavra-passe</label>
             <div class="input-wrapper">
               <span class="input-icon">🔒</span>
               <input type="password" class="form-input with-icon register-input" id="password" placeholder="Mínimo 8 caracteres" required minlength="8">
@@ -58,15 +58,15 @@
               <div class="strength-bar">
                 <div class="strength-fill" id="strengthFill"></div>
               </div>
-              <span class="strength-text" id="strengthText">Digite uma senha</span>
+              <span class="strength-text" id="strengthText">Digite uma palavra-passe</span>
             </div>
           </div>
 
           <div class="form-group register-group">
-            <label class="form-label small">Confirmar Senha</label>
+            <label class="form-label small">Confirmar Palavra-passe</label>
             <div class="input-wrapper">
               <span class="input-icon">🔒</span>
-              <input type="password" class="form-input with-icon register-input" id="confirmPassword" placeholder="Repita a senha" required>
+              <input type="password" class="form-input with-icon register-input" id="confirmPassword" placeholder="Repita a palavra-passe" required>
               <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)">
                 <span>👁</span>
               </button>
@@ -76,14 +76,14 @@
           <label class="terms-checkbox">
             <input type="checkbox" id="terms" required>
             <div class="checkbox-custom"></div>
-            <span>Eu concordo com os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a></span>
+            <span>Eu concordo com os <a href="#">Termos de Utilização</a> e <a href="#">Política de Privacidade</a></span>
           </label>
 
           <button type="submit" class="btn-auth register-btn" id="register-btn">Criar Conta</button>
         </form>
 
         <div class="divider register-divider">
-          <span>ou cadastre-se com</span>
+          <span>ou registe-se com</span>
         </div>
 
         <div class="social-login">
@@ -98,7 +98,7 @@
         </div>
 
         <div class="auth-footer register-footer">
-          <p>Já tem uma conta? <a href="login.html">Faça login</a></p>
+          <p>Já tem uma conta? <a href="login.html">Inicie sessão</a></p>
         </div>
       </div>
     </div>
