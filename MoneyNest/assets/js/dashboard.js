@@ -237,11 +237,13 @@ function applySettings() {
  * Atualiza o dashboard com os dados dos registos
  */
 function updateDashboardWithRecords() {
+  console.log('updateDashboardWithRecords called');
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
   const categories = settings.categories || getDefaultCategories();
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
+  console.log('records:', records.length);
   
   // Obter mês e ano atuais
   const hoje = new Date();
@@ -969,6 +971,7 @@ function deleteRecord(id) {
 // EVENTO: DOMContentLoaded
 // ================================================
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOMContentLoaded fired');
   // Aplicar tema
   loadAndApplyTheme();
 
