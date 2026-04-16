@@ -43,7 +43,18 @@ const translations = {
     dateFormat: 'Formato de data',
     dateFormatDesc: 'Formato de apresentação das datas',
     months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    resetConfirm: 'Tem a certeza que deseja restaurar as definições padrão?'
+    resetConfirm: 'Tem a certeza que deseja restaurar as definições padrão?',
+    currentPassword: 'Palavra-passe atual',
+    newPassword: 'Nova palavra-passe',
+    confirmPassword: 'Confirmar nova palavra-passe',
+    cancel: 'Cancelar',
+    confirm: 'Alterar',
+    notLoggedIn: 'Precisa de iniciar sessão para alterar a palavra-passe.',
+    userNotFound: 'Utilizador não encontrado.',
+    wrongPassword: 'Palavra-passe atual incorreta.',
+    passwordTooShort: 'A nova palavra-passe deve ter pelo menos 6 caracteres.',
+    passwordMismatch: 'As palavras-passe não coincidem.',
+    passwordChanged: 'Palavra-passe alterada com sucesso!'
   },
   'pt-BR': {
     title: 'Configurações',
@@ -84,7 +95,18 @@ const translations = {
     dateFormat: 'Formato de data',
     dateFormatDesc: 'Formato de apresentação das datas',
     months: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    resetConfirm: 'Tem certeza que deseja restaurar as configurações padrão?'
+    resetConfirm: 'Tem certeza que deseja restaurar as configurações padrão?',
+    currentPassword: 'Senha atual',
+    newPassword: 'Nova senha',
+    confirmPassword: 'Confirmar nova senha',
+    cancel: 'Cancelar',
+    confirm: 'Alterar',
+    notLoggedIn: 'Você precisa estar logado para alterar a senha.',
+    userNotFound: 'Usuário não encontrado.',
+    wrongPassword: 'Senha atual incorreta.',
+    passwordTooShort: 'A nova senha deve ter pelo menos 6 caracteres.',
+    passwordMismatch: 'As senhas não coincidem.',
+    passwordChanged: 'Senha alterada com sucesso!'
   },
   'en': {
     title: 'Settings',
@@ -125,7 +147,18 @@ const translations = {
     dateFormat: 'Date format',
     dateFormatDesc: 'Date display format',
     months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    resetConfirm: 'Are you sure you want to reset to default settings?'
+    resetConfirm: 'Are you sure you want to reset to default settings?',
+    currentPassword: 'Current password',
+    newPassword: 'New password',
+    confirmPassword: 'Confirm new password',
+    cancel: 'Cancel',
+    confirm: 'Change',
+    notLoggedIn: 'You need to be logged in to change your password.',
+    userNotFound: 'User not found.',
+    wrongPassword: 'Current password is incorrect.',
+    passwordTooShort: 'New password must be at least 6 characters.',
+    passwordMismatch: 'Passwords do not match.',
+    passwordChanged: 'Password changed successfully!'
   },
   'es': {
     title: 'Configuración',
@@ -166,7 +199,18 @@ const translations = {
     dateFormat: 'Formato de fecha',
     dateFormatDesc: 'Formato de presentación de fechas',
     months: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-    resetConfirm: '¿Está seguro de que desea restablecer la configuración predeterminada?'
+    resetConfirm: '¿Está seguro de que desea restablecer la configuración predeterminada?',
+    currentPassword: 'Contraseña actual',
+    newPassword: 'Nueva contraseña',
+    confirmPassword: 'Confirmar nueva contraseña',
+    cancel: 'Cancelar',
+    confirm: 'Cambiar',
+    notLoggedIn: 'Debes iniciar sesión para cambiar tu contraseña.',
+    userNotFound: 'Usuario no encontrado.',
+    wrongPassword: 'Contraseña actual incorrecta.',
+    passwordTooShort: 'La nueva contraseña debe tener al menos 6 caracteres.',
+    passwordMismatch: 'Las contraseñas no coinciden.',
+    passwordChanged: '¡Contraseña cambiada con éxito!'
   }
 };
 
@@ -314,6 +358,115 @@ function resetSettings() {
 }
 
 // ================================================
+// FUNÇÃO: togglePassword
+// ================================================
+function togglePassword(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.querySelector('span').textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.querySelector('span').textContent = '👁';
+  }
+}
+
+// ================================================
+// FUNÇÃO: openPasswordModal
+// ================================================
+function openPasswordModal() {
+  const modal = document.getElementById('passwordModal');
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  
+  document.getElementById('currentPassword').value = '';
+  document.getElementById('newPassword').value = '';
+  document.getElementById('confirmPassword').value = '';
+  document.getElementById('modalMessage').className = 'modal-message';
+  document.getElementById('modalMessage').textContent = '';
+  
+  document.getElementById('modalTitle').textContent = t.changePassword;
+  document.getElementById('currentPassLabel').textContent = t.currentPassword || 'Palavra-passe atual';
+  document.getElementById('newPassLabel').textContent = t.newPassword || 'Nova palavra-passe';
+  document.getElementById('confirmPassLabel').textContent = t.confirmPassword || 'Confirmar nova palavra-passe';
+  document.getElementById('cancelBtn').textContent = t.cancel || 'Cancelar';
+  document.getElementById('confirmBtn').textContent = t.confirm || 'Alterar';
+  
+  modal.classList.add('active');
+}
+
+// ================================================
+// FUNÇÃO: closePasswordModal
+// ================================================
+function closePasswordModal() {
+  document.getElementById('passwordModal').classList.remove('active');
+}
+
+// ================================================
+// FUNÇÃO: submitPasswordChange
+// ================================================
+function submitPasswordChange() {
+  const currentPassword = document.getElementById('currentPassword').value;
+  const newPassword = document.getElementById('newPassword').value;
+  const confirmPassword = document.getElementById('confirmPassword').value;
+  const messageEl = document.getElementById('modalMessage');
+  
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settings.language || 'pt-PT';
+  const t = translations[lang];
+  
+  messageEl.className = 'modal-message';
+  
+  const users = JSON.parse(localStorage.getItem('moneynest_users') || '[]');
+  const loggedInUser = JSON.parse(localStorage.getItem('moneynest_loggedIn'));
+  
+  if (!loggedInUser) {
+    messageEl.textContent = t.notLoggedIn || 'Precisa de iniciar sessão para alterar a palavra-passe.';
+    messageEl.classList.add('error');
+    return;
+  }
+  
+  const userIndex = users.findIndex(u => u.email === loggedInUser.email);
+  
+  if (userIndex === -1) {
+    messageEl.textContent = t.userNotFound || 'Utilizador não encontrado.';
+    messageEl.classList.add('error');
+    return;
+  }
+  
+  const user = users[userIndex];
+  
+  if (user.password !== currentPassword) {
+    messageEl.textContent = t.wrongPassword || 'Palavra-passe atual incorreta.';
+    messageEl.classList.add('error');
+    return;
+  }
+  
+  if (newPassword.length < 6) {
+    messageEl.textContent = t.passwordTooShort || 'A nova palavra-passe deve ter pelo menos 6 caracteres.';
+    messageEl.classList.add('error');
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    messageEl.textContent = t.passwordMismatch || 'As palavras-passe não coincidem.';
+    messageEl.classList.add('error');
+    return;
+  }
+  
+  users[userIndex].password = newPassword;
+  localStorage.setItem('moneynest_users', JSON.stringify(users));
+  
+  messageEl.textContent = t.passwordChanged || 'Palavra-passe alterada com sucesso!';
+  messageEl.classList.add('success');
+  
+  setTimeout(() => {
+    closePasswordModal();
+  }, 1500);
+}
+
+// ================================================
 // FUNÇÃO: loadSettings
 // ================================================
 function loadSettings() {
@@ -363,5 +516,17 @@ document.addEventListener('DOMContentLoaded', function() {
     currentSettings.theme = this.value;
     localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
     applyTheme(this.value);
+  });
+
+  document.getElementById('passwordModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+      closePasswordModal();
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closePasswordModal();
+    }
   });
 });

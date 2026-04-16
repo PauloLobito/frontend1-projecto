@@ -150,7 +150,7 @@
                 <span class="setting-label">Alterar palavra-passe</span>
                 <span class="setting-desc">Atualizar a sua palavra-passe</span>
               </div>
-              <button class="btn-change">Alterar</button>
+              <button class="btn-change" onclick="openPasswordModal()">Alterar</button>
             </div>
           </section>
 
@@ -212,6 +212,52 @@
         </div>
       </div>
     </main>
+  </div>
+
+  <div class="modal-overlay" id="passwordModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Alterar Palavra-passe</h2>
+        <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-message" id="modalMessage"></div>
+        <div class="form-group">
+          <label class="form-label" id="currentPassLabel">Palavra-passe atual</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input with-icon" id="currentPassword" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('currentPassword', this)">
+              <span>👁</span>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="newPassLabel">Nova palavra-passe</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔑</span>
+            <input type="password" class="form-input with-icon" id="newPassword" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('newPassword', this)">
+              <span>👁</span>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="confirmPassLabel">Confirmar nova palavra-passe</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔑</span>
+            <input type="password" class="form-input with-icon" id="confirmPassword" placeholder="••••••••">
+            <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)">
+              <span>👁</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closePasswordModal()" id="cancelBtn">Cancelar</button>
+        <button class="btn-confirm" onclick="submitPasswordChange()" id="confirmBtn">Alterar</button>
+      </div>
+    </div>
   </div>
 
   <script src="../assets/js/settings.js"></script>
