@@ -247,12 +247,17 @@ function getDefaultCategories() {
 // ================================================
 function loadIncomeCategories() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
-  const categories = settings.categories || getDefaultCategories();
+  const categories = settings.categories;
+  const defaultCats = getDefaultCategories();
   const barLabels = document.querySelectorAll('.bar-label');
   
+  const incomeCategories = categories ? categories.income : defaultCats.income;
+  
   barLabels.forEach((label, index) => {
-    if (categories.income[index]) {
-      label.textContent = categories.income[index];
+    if (incomeCategories[index]) {
+      label.textContent = incomeCategories[index];
+    } else {
+      label.textContent = '';
     }
   });
 }

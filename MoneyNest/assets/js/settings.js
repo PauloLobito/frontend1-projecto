@@ -698,6 +698,8 @@ function loadCategories() {
   let categories = settings.categories;
   if (!categories) {
     categories = getDefaultCategories();
+    settings.categories = categories;
+    localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   }
   
   const incomeList = document.getElementById('incomeCategoryList');
@@ -783,7 +785,7 @@ function closeCategoryModal() {
 function addCategory() {
   const input = document.getElementById('newCategoryName');
   const name = input.value.trim();
-  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  let settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
   
@@ -798,6 +800,7 @@ function addCategory() {
   let categories = settings.categories;
   if (!categories) {
     categories = getDefaultCategories();
+    settings.categories = categories;
   }
   
   if (categories[currentCategoryType].some(c => c.toLowerCase() === name.toLowerCase())) {
@@ -820,18 +823,20 @@ function addCategory() {
 // FUNÇÃO: deleteCategory
 // ================================================
 function deleteCategory(type, index) {
-  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  let settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   let categories = settings.categories;
   
   if (!categories) {
     categories = getDefaultCategories();
+    settings.categories = categories;
   }
   
-  categories[type].splice(index, 1);
-  settings.categories = categories;
-  localStorage.setItem('moneynest_settings', JSON.stringify(settings));
-  
-  loadCategories();
+  if (categories[type] && categories[type][index] !== undefined) {
+    categories[type].splice(index, 1);
+    settings.categories = categories;
+    localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+    loadCategories();
+  }
 }
 
 // ================================================
