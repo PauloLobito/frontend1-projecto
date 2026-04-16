@@ -463,6 +463,8 @@ function renderChart() {
   if (svg) {
     svg.innerHTML = barsHTML;
     svg.setAttribute('viewBox', `0 0 ${chartRight} 260`);
+  } else {
+    console.log('SVG not found');
   }
   
   const totalIncome = monthlyData.reduce((sum, d) => sum + d.income, 0);
@@ -478,6 +480,8 @@ function renderChart() {
   if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
   if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
   if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
+  
+  console.log('Chart rendered, records:', records.length, 'barsHTML length:', barsHTML.length);
 }
 
 // ================================================
