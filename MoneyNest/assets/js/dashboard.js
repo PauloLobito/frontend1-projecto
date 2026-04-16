@@ -323,6 +323,8 @@ function setRecordType(type) {
 function loadRecordCategories() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const categories = settings.categories || getDefaultCategories();
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
   const select = document.getElementById('recordCategory');
   
   select.innerHTML = '';
@@ -334,6 +336,12 @@ function loadRecordCategories() {
     option.textContent = cat;
     select.appendChild(option);
   });
+  
+  // Atualizar símbolo da moeda no modal
+  const modalCurrencyIcon = document.querySelector('#recordModal .input-icon');
+  if (modalCurrencyIcon) {
+    modalCurrencyIcon.textContent = currencySymbol;
+  }
 }
 
 /**
@@ -397,6 +405,8 @@ function filterRecords(filter) {
 function loadRecords() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
   const list = document.getElementById('recordsList');
   
   // Filtrar registos
@@ -438,7 +448,7 @@ function loadRecords() {
         </div>
       </div>
       <div class="record-actions">
-        <span class="record-value">${record.type === 'income' ? '+' : '-'}${formatCurrencyValue(record.amount)}</span>
+        <span class="record-value">${record.type === 'income' ? '+' : '-'}${currencySymbol} ${formatCurrencyValue(record.amount)}</span>
         <button class="record-delete" onclick="deleteRecord(${record.id})" title="Eliminar">🗑️</button>
       </div>
     </div>
@@ -451,7 +461,16 @@ function loadRecords() {
  * @returns {string} Valor formatado
  */
 function formatCurrencyValue(value) {
-  return new Intl.NumberFormat('pt-BR', {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const currency = settings.currency || 'BRL';
+  
+  const locales = {
+    'BRL': 'pt-BR',
+    'EUR': 'de-DE',
+    'USD': 'en-US'
+  };
+  
+  return new Intl.NumberFormat(locales[currency] || 'pt-BR', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(value);
