@@ -225,6 +225,117 @@ function applySettings() {
   const registerBtn = document.getElementById('registerBtn');
   if (loginBtn) loginBtn.textContent = t.login;
   if (registerBtn) registerBtn.textContent = t.register;
+  
+  // Atualizar dashboard com dados dos registos
+  updateDashboardWithRecords();
+}
+
+// ================================================
+// FUNÇÃO: updateDashboardWithRecords
+// ================================================
+/**
+ * Atualiza o dashboard com os dados dos registos
+ */
+function updateDashboardWithRecords() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const records = settings.records || [];
+  const categories = settings.categories || getDefaultCategories();
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
+  
+  // Obter mês e ano atuais
+  const hoje = new Date();
+  const currentMonth = hoje.getMonth();
+  const currentYear = hoje.getFullYear();
+  
+  // Filtrar registos do mês atual
+  const monthlyRecords = records.filter(r => {
+    const recordDate = new Date(r.date);
+    return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+  });
+  
+  // Calcular totais
+  const totalIncome = monthlyRecords.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const totalExpense = monthlyRecords.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  const balance = totalIncome - totalExpense;
+  
+  // Atualizar valores no dashboard
+  // Saldo disponível
+  const balanceEl = document.querySelector('.balance');
+  if (balanceEl) {
+    balanceEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(balance)}`;
+  }
+  
+  // Gastos (despesas)
+  const gastosEl = document.querySelector('.mini-value');
+  if (gastosEl) {
+    gastosEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
+  }
+  
+  // Receita total
+  const revenueEl = document.querySelectorAll('.mini-value')[1];
+  if (revenueEl) {
+    revenueEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
+  }
+  
+  // Meta de receita
+  const goalAmount = settings.revenueGoal || 0;
+  const progressPercent = goalAmount > 0 ? Math.min(Math.round((totalIncome / goalAmount) * 100), 100) : 0;
+  
+  const currentRevenueEl = document.getElementById('currentRevenue');
+  const goalAmountEl = document.getElementById('goalAmount');
+  const percentEl = document.querySelector('.percent');
+  const progressFill = document.getElementById('progressFill');
+  
+  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(totalIncome);
+  if (goalAmountEl) goalAmountEl.textContent = formatCurrencyValue(goalAmount);
+  if (percentEl) percentEl.textContent = progressPercent + '%';
+  if (progressFill) progressFill.style.width = progressPercent + '%';
+  
+  // Fontes de receita (barras)
+  const incomeByCategory = {};
+  monthlyRecords.filter(r => r.type === 'income').forEach(r => {
+    incomeByCategory[r.category] = (incomeByCategory[r.category] || 0) + r.amount;
+  });
+  
+  const barValues = document.querySelectorAll('.bar-value');
+  const barLabels = document.querySelectorAll('.bar-label');
+  
+  barValues.forEach((el, index) => {
+    const category = categories.income[index] || categories.income[0];
+    const amount = incomeByCategory[category] || 0;
+    el.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+    
+    // Altura da barra proporcional ao máximo
+    const maxAmount = Math.max(...Object.values(incomeByCategory), 1);
+    const barHeight = (amount / maxAmount) * 100;
+    const bar = el.parentElement.querySelector('.bar');
+    if (bar) bar.style.height = barHeight + 'px';
+  });
+  
+  barLabels.forEach((el, index) => {
+    el.textContent = categories.income[index] || '';
+  });
+  
+  // Lista de despesas
+  const expenseByCategory = {};
+  monthlyRecords.filter(r => r.type === 'expense').forEach(r => {
+    expenseByCategory[r.category] = (expenseByCategory[r.category] || 0) + r.amount;
+  });
+  
+  const itemNames = document.querySelectorAll('.item-name');
+  const itemAmounts = document.querySelectorAll('.item-amount');
+  
+  itemNames.forEach((el, index) => {
+    const category = categories.expense[index] || categories.expense[index];
+    el.textContent = category || '';
+    
+    const amount = expenseByCategory[category] || 0;
+    const amountEl = itemAmounts[index];
+    if (amountEl) {
+      amountEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+    }
+  });
 }
 
 // ================================================
@@ -379,6 +490,7 @@ function addRecord() {
   
   closeRecordModal();
   loadRecords();
+  updateDashboardWithRecords();
 }
 
 /**
@@ -496,6 +608,7 @@ function deleteRecord(id) {
     settings.records = settings.records.filter(r => r.id !== id);
     localStorage.setItem('moneynest_settings', JSON.stringify(settings));
     loadRecords();
+    updateDashboardWithRecords();
   }
 }
 
