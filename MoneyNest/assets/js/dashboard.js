@@ -233,6 +233,31 @@ function formatCurrency(value) {
 }
 
 // ================================================
+// FUNÇÃO: getDefaultCategories
+// ================================================
+function getDefaultCategories() {
+  return {
+    income: ['Salário', 'E-commerce', 'Anúncios', 'Loja', 'Freelance', 'Investimentos'],
+    expense: ['Habitação', 'Pessoal', 'Transportes', 'Alimentação', 'Saúde', 'Lazer']
+  };
+}
+
+// ================================================
+// FUNÇÃO: loadIncomeCategories
+// ================================================
+function loadIncomeCategories() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const categories = settings.categories || getDefaultCategories();
+  const barLabels = document.querySelectorAll('.bar-label');
+  
+  barLabels.forEach((label, index) => {
+    if (categories.income[index]) {
+      label.textContent = categories.income[index];
+    }
+  });
+}
+
+// ================================================
 // FUNÇÃO: loadRevenueGoal
 // ================================================
 function loadRevenueGoal() {
@@ -410,4 +435,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Carregar meta de receita
   loadRevenueGoal();
+  
+  // Carregar categorias de receita
+  loadIncomeCategories();
 });
