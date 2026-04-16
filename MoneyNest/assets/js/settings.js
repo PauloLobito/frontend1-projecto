@@ -518,7 +518,9 @@ function saveProfileChanges() {
 // FUNÇÃO: saveSettings
 // ================================================
 function saveSettings() {
+  const existingSettings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const settings = {
+    ...existingSettings,
     name: document.getElementById('settingName').value,
     email: document.getElementById('settingEmail').value,
     currency: document.getElementById('settingCurrency').value,
