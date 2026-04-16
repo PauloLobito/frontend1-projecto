@@ -464,6 +464,20 @@ function renderChart() {
     svg.innerHTML = barsHTML;
     svg.setAttribute('viewBox', `0 0 ${chartRight} 260`);
   }
+  
+  const totalIncome = monthlyData.reduce((sum, d) => sum + d.income, 0);
+  const totalExpense = monthlyData.reduce((sum, d) => sum + d.expense, 0);
+  const totalBalance = totalIncome - totalExpense;
+  
+  const assetsIncome = document.getElementById('assetsIncome');
+  const assetsExpense = document.getElementById('assetsExpense');
+  const assetsBalance = document.getElementById('assetsBalance');
+  const assetsPatrimony = document.getElementById('assetsPatrimony');
+  
+  if (assetsIncome) assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
+  if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
+  if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
+  if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
 }
 
 // ================================================
