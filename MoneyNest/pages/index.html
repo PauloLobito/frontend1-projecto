@@ -71,7 +71,10 @@
         </article>
 
         <article class="card">
-          <h3>Despesas</h3>
+          <div class="card-header">
+            <h3>Despesas</h3>
+            <button class="btn-add-transaction" onclick="openTransactionModal('expense')">+ Adicionar</button>
+          </div>
           <div class="list">
             <div class="list-item">
               <div class="icon-box icon-purple">⌂</div>
@@ -144,7 +147,10 @@
         </article>
 
         <article class="card">
-          <h3>Receita</h3>
+          <div class="card-header">
+            <h3>Receita</h3>
+            <button class="btn-add-transaction" onclick="openTransactionModal('income')">+ Adicionar</button>
+          </div>
           <div class="mini-value"><span class="currency-symbol">R$</span> 0</div>
           <svg class="sparkline" viewBox="0 0 260 80" fill="none">
             <path d="M4 62 C 20 50, 35 18, 52 12 S 84 26, 98 54 S 132 72, 154 34 S 186 8, 204 32 S 232 58, 256 28" stroke="#ff8a2a" stroke-width="4" stroke-linecap="round"/>
@@ -235,6 +241,52 @@
     </main>
   </div>
 
+  <div class="modal-overlay" id="transactionModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="transactionModalTitle">Adicionar Transação</h2>
+        <button class="modal-close" onclick="closeTransactionModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="transaction-type-tabs">
+          <button class="type-tab active" data-type="expense" onclick="setTransactionType('expense')">Despesa</button>
+          <button class="type-tab" data-type="income" onclick="setTransactionType('income')">Receita</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Valor</label>
+          <div class="input-wrapper">
+            <span class="input-icon currency-symbol">R$</span>
+            <input type="number" class="form-input with-icon" id="transactionAmount" placeholder="0,00" min="0" step="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Descrição</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📝</span>
+            <input type="text" class="form-input with-icon" id="transactionDescription" placeholder="Descrição da transação">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Categoria</label>
+          <select class="form-input" id="transactionCategory">
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📅</span>
+            <input type="date" class="form-input with-icon" id="transactionDate">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeTransactionModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="addTransaction()">Adicionar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/translations.js"></script>
   <script src="../assets/js/dashboard.js"></script>
 </body>
 </html>

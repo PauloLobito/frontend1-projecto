@@ -408,6 +408,150 @@ function logout() {
 }
 
 // ================================================
+// VARIÁVEL: currentTransactionType
+// ================================================
+let currentTransactionType = 'expense';
+
+// ================================================
+// FUNÇÃO: openTransactionModal
+// ================================================
+/**
+ * Abre o modal para adicionar uma nova transação
+ * @param {string} type - Tipo de transação (income ou expense)
+ */
+function openTransactionModal(type) {
+  const modal = document.getElementById('transactionModal');
+  currentTransactionType = type;
+  
+  // Definir a data atual como padrão
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('transactionDate').value = today;
+  document.getElementById('transactionAmount').value = '';
+  document.getElementById('transactionDescription').value = '';
+  
+  // Atualizar tabs
+  setTransactionType(type);
+  
+  // Carregar categorias
+  loadTransactionCategories();
+  
+  modal.classList.add('active');
+  document.getElementById('transactionAmount').focus();
+}
+
+// ================================================
+// FUNÇÃO: closeTransactionModal
+// ================================================
+/**
+ * Fecha o modal de transação
+ */
+function closeTransactionModal() {
+  document.getElementById('transactionModal').classList.remove('active');
+}
+
+// ================================================
+// FUNÇÃO: setTransactionType
+// ================================================
+/**
+ * Define o tipo de transação e atualiza a UI
+ * @param {string} type - Tipo de transação (income ou expense)
+ */
+function setTransactionType(type) {
+  currentTransactionType = type;
+  
+  const tabs = document.querySelectorAll('.type-tab');
+  tabs.forEach(tab => {
+    tab.classList.remove('active');
+    if (tab.dataset.type === type) {
+      tab.classList.add('active');
+    }
+  });
+  
+  // Atualizar ícone da moeda
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
+  document.querySelector('#transactionModal .currency-symbol').textContent = currencySymbol;
+  
+  // Recarregar categorias
+  loadTransactionCategories();
+}
+
+// ================================================
+// FUNÇÃO: loadTransactionCategories
+// ================================================
+/**
+ * Carrega as categorias disponíveis no select do modal
+ */
+function loadTransactionCategories() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const categories = settings.categories || getDefaultCategories();
+  const select = document.getElementById('transactionCategory');
+  
+  select.innerHTML = '';
+  
+  const catList = currentTransactionType === 'income' ? categories.income : categories.expense;
+  
+  catList.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
+  });
+}
+
+// ================================================
+// FUNÇÃO: addTransaction
+// ================================================
+/**
+ * Adiciona uma nova transação ao localStorage
+ */
+function addTransaction() {
+  const amount = parseFloat(document.getElementById('transactionAmount').value) || 0;
+  const description = document.getElementById('transactionDescription').value.trim();
+  const category = document.getElementById('transactionCategory').value;
+  const date = document.getElementById('transactionDate').value;
+  
+  if (amount <= 0) {
+    document.getElementById('transactionAmount').style.borderColor = 'var(--red)';
+    setTimeout(() => {
+      document.getElementById('transactionAmount').style.borderColor = '';
+    }, 2000);
+    return;
+  }
+  
+  const transaction = {
+    id: Date.now(),
+    type: currentTransactionType,
+    amount: amount,
+    description: description || category,
+    category: category,
+    date: date,
+    createdAt: new Date().toISOString()
+  };
+  
+  // Guardar transação
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  if (!settings.transactions) {
+    settings.transactions = [];
+  }
+  settings.transactions.push(transaction);
+  localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+  
+  closeTransactionModal();
+  
+  // Feedback visual
+  const addBtn = document.querySelector(`.btn-add-transaction[onclick="openTransactionModal('${currentTransactionType}')"]`);
+  if (addBtn) {
+    const originalText = addBtn.textContent;
+    addBtn.textContent = '✓';
+    setTimeout(() => {
+      addBtn.textContent = originalText;
+    }, 1000);
+  }
+}
+
+// ================================================
 // EVENTO: DOMContentLoaded
 // ================================================
 document.addEventListener('DOMContentLoaded', function() {
@@ -443,4 +587,19 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Carregar categorias de receita
   loadIncomeCategories();
+  
+  // Listener: fechar modal ao clicar fora
+  document.getElementById('transactionModal').addEventListener('click', function(e) {
+    if (e.target === this) closeTransactionModal();
+  });
+  
+  // Listener: ESC fecha modal
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeTransactionModal();
+  });
+  
+  // Listener: Enter adiciona transação
+  document.getElementById('transactionAmount').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') addTransaction();
+  });
 });
