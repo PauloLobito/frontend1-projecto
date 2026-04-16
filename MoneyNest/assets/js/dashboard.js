@@ -364,6 +364,26 @@ function updateDashboardWithRecords() {
       item.style.display = 'none';
     }
   });
+  
+  // Atualizar "Receitas e Despesas" (totais do gráfico)
+  const chartHeader = document.querySelector('.chart-header');
+  if (chartHeader) {
+    const totals = chartHeader.querySelectorAll('div[style*="color"]');
+    if (totals[0]) totals[0].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
+    if (totals[1]) totals[1].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
+  }
+  
+  // Atualizar "Ativos" (património total)
+  const assetList = document.querySelector('.asset-list');
+  if (assetList) {
+    const assetDivs = assetList.querySelectorAll('div');
+    assetDivs.forEach((div, index) => {
+      const strong = div.querySelector('strong');
+      if (strong) {
+        strong.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalPatrimony)}`;
+      }
+    });
+  }
 }
 
 // ================================================
