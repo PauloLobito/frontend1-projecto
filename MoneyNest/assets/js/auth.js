@@ -10,6 +10,7 @@
  * - Validação de formulários
  * - Indicador de força da palavra-passe
  * - Mensagens de sucesso/erro
+ * - Guardar/verificar utilizadores no localStorage
  */
 
 // ================================================
@@ -22,12 +23,6 @@
  * 
  * @param {string} inputId - O ID do campo de input da palavra-passe
  * @param {HTMLElement} btn - O botão que foi clicado (para mudar o ícone)
- * 
- * Como funciona:
- * 1. Pega o input pelo ID
- * 2. Se estiver oculto (password), mostra (text)
- * 3. Se estiver visível, oculta
- * 4. Muda o ícone entre 👁 (olho) e 🙈 (macaco)
  */
 function togglePassword(inputId, btn) {
   const input = document.getElementById(inputId);
@@ -51,11 +46,6 @@ function togglePassword(inputId, btn) {
  * 
  * @param {string} type - Tipo de mensagem: 'success' ou 'error'
  * @param {string} text - Texto da mensagem a exibir
- * 
- * Como funciona:
- * 1. Procura o container de mensagens na página
- * 2. Insere o HTML da mensagem com a classe correta
- * 3. Configura um timer para remover a mensagem após 5 segundos
  */
 function showMessage(type, text) {
   const container = document.getElementById('message-container');
@@ -77,18 +67,7 @@ function showMessage(type, text) {
  * 3. Contém pelo menos um número
  * 4. Contém pelo menos um caractere especial
  * 
- * Níveis de força:
- * - 1 critério = Fraca (vermelho)
- * - 2 critérios = Razoável (laranja)
- * - 3 critérios = Boa (verde)
- * - 4 critérios = Forte (cyan)
- * 
  * @param {string} password - A palavra-passe a ser analisada
- * 
- * @example
- * checkPasswordStrength('abc');        // Fraca (só 3 caracteres)
- * checkPasswordStrength('Abc12345');   // Boa (8 chars + maiúscula + número)
- * checkPasswordStrength('Abc12345!');  // Forte (todos os critérios)
  */
 function checkPasswordStrength(password) {
   const strengthFill = document.getElementById('strengthFill');
@@ -119,14 +98,62 @@ function checkPasswordStrength(password) {
 }
 
 // ================================================
+// FUNÇÃO: getUsers
+// ================================================
+/**
+ * Obtém a lista de utilizadores guardados no localStorage.
+ * Se não existirem utilizadores, retorna a lista vazia.
+ * 
+ * @returns {Array} Array de objetos {email, password, firstName, lastName}
+ */
+function getUsers() {
+  const users = localStorage.getItem('moneynest_users');
+  return users ? JSON.parse(users) : [];
+}
+
+// ================================================
+// FUNÇÃO: saveUser
+// ================================================
+/**
+ * Guarda um novo utilizador no localStorage.
+ * 
+ * @param {Object} user - Objeto com email, password, firstName, lastName
+ * @returns {boolean} True se guardado com sucesso, false se email já existe
+ */
+function saveUser(user) {
+  const users = getUsers();
+  
+  // Verifica se o email já existe
+  if (users.find(u => u.email === user.email)) {
+    return false;
+  }
+  
+  users.push(user);
+  localStorage.setItem('moneynest_users', JSON.stringify(users));
+  return true;
+}
+
+// ================================================
+// FUNÇÃO: findUser
+// ================================================
+/**
+ * Procura um utilizador pelo email e palavra-passe.
+ * 
+ * @param {string} email - Email do utilizador
+ * @param {string} password - Palavra-passe do utilizador
+ * @returns {Object|null} O utilizador se encontrado, null caso contrário
+ */
+function findUser(email, password) {
+  const users = getUsers();
+  return users.find(u => u.email === email && u.password === password) || null;
+}
+
+// ================================================
 // EVENTO: DOMContentLoaded
 // ================================================
 /**
  * Quando a página carrega completamente, este código
  * configura os formulários de login e registo.
- * 
- * O evento DOMContentLoaded garante que o código só
- * executa quando todo o HTML já foi carregado.
  */
 document.addEventListener('DOMContentLoaded', function() {
   
@@ -136,14 +163,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const loginForm = document.getElementById('login-form');
   
   if (loginForm) {
-    /**
-     * Quando o utilizador clica em "Iniciar Sessão" (submit):
-     * 1. Previne o comportamento padrão do formulário
-     * 2. Mostra o estado de loading no botão
-     * 3. Aguarda 1.5 segundos (simula chamada à API)
-     * 4. Verifica as credenciais
-     * 5. Mostra mensagem de sucesso ou erro
-     */
     loginForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -154,16 +173,32 @@ document.addEventListener('DOMContentLoaded', function() {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
+      // Simula um atraso de rede
       await new Promise(r => setTimeout(r, 1500));
 
       btn.classList.remove('loading');
       btn.textContent = 'Iniciar Sessão';
 
+      // Verifica primeiro se é o utilizador demo
       if (email === 'demo@moneynest.com' && password === 'demo123') {
         showMessage('success', '✓ Sessão iniciada com sucesso! A redirecionar...');
-        setTimeout(() => window.location.href = '../pages/index.html', 1500);
-      } else {
-        showMessage('error', '✗ Email ou palavra-passe incorretos. Tente demo@moneynest.com / demo123');
+        localStorage.setItem('moneynest_loggedIn', JSON.stringify({
+          email: 'demo@moneynest.com',
+          firstName: 'Demo',
+          lastName: 'User'
+        }));
+        setTimeout(() => window.location.href = 'index.html', 1500);
+      } 
+      // Depois verifica nos utilizadores registados
+      else {
+        const user = findUser(email, password);
+        if (user) {
+          showMessage('success', '✓ Sessão iniciada com sucesso! A redirecionar...');
+          localStorage.setItem('moneynest_loggedIn', JSON.stringify(user));
+          setTimeout(() => window.location.href = 'index.html', 1500);
+        } else {
+          showMessage('error', '✗ Email ou palavra-passe incorretos');
+        }
       }
     });
   }
@@ -181,14 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
 
-    /**
-     * Quando o utilizador clica em "Criar Conta" (submit):
-     * 1. Valida se as palavras-passe coincidem
-     * 2. Valida se os termos foram aceites
-     * 3. Mostra estado de loading
-     * 4. Simula criação de conta
-     * 5. Redireciona para login
-     */
     registerForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
@@ -218,8 +245,15 @@ document.addEventListener('DOMContentLoaded', function() {
       btn.classList.remove('loading');
       btn.textContent = 'Criar Conta';
 
-      showMessage('success', '✓ Conta criada com sucesso! A redirecionar...');
-      setTimeout(() => window.location.href = 'login.html', 1500);
+      // Tenta guardar o utilizador
+      const saved = saveUser({ email, password, firstName, lastName });
+      
+      if (saved) {
+        showMessage('success', '✓ Conta criada com sucesso! A redirecionar...');
+        setTimeout(() => window.location.href = 'login.html', 1500);
+      } else {
+        showMessage('error', '✗ Este email já está registado');
+      }
     });
   }
 });
