@@ -3,14 +3,23 @@
 // ================================================
 
 // ================================================
-// VARIÁVEIS
+// VARIÁVEIS GLOBAIS
 // ================================================
+
+// Controla se o perfil está em modo de edição
 let isEditingProfile = false;
+
+// Tipo de categoria atual (income = receita, expense = despesa)
 let currentCategoryType = 'income';
 
 // ================================================
-// FUNÇÕES: Categorias
+// FUNÇÕES: CATEGORIAS
 // ================================================
+
+/**
+ * Retorna as categorias predefinidas do sistema
+ * @returns {Object} Categorias padrão de receitas e despesas
+ */
 function getDefaultCategories() {
   return {
     income: ['Salário', 'E-commerce', 'Anúncios', 'Loja', 'Freelance', 'Investimentos'],
@@ -18,6 +27,10 @@ function getDefaultCategories() {
   };
 }
 
+/**
+ * Carrega e exibe as categorias na interface das definições
+ * Usa categorias salvas ou as predefinidas se não existirem
+ */
 function loadCategories() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
@@ -54,6 +67,13 @@ function loadCategories() {
   }
 }
 
+/**
+ * Cria um elemento visual (tag) para representar uma categoria
+ * @param {string} name - Nome da categoria
+ * @param {string} type - Tipo (income ou expense)
+ * @param {number} index - Índice da categoria no array
+ * @returns {HTMLElement} Elemento div com a tag da categoria
+ */
 function createCategoryTag(name, type, index) {
   const tag = document.createElement('div');
   tag.className = 'category-tag';
@@ -64,6 +84,10 @@ function createCategoryTag(name, type, index) {
   return tag;
 }
 
+/**
+ * Abre o modal para adicionar uma nova categoria
+ * @param {string} type - Tipo de categoria (income ou expense)
+ */
 function openAddCategoryModal(type) {
   const modal = document.getElementById('categoryModal');
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
@@ -93,10 +117,17 @@ function openAddCategoryModal(type) {
   document.getElementById('newCategoryName').focus();
 }
 
+/**
+ * Fecha o modal de adicionar categoria
+ */
 function closeCategoryModal() {
   document.getElementById('categoryModal').classList.remove('active');
 }
 
+/**
+ * Adiciona uma nova categoria ao tipo selecionado
+ * Valida que o nome não está vazio e não existe duplicado
+ */
 function addCategory() {
   const input = document.getElementById('newCategoryName');
   const name = input.value.trim();
@@ -104,6 +135,7 @@ function addCategory() {
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
   
+  // Validação: nome vazio
   if (!name) {
     input.style.borderColor = 'var(--red)';
     setTimeout(() => { input.style.borderColor = ''; }, 2000);
@@ -116,6 +148,7 @@ function addCategory() {
     settings.categories = categories;
   }
   
+  // Validação: categoria duplicada
   if (categories[currentCategoryType].some(c => c.toLowerCase() === name.toLowerCase())) {
     input.style.borderColor = 'var(--red)';
     setTimeout(() => { input.style.borderColor = ''; }, 2000);
@@ -130,6 +163,11 @@ function addCategory() {
   loadCategories();
 }
 
+/**
+ * Elimina uma categoria pelo seu tipo e índice
+ * @param {string} type - Tipo de categoria (income ou expense)
+ * @param {number} index - Índice da categoria a eliminar
+ */
 function deleteCategory(type, index) {
   let settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   let categories = settings.categories;
@@ -148,8 +186,13 @@ function deleteCategory(type, index) {
 }
 
 // ================================================
-// FUNÇÕES: Perfil
+// FUNÇÕES: PERFIL
 // ================================================
+
+/**
+ * Carrega os dados do utilizador logado para os campos de perfil
+ * Se não estiver logado, limpa os campos
+ */
 function loadUserProfile() {
   const loggedInUser = localStorage.getItem('moneynest_loggedIn');
   const nameInput = document.getElementById('settingName');
@@ -165,6 +208,10 @@ function loadUserProfile() {
   }
 }
 
+/**
+ * Alterna entre modo de edição e modo de visualização do perfil
+ * Ativa/desativa os campos de nome e email
+ */
 function toggleEditProfile() {
   const nameInput = document.getElementById('settingName');
   const emailInput = document.getElementById('settingEmail');
@@ -193,6 +240,10 @@ function toggleEditProfile() {
   }
 }
 
+/**
+ * Guarda as alterações feitas ao perfil do utilizador
+ * Atualiza tanto o utilizador logado como a lista de utilizadores
+ */
 function saveProfileChanges() {
   const nameInput = document.getElementById('settingName');
   const emailInput = document.getElementById('settingEmail');
@@ -229,6 +280,7 @@ function saveProfileChanges() {
   });
   isEditingProfile = false;
   
+  // Feedback visual de sucesso
   const btn = document.querySelector('.btn-save');
   const originalText = btn.textContent;
   btn.textContent = '✓';
@@ -240,8 +292,14 @@ function saveProfileChanges() {
 }
 
 // ================================================
-// FUNÇÕES: Palavra-passe
+// FUNÇÕES: PALAVRA-PASSE
 // ================================================
+
+/**
+ * Alterna a visibilidade da palavra-passe (mostrar/ocultar)
+ * @param {string} inputId - ID do campo de input
+ * @param {HTMLElement} btn - Botão que chamou a função
+ */
 function togglePassword(inputId, btn) {
   const input = document.getElementById(inputId);
   if (input.type === 'password') {
@@ -253,6 +311,10 @@ function togglePassword(inputId, btn) {
   }
 }
 
+/**
+ * Abre o modal para alterar a palavra-passe
+ * Limpa os campos e configura o modal com traduções
+ */
 function openPasswordModal() {
   const modal = document.getElementById('passwordModal');
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
@@ -275,10 +337,17 @@ function openPasswordModal() {
   modal.classList.add('active');
 }
 
+/**
+ * Fecha o modal de alteração de palavra-passe
+ */
 function closePasswordModal() {
   document.getElementById('passwordModal').classList.remove('active');
 }
 
+/**
+ * Valida e submete a alteração de palavra-passe
+ * Verifica: palavra-passe atual, nova palavra-passe e confirmação
+ */
 function submitPasswordChange() {
   const currentPassword = document.getElementById('currentPassword').value;
   const newPassword = document.getElementById('newPassword').value;
@@ -294,6 +363,7 @@ function submitPasswordChange() {
   const users = JSON.parse(localStorage.getItem('moneynest_users') || '[]');
   const loggedInUser = JSON.parse(localStorage.getItem('moneynest_loggedIn'));
   
+  // Verificar se está logado
   if (!loggedInUser) {
     messageEl.textContent = t.notLoggedIn || 'Precisa de iniciar sessão para alterar a palavra-passe.';
     messageEl.classList.add('error');
@@ -309,18 +379,21 @@ function submitPasswordChange() {
   
   const user = users[userIndex];
   
+  // Verificar palavra-passe atual
   if (user.password !== currentPassword) {
     messageEl.textContent = t.wrongPassword || 'Palavra-passe atual incorreta.';
     messageEl.classList.add('error');
     return;
   }
   
+  // Verificar tamanho mínimo
   if (newPassword.length < 6) {
     messageEl.textContent = t.passwordTooShort || 'A nova palavra-passe deve ter pelo menos 6 caracteres.';
     messageEl.classList.add('error');
     return;
   }
   
+  // Verificar se coincidem
   if (newPassword !== confirmPassword) {
     messageEl.textContent = t.passwordMismatch || 'As palavras-passe não coincidem.';
     messageEl.classList.add('error');
@@ -337,8 +410,14 @@ function submitPasswordChange() {
 }
 
 // ================================================
-// FUNÇÕES: Tema
+// FUNÇÕES: TEMA
 // ================================================
+
+/**
+ * Aplica o tema visual (claro/escuro) à aplicação
+ * Considera a hora do dia se o tema for automático
+ * @param {string} theme - Tema a aplicar (dark, light, auto)
+ */
 function applyTheme(theme) {
   const hour = new Date().getHours();
   const isDaytime = hour >= 6 && hour < 18;
@@ -356,11 +435,16 @@ function applyTheme(theme) {
   }
 }
 
+/**
+ * Carrega e aplica o tema salvo nas definições
+ * Configura um intervalo para atualizar tema automático
+ */
 function loadAndApplyTheme() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const theme = settings.theme || 'dark';
   applyTheme(theme);
   
+  // Atualizar tema automático a cada minuto
   if (theme === 'auto') {
     setInterval(() => {
       const currentSettings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
@@ -372,25 +456,33 @@ function loadAndApplyTheme() {
 }
 
 // ================================================
-// FUNÇÕES: Idioma
+// FUNÇÕES: IDIOMA
 // ================================================
+
+/**
+ * Aplica as traduções à interface das definições
+ * Atualiza todos os textos conforme o idioma selecionado
+ */
 function applyLanguageSettings() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
 
+  // Cabeçalho
   document.querySelector('.settings-header h1').textContent = t.title;
   document.querySelector('.settings-header p').textContent = t.subtitle;
   document.querySelector('.btn-save').textContent = t.save;
   document.querySelector('.btn-reset').textContent = t.reset;
   document.querySelector('.btn-back').textContent = t.back;
 
+  // Secções
   document.querySelectorAll('.settings-section h2')[0].textContent = '👤 ' + t.account;
   document.querySelectorAll('.settings-section h2')[1].textContent = '🔔 ' + t.notifications;
   document.querySelectorAll('.settings-section h2')[2].textContent = '🔒 ' + t.security;
   document.querySelectorAll('.settings-section h2')[3].textContent = '🎨 ' + t.appearance;
   document.querySelectorAll('.settings-section h2')[4].textContent = '🌐 ' + t.language;
 
+  // Itens de definições
   const sections = document.querySelectorAll('.setting-item');
   sections[0].querySelector('.setting-label').textContent = t.name;
   sections[0].querySelector('.setting-desc').textContent = t.nameDesc;
@@ -420,14 +512,17 @@ function applyLanguageSettings() {
   sections[12].querySelector('.setting-label').textContent = t.dateFormat;
   sections[12].querySelector('.setting-desc').textContent = t.dateFormatDesc;
 
+  // Meses no sidebar
   document.querySelectorAll('.months li').forEach((li, index) => {
     li.textContent = t.months[index];
   });
 
+  // Confirmação em PT
   if (lang === 'pt-PT' || lang === 'pt-BR') {
     document.querySelector('.btn-reset').setAttribute('onclick', "if(confirm('" + t.resetConfirm + "')){localStorage.removeItem('moneynest_settings');location.reload();}");
   }
 
+  // Títulos das categorias
   if (document.getElementById('incomeCategoriesTitle')) {
     document.getElementById('incomeCategoriesTitle').textContent = t.incomeCategories;
   }
@@ -437,8 +532,12 @@ function applyLanguageSettings() {
 }
 
 // ================================================
-// FUNÇÕES: Settings
+// FUNÇÕES: SETTINGS (DEFINIÇÕES)
 // ================================================
+
+/**
+ * Carrega os valores das definições guardadas para os campos do formulário
+ */
 function loadSettings() {
   const saved = localStorage.getItem('moneynest_settings');
   if (saved) {
@@ -458,6 +557,10 @@ function loadSettings() {
   }
 }
 
+/**
+ * Guarda todas as definições no localStorage
+ * Usa spread operator para preservar definições existentes
+ */
 function saveSettings() {
   const existingSettings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const settings = {
@@ -479,6 +582,7 @@ function saveSettings() {
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   applyLanguageSettings();
   
+  // Feedback visual de sucesso
   const btn = document.querySelector('.btn-save');
   const originalText = btn.textContent;
   btn.textContent = '✓';
@@ -489,6 +593,10 @@ function saveSettings() {
   }, 2000);
 }
 
+/**
+ * Restaura todas as definições para os valores padrão
+ * Remove o localStorage e recarrega a página
+ */
 function resetSettings() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
@@ -503,19 +611,24 @@ function resetSettings() {
 // ================================================
 // EVENTO: DOMContentLoaded
 // ================================================
+
+// Inicialização quando a página carrega
 document.addEventListener('DOMContentLoaded', function() {
+  // Carregar dados iniciais
   loadSettings();
   loadUserProfile();
   loadAndApplyTheme();
   applyLanguageSettings();
   loadCategories();
   
+  // Destacar mês atual no sidebar
   const hoje = new Date();
   document.querySelectorAll('.months li').forEach((li, index) => {
     li.classList.remove('active');
     if (index === hoje.getMonth()) li.classList.add('active');
   });
 
+  // Listener: mudança de idioma
   document.getElementById('settingLang').addEventListener('change', function() {
     const saved = localStorage.getItem('moneynest_settings');
     const currentSettings = saved ? JSON.parse(saved) : {};
@@ -525,6 +638,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadCategories();
   });
 
+  // Listener: mudança de tema
   document.getElementById('settingTheme').addEventListener('change', function() {
     const saved = localStorage.getItem('moneynest_settings');
     const currentSettings = saved ? JSON.parse(saved) : {};
@@ -533,6 +647,7 @@ document.addEventListener('DOMContentLoaded', function() {
     applyTheme(this.value);
   });
 
+  // Listeners: teclado no perfil
   document.getElementById('settingName').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && isEditingProfile) saveProfileChanges();
   });
@@ -541,18 +656,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'Enter' && isEditingProfile) saveProfileChanges();
   });
 
+  // Listener: fechar modal de palavra-passe ao clicar fora
   document.getElementById('passwordModal').addEventListener('click', function(e) {
     if (e.target === this) closePasswordModal();
   });
 
+  // Listener: fechar modal de categoria ao clicar fora
   document.getElementById('categoryModal').addEventListener('click', function(e) {
     if (e.target === this) closeCategoryModal();
   });
 
+  // Listener: adicionar categoria com Enter
   document.getElementById('newCategoryName').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') addCategory();
   });
 
+  // Listener: ESC fecha modais
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       closePasswordModal();
