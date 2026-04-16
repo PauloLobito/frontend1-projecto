@@ -46,7 +46,7 @@
           <button class="tab">Relatórios</button>
         </div>
 
-        <div class="date-box">Segunda-feira, 1 de Janeiro de 2024</div>
+        <div class="date-box" id="currentDate"></div>
 
         <div class="profile">
           <div class="profile-meta">
@@ -202,5 +202,31 @@
       </section>
     </main>
   </div>
+
+  <script>
+    // Nomes dos dias e meses em português
+    const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+    // Data atual
+    const hoje = new Date();
+    const diaSemana = dias[hoje.getDay()];
+    const dia = hoje.getDate();
+    const mes = meses[hoje.getMonth()];
+    const ano = hoje.getFullYear();
+
+    // Coloca a data no elemento
+    document.getElementById('currentDate').textContent = `${diaSemana}, ${dia} de ${meso} de ${ano}`;
+
+    // Destaca o mês atual na sidebar
+    const mesesList = document.querySelectorAll('.months li');
+    const mesAtual = hoje.getMonth(); // 0-11
+    mesesList.forEach((li, index) => {
+      li.classList.remove('active');
+      if (index === mesAtual) {
+        li.classList.add('active');
+      }
+    });
+  </script>
 </body>
 </html>
