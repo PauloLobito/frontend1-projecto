@@ -298,23 +298,29 @@ function updateDashboardWithRecords() {
     incomeByCategory[r.category] = (incomeByCategory[r.category] || 0) + r.amount;
   });
   
-  const barValues = document.querySelectorAll('.bar-value');
-  const barLabels = document.querySelectorAll('.bar-label');
+  const barCols = document.querySelectorAll('.bar-col');
+  const maxIncome = Math.max(...Object.values(incomeByCategory), 1);
   
-  barValues.forEach((el, index) => {
-    const category = categories.income[index] || categories.income[0];
+  barCols.forEach((col, index) => {
+    const category = categories.income[index];
     const amount = incomeByCategory[category] || 0;
-    el.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
     
-    // Altura da barra proporcional ao máximo
-    const maxAmount = Math.max(...Object.values(incomeByCategory), 1);
-    const barHeight = (amount / maxAmount) * 100;
-    const bar = el.parentElement.querySelector('.bar');
-    if (bar) bar.style.height = barHeight + 'px';
-  });
-  
-  barLabels.forEach((el, index) => {
-    el.textContent = categories.income[index] || '';
+    const barValue = col.querySelector('.bar-value');
+    const barLabel = col.querySelector('.bar-label');
+    const bar = col.querySelector('.bar');
+    
+    if (barValue) {
+      barValue.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+    }
+    
+    if (barLabel) {
+      barLabel.textContent = category || '';
+    }
+    
+    if (bar) {
+      const barHeight = amount > 0 ? Math.max((amount / maxIncome) * 80, 4) : 0;
+      bar.style.height = barHeight + 'px';
+    }
   });
   
   // Lista de despesas
@@ -327,8 +333,8 @@ function updateDashboardWithRecords() {
   const itemAmounts = document.querySelectorAll('.item-amount');
   
   itemNames.forEach((el, index) => {
-    const category = categories.expense[index] || categories.expense[index];
-    el.textContent = category || '';
+    const category = categories.expense[index] || '';
+    el.textContent = category;
     
     const amount = expenseByCategory[category] || 0;
     const amountEl = itemAmounts[index];
