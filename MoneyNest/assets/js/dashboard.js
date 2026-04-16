@@ -482,22 +482,37 @@ function loadRecordCategories() {
  * @param {string} modal - 'record' ou 'edit'
  */
 function onCategoryChange(modal) {
-  const categorySelect = document.getElementById(modal + 'RecordCategory');
-  const textGroup = document.getElementById(modal + 'DescriptionTextGroup');
-  const selectGroup = document.getElementById(modal + 'DescriptionSelectGroup');
-  const textInput = document.getElementById(modal + 'RecordDescription');
-  const selectInput = document.getElementById(modal + 'RecordDescriptionSelect');
+  let categorySelect, textGroup, selectGroup, textInput, selectInput;
   
-  if (!categorySelect) return;
+  if (modal === 'record') {
+    categorySelect = document.getElementById('recordCategory');
+    textGroup = document.getElementById('recordDescriptionTextGroup');
+    selectGroup = document.getElementById('recordDescriptionSelectGroup');
+    textInput = document.getElementById('recordDescription');
+    selectInput = document.getElementById('recordDescriptionSelect');
+  } else {
+    categorySelect = document.getElementById('editRecordCategory');
+    textGroup = document.getElementById('editDescriptionTextGroup');
+    selectGroup = document.getElementById('editDescriptionSelectGroup');
+    textInput = document.getElementById('editRecordDescription');
+    selectInput = document.getElementById('editRecordDescriptionSelect');
+  }
+  
+  if (!categorySelect) {
+    console.log('onCategoryChange: categorySelect not found');
+    return;
+  }
   
   const category = categorySelect.value;
   if (!category) return;
   
   const categoryLower = category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  console.log('onCategoryChange:', modal, 'category:', category, 'lower:', categoryLower);
   
   // Verificar se a categoria é relacionada a pets/animais
-  const petKeywords = ['pet', 'pets', 'animal', 'animais', 'cao', 'cão', 'gato', 'passeio', 'veterin', 'clinic'];
+  const petKeywords = ['pet', 'pets', 'animal', 'animais', 'cao', 'gato', 'passeio', 'veterin'];
   const isPets = petKeywords.some(keyword => categoryLower.includes(keyword));
+  console.log('isPets:', isPets, 'textGroup:', textGroup, 'selectGroup:', selectGroup);
   
   if (isPets) {
     textGroup.style.display = 'none';
