@@ -472,6 +472,36 @@ function loadRecordCategories() {
   if (modalCurrencyIcon) {
     modalCurrencyIcon.textContent = currencySymbol;
   }
+  
+  // Verificar se a categoria atual é PETS
+  onCategoryChange('record');
+}
+
+/**
+ * Verifica se a categoria é PETS e mostra o dropdown apropriado
+ * @param {string} modal - 'record' ou 'edit'
+ */
+function onCategoryChange(modal) {
+  const categorySelect = document.getElementById(modal + 'RecordCategory');
+  const textGroup = document.getElementById(modal + 'DescriptionTextGroup');
+  const selectGroup = document.getElementById(modal + 'DescriptionSelectGroup');
+  const textInput = document.getElementById(modal + 'RecordDescription');
+  const selectInput = document.getElementById(modal + 'RecordDescriptionSelect');
+  
+  if (!categorySelect) return;
+  
+  const category = categorySelect.value.toLowerCase();
+  const isPets = category.includes('pet') || category.includes('animais') || category.includes('pets');
+  
+  if (isPets) {
+    textGroup.style.display = 'none';
+    selectGroup.style.display = '';
+    textInput.value = '';
+  } else {
+    textGroup.style.display = '';
+    selectGroup.style.display = 'none';
+    selectInput.value = '';
+  }
 }
 
 /**
@@ -479,9 +509,19 @@ function loadRecordCategories() {
  */
 function addRecord() {
   const amount = parseFloat(document.getElementById('recordAmount').value) || 0;
-  const description = document.getElementById('recordDescription').value.trim();
   const category = document.getElementById('recordCategory').value;
   const date = document.getElementById('recordDate').value;
+  
+  // Verificar se é PETS para usar o select ou input
+  const categoryLower = category.toLowerCase();
+  const isPets = categoryLower.includes('pet') || categoryLower.includes('animais');
+  let description;
+  
+  if (isPets) {
+    description = document.getElementById('recordDescriptionSelect').value;
+  } else {
+    description = document.getElementById('recordDescription').value.trim();
+  }
   
   if (amount <= 0) {
     document.getElementById('recordAmount').style.borderColor = 'var(--red)';
@@ -535,11 +575,24 @@ function openEditModal(id) {
   editingRecordId = id;
   
   document.getElementById('editRecordAmount').value = record.amount;
-  document.getElementById('editRecordDescription').value = record.description;
   document.getElementById('editRecordDate').value = record.date;
   
   setEditRecordType(record.type);
   loadEditRecordCategories(record.type, record.category);
+  
+  // Definir descrição no campo correto
+  const categoryLower = record.category.toLowerCase();
+  const isPets = categoryLower.includes('pet') || categoryLower.includes('animais');
+  
+  if (isPets) {
+    document.getElementById('editDescriptionTextGroup').style.display = 'none';
+    document.getElementById('editDescriptionSelectGroup').style.display = '';
+    document.getElementById('editRecordDescriptionSelect').value = record.description;
+  } else {
+    document.getElementById('editDescriptionTextGroup').style.display = '';
+    document.getElementById('editDescriptionSelectGroup').style.display = 'none';
+    document.getElementById('editRecordDescription').value = record.description;
+  }
   
   modal.classList.add('active');
 }
@@ -605,11 +658,21 @@ function loadEditRecordCategories(type, selectedCategory) {
  */
 function saveEditRecord() {
   const amount = parseFloat(document.getElementById('editRecordAmount').value) || 0;
-  const description = document.getElementById('editRecordDescription').value.trim();
   const category = document.getElementById('editRecordCategory').value;
   const date = document.getElementById('editRecordDate').value;
   const typeBtn = document.querySelector('#editModal .type-btn.active');
   const type = typeBtn ? typeBtn.dataset.type : 'expense';
+  
+  // Verificar se é PETS para usar o select ou input
+  const categoryLower = category.toLowerCase();
+  const isPets = categoryLower.includes('pet') || categoryLower.includes('animais');
+  let description;
+  
+  if (isPets) {
+    description = document.getElementById('editRecordDescriptionSelect').value;
+  } else {
+    description = document.getElementById('editRecordDescription').value.trim();
+  }
   
   if (amount <= 0) {
     document.getElementById('editRecordAmount').style.borderColor = 'var(--red)';
