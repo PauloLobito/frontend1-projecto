@@ -568,7 +568,7 @@ function renderChart() {
   if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalAllBalance)}`;
   
   // Atualizar donut chart
-  updateDonut(totalIncome, totalExpense);
+  updateDonut(totalIncomeMonth, totalExpenseMonth);
 }
 
 // ================================================
