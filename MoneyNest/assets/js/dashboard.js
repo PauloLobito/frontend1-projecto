@@ -104,20 +104,18 @@ function loadRevenueGoal() {
   const currency = settings.currency || 'BRL';
   const symbol = currencies[currency].symbol;
   
-  // Calcular saldo disponível (total de todos os registos)
+  // Calcular total de receitas (todas)
   const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
-  const totalExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
-  const balance = totalIncome - totalExpense;
   
   document.getElementById('goalAmount').textContent = formatCurrency(goal);
-  document.getElementById('currentRevenue').textContent = formatCurrency(balance);
+  document.getElementById('currentRevenue').textContent = formatCurrency(totalIncome);
   document.getElementById('goalInput').placeholder = '0,00';
   document.getElementById('goalInput').min = '0';
   
   const percentEl = document.querySelector('.percent');
   let percent = 0;
   if (goal > 0) {
-    percent = Math.min(Math.round((balance / goal) * 100), 100);
+    percent = Math.min(Math.round((totalIncome / goal) * 100), 100);
   }
   percentEl.textContent = percent + '%';
   
@@ -292,16 +290,16 @@ function updateDashboardWithRecords() {
     patrimonyEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalPatrimony)}`;
   }
    
-  // Meta de receita
+   // Meta de receita (usar totais de todos os registos)
   const goalAmount = settings.revenueGoal || 0;
-  const progressPercent = goalAmount > 0 ? Math.min(Math.round((totalIncome / goalAmount) * 100), 100) : 0;
+  const progressPercent = goalAmount > 0 ? Math.min(Math.round((totalAllIncome / goalAmount) * 100), 100) : 0;
   
   const currentRevenueEl = document.getElementById('currentRevenue');
   const goalAmountEl = document.getElementById('goalAmount');
   const percentEl = document.querySelector('.percent');
   const progressFill = document.getElementById('progressFill');
   
-  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(totalIncome);
+  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(totalAllIncome);
   if (goalAmountEl) goalAmountEl.textContent = formatCurrencyValue(goalAmount);
   if (percentEl) percentEl.textContent = progressPercent + '%';
   if (progressFill) progressFill.style.width = progressPercent + '%';
@@ -542,19 +540,24 @@ function renderChart() {
   
   // Totais do mês selecionado para Ativos
   const selectedMonthData = monthlyData[selectedMonth];
-  const totalIncome = selectedMonthData ? selectedMonthData.income : 0;
-  const totalExpense = selectedMonthData ? selectedMonthData.expense : 0;
-  const totalBalance = totalIncome - totalExpense;
+  const totalIncomeMonth = selectedMonthData ? selectedMonthData.income : 0;
+  const totalExpenseMonth = selectedMonthData ? selectedMonthData.expense : 0;
+  const totalBalanceMonth = totalIncomeMonth - totalExpenseMonth;
+  
+  // Totais de todos os registos para Património
+  const totalAllIncome = records.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
+  const totalAllExpense = records.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
+  const totalAllBalance = totalAllIncome - totalAllExpense;
   
   const assetsIncome = document.getElementById('assetsIncome');
   const assetsExpense = document.getElementById('assetsExpense');
   const assetsBalance = document.getElementById('assetsBalance');
   const assetsPatrimony = document.getElementById('assetsPatrimony');
   
-  if (assetsIncome) assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
-  if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
-  if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
-  if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
+  if (assetsIncome) assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncomeMonth)}`;
+  if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpenseMonth)}`;
+  if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalanceMonth)}`;
+  if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalAllBalance)}`;
   
   // Atualizar donut chart
   updateDonut(totalIncome, totalExpense);
