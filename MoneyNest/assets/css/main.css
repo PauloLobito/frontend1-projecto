@@ -1590,13 +1590,28 @@ select.form-input {
 
 @media (max-width: 768px) {
   select.form-input {
-    font-size: 16px;
-    padding: 12px 14px;
+    font-size: 18px;
+    padding: 14px 16px;
   }
   
   .form-input {
-    font-size: 16px;
-    padding: 12px 14px;
+    font-size: 18px;
+    padding: 14px 16px;
+  }
+  
+  .form-label {
+    font-size: 15px;
+  }
+  
+  #recordModal .modal-content,
+  #editModal .modal-content {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  #recordModal .modal-header h2,
+  #editModal .modal-header h2 {
+    font-size: 20px;
   }
 }
 
