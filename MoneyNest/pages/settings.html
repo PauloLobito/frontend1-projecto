@@ -81,11 +81,17 @@
                 <span class="setting-label">Moeda</span>
                 <span class="setting-desc">Moeda preferida para visualização</span>
               </div>
-              <select class="setting-select" id="settingCurrency">
-                <option value="BRL" selected>Real (R$)</option>
-                <option value="EUR">Euro (€)</option>
-                <option value="USD">Dólar ($)</option>
-              </select>
+              <div class="custom-select setting-custom-select" id="settingCurrencyCustom">
+                <div class="custom-select-trigger" onclick="toggleCustomSelect('settingCurrencyCustom')">
+                  <span class="custom-select-value">Real (R$)</span>
+                  <span class="custom-select-arrow">▼</span>
+                </div>
+                <div class="custom-select-dropdown">
+                  <div class="custom-select-option" data-value="BRL" onclick="selectCustomOption('settingCurrencyCustom', 'BRL', 'Real (R$)')">Real (R$)</div>
+                  <div class="custom-select-option" data-value="EUR" onclick="selectCustomOption('settingCurrencyCustom', 'EUR', 'Euro (€)')">Euro (€)</div>
+                  <div class="custom-select-option" data-value="USD" onclick="selectCustomOption('settingCurrencyCustom', 'USD', 'Dólar ($)')">Dólar ($)</div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -168,11 +174,17 @@
                 <span class="setting-label">Tema</span>
                 <span class="setting-desc">Escolher o tema da aplicação</span>
               </div>
-              <select class="setting-select" id="settingTheme">
-                <option value="dark" selected>Escuro</option>
-                <option value="light">Claro</option>
-                <option value="auto">Automático</option>
-              </select>
+              <div class="custom-select setting-custom-select" id="settingThemeCustom">
+                <div class="custom-select-trigger" onclick="toggleCustomSelect('settingThemeCustom')">
+                  <span class="custom-select-value">Escuro</span>
+                  <span class="custom-select-arrow">▼</span>
+                </div>
+                <div class="custom-select-dropdown">
+                  <div class="custom-select-option" data-value="dark" onclick="selectCustomOption('settingThemeCustom', 'dark', 'Escuro')">Escuro</div>
+                  <div class="custom-select-option" data-value="light" onclick="selectCustomOption('settingThemeCustom', 'light', 'Claro')">Claro</div>
+                  <div class="custom-select-option" data-value="auto" onclick="selectCustomOption('settingThemeCustom', 'auto', 'Automático')">Automático</div>
+                </div>
+              </div>
             </div>
             
             <div class="setting-item">
@@ -195,12 +207,18 @@
                 <span class="setting-label">Idioma da interface</span>
                 <span class="setting-desc">Idioma utilizado na aplicação</span>
               </div>
-              <select class="setting-select" id="settingLang">
-                <option value="pt-PT" selected>Português (Portugal)</option>
-                <option value="pt-BR">Português (Brasil)</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-              </select>
+              <div class="custom-select setting-custom-select" id="settingLangCustom">
+                <div class="custom-select-trigger" onclick="toggleCustomSelect('settingLangCustom')">
+                  <span class="custom-select-value">Português (Portugal)</span>
+                  <span class="custom-select-arrow">▼</span>
+                </div>
+                <div class="custom-select-dropdown">
+                  <div class="custom-select-option" data-value="pt-PT" onclick="selectCustomOption('settingLangCustom', 'pt-PT', 'Português (Portugal)')">Português (Portugal)</div>
+                  <div class="custom-select-option" data-value="pt-BR" onclick="selectCustomOption('settingLangCustom', 'pt-BR', 'Português (Brasil)')">Português (Brasil)</div>
+                  <div class="custom-select-option" data-value="en" onclick="selectCustomOption('settingLangCustom', 'en', 'English')">English</div>
+                  <div class="custom-select-option" data-value="es" onclick="selectCustomOption('settingLangCustom', 'es', 'Español')">Español</div>
+                </div>
+              </div>
             </div>
             
             <div class="setting-item">
@@ -208,11 +226,17 @@
                 <span class="setting-label">Formato de data</span>
                 <span class="setting-desc">Formato de apresentação das datas</span>
               </div>
-              <select class="setting-select" id="settingDateFormat">
-                <option value="dd/mm/yyyy" selected>DD/MM/YYYY</option>
-                <option value="mm/dd/yyyy">MM/DD/YYYY</option>
-                <option value="yyyy-mm-dd">YYYY-MM-DD</option>
-              </select>
+              <div class="custom-select setting-custom-select" id="settingDateFormatCustom">
+                <div class="custom-select-trigger" onclick="toggleCustomSelect('settingDateFormatCustom')">
+                  <span class="custom-select-value">DD/MM/YYYY</span>
+                  <span class="custom-select-arrow">▼</span>
+                </div>
+                <div class="custom-select-dropdown">
+                  <div class="custom-select-option" data-value="dd/mm/yyyy" onclick="selectCustomOption('settingDateFormatCustom', 'dd/mm/yyyy', 'DD/MM/YYYY')">DD/MM/YYYY</div>
+                  <div class="custom-select-option" data-value="mm/dd/yyyy" onclick="selectCustomOption('settingDateFormatCustom', 'mm/dd/yyyy', 'MM/DD/YYYY')">MM/DD/YYYY</div>
+                  <div class="custom-select-option" data-value="yyyy-mm-dd" onclick="selectCustomOption('settingDateFormatCustom', 'yyyy-mm-dd', 'YYYY-MM-DD')">YYYY-MM-DD</div>
+                </div>
+              </div>
             </div>
           </section>
 

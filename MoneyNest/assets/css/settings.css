@@ -602,3 +602,38 @@
   color: var(--muted);
   margin-top: 8px;
 }
+
+/* Custom Select Styles for Settings */
+.setting-custom-select {
+  min-width: 180px;
+}
+
+.setting-custom-select .custom-select-trigger {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.setting-custom-select .custom-select-dropdown {
+  min-width: 180px;
+}
+
+.setting-custom-select .custom-select-option {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .setting-custom-select {
+    width: 100%;
+  }
+  
+  .setting-custom-select .custom-select-trigger {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  
+  .setting-custom-select .custom-select-option {
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+}

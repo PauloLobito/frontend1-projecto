@@ -13,6 +13,35 @@ let isEditingProfile = false;
 let currentCategoryType = 'income';
 
 // ================================================
+// FUNÇÕES: CUSTOM SELECT (para settings)
+// ================================================
+
+function getCustomSelectValue(id) {
+  const select = document.getElementById(id);
+  if (select) {
+    const selected = select.querySelector('.custom-select-option.selected');
+    return selected ? selected.dataset.value : '';
+  }
+  return '';
+}
+
+function setCustomSelectValue(id, value) {
+  const select = document.getElementById(id);
+  if (!select) return;
+  
+  const trigger = select.querySelector('.custom-select-trigger');
+  const valueSpan = trigger.querySelector('.custom-select-value');
+  
+  select.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.classList.remove('selected');
+    if (opt.dataset.value === value) {
+      opt.classList.add('selected');
+      if (valueSpan) valueSpan.textContent = opt.textContent;
+    }
+  });
+}
+
+// ================================================
 // FUNÇÕES: CATEGORIAS
 // ================================================
 
@@ -544,16 +573,16 @@ function loadSettings() {
     const settings = JSON.parse(saved);
     document.getElementById('settingName').value = settings.name || 'Utilizador';
     document.getElementById('settingEmail').value = settings.email || 'utilizador@email.com';
-    document.getElementById('settingCurrency').value = settings.currency || 'BRL';
+    setCustomSelectValue('settingCurrencyCustom', settings.currency || 'BRL');
+    setCustomSelectValue('settingThemeCustom', settings.theme || 'dark');
+    setCustomSelectValue('settingLangCustom', settings.language || 'pt-PT');
+    setCustomSelectValue('settingDateFormatCustom', settings.dateFormat || 'dd/mm/yyyy');
     document.getElementById('notifEmail').checked = settings.notifEmail !== undefined ? settings.notifEmail : true;
     document.getElementById('notifExpense').checked = settings.notifExpense !== undefined ? settings.notifExpense : true;
     document.getElementById('notifReport').checked = settings.notifReport || false;
     document.getElementById('2fa').checked = settings.twoFactor || false;
     document.getElementById('sessionLock').checked = settings.sessionLock || false;
-    document.getElementById('settingTheme').value = settings.theme || 'dark';
     document.getElementById('ecoMode').checked = settings.ecoMode || false;
-    document.getElementById('settingLang').value = settings.language || 'pt-PT';
-    document.getElementById('settingDateFormat').value = settings.dateFormat || 'dd/mm/yyyy';
   }
 }
 
@@ -567,16 +596,16 @@ function saveSettings() {
     ...existingSettings,
     name: document.getElementById('settingName').value,
     email: document.getElementById('settingEmail').value,
-    currency: document.getElementById('settingCurrency').value,
+    currency: getCustomSelectValue('settingCurrencyCustom'),
     notifEmail: document.getElementById('notifEmail').checked,
     notifExpense: document.getElementById('notifExpense').checked,
     notifReport: document.getElementById('notifReport').checked,
     twoFactor: document.getElementById('2fa').checked,
     sessionLock: document.getElementById('sessionLock').checked,
-    theme: document.getElementById('settingTheme').value,
+    theme: getCustomSelectValue('settingThemeCustom'),
     ecoMode: document.getElementById('ecoMode').checked,
-    language: document.getElementById('settingLang').value,
-    dateFormat: document.getElementById('settingDateFormat').value
+    language: getCustomSelectValue('settingLangCustom'),
+    dateFormat: getCustomSelectValue('settingDateFormatCustom')
   };
   
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
@@ -628,25 +657,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (index === hoje.getMonth()) li.classList.add('active');
   });
 
-  // Listener: mudança de idioma
-  document.getElementById('settingLang').addEventListener('change', function() {
-    const saved = localStorage.getItem('moneynest_settings');
-    const currentSettings = saved ? JSON.parse(saved) : {};
-    currentSettings.language = this.value;
-    localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
-    applyLanguageSettings();
-    loadCategories();
-  });
-
-  // Listener: mudança de tema
-  document.getElementById('settingTheme').addEventListener('change', function() {
-    const saved = localStorage.getItem('moneynest_settings');
-    const currentSettings = saved ? JSON.parse(saved) : {};
-    currentSettings.theme = this.value;
-    localStorage.setItem('moneynest_settings', JSON.stringify(currentSettings));
-    applyTheme(this.value);
-  });
-
   // Listeners: teclado no perfil
   document.getElementById('settingName').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && isEditingProfile) saveProfileChanges();
@@ -678,4 +688,13 @@ document.addEventListener('DOMContentLoaded', function() {
       closeCategoryModal();
     }
   });
+});
+
+// Click outside to close custom selects
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select')) {
+    document.querySelectorAll('.custom-select.open').forEach(el => {
+      el.classList.remove('open');
+    });
+  }
 });
