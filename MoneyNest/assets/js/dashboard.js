@@ -451,13 +451,22 @@ function logout() {
 // ================================================
 // FUNÇÃO: renderChart
 // ================================================
+// ================================================
+// VARIÁVEL: Chart instances
+// ================================================
+let barChartInstance = null;
+let donutChartInstance = null;
+
+// ================================================
+// FUNÇÃO: renderChart
+// ================================================
 function renderChart() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
   
-  const currentYear = new Date().getFullYear();
+  const currentYear = selectedYear || new Date().getFullYear();
   const months = Array.from({ length: 12 }, (_, i) => ({ month: i, year: currentYear }));
   
   const monthlyData = months.map(m => {
@@ -470,52 +479,65 @@ function renderChart() {
     return { income, expense };
   });
   
-  const maxValue = Math.max(...monthlyData.map(d => Math.max(d.income, d.expense)), 1);
-  const chartHeight = 200;
-  const chartLeft = 40;
-  const chartRight = 760;
-  const chartTop = 20;
-  const chartBottom = 220;
-  const barGroupWidth = (chartRight - chartLeft) / 12;
-  const barWidth = barGroupWidth * 0.35;
-  
-  let barsHTML = `
-    <g opacity="0.18" stroke="#b9c4ff">
-      <path d="M40 20 H760"/><path d="M40 60 H760"/><path d="M40 100 H760"/><path d="M40 140 H760"/><path d="M40 180 H760"/><path d="M40 220 H760"/>
-    </g>
-  `;
-  
   const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const incomeData = monthlyData.map(d => d.income);
+  const expenseData = monthlyData.map(d => d.expense);
   
-  months.forEach((m, i) => {
-    const data = monthlyData[i];
-    const groupX = chartLeft + (i + 0.5) * barGroupWidth;
-    const incomeHeight = (data.income / maxValue) * (chartBottom - chartTop);
-    const expenseHeight = (data.expense / maxValue) * (chartBottom - chartTop);
-    
-    const incomeY = chartBottom - incomeHeight;
-    const expenseY = chartBottom - expenseHeight;
-    
-    const incomeX = groupX - barWidth - 2;
-    const expenseX = groupX + 2;
-    
-    barsHTML += `
-      <rect x="${incomeX}" y="${incomeY}" width="${barWidth}" height="${incomeHeight}" fill="#00c853" rx="4"/>
-      <rect x="${expenseX}" y="${expenseY}" width="${barWidth}" height="${expenseHeight}" fill="#ff5722" rx="4"/>
-    `;
-    
-    const labelY = chartBottom + 18;
-    barsHTML += `
-      <text x="${groupX}" y="${labelY}" text-anchor="middle" fill="#888" font-size="14" font-weight="600">${monthNames[i]}</text>
-    `;
-  });
+  // Atualizar totais no header do gráfico
+  const totalIncomeYear = incomeData.reduce((s, v) => s + v, 0);
+  const totalExpenseYear = expenseData.reduce((s, v) => s + v, 0);
+  const chartIncomeTotal = document.getElementById('chartIncomeTotal');
+  const chartExpenseTotal = document.getElementById('chartExpenseTotal');
+  if (chartIncomeTotal) chartIncomeTotal.textContent = formatCurrencyValue(totalIncomeYear);
+  if (chartExpenseTotal) chartExpenseTotal.textContent = formatCurrencyValue(totalExpenseYear);
   
-  const svg = document.querySelector('.chart-wrap svg');
-  if (svg) {
-    svg.innerHTML = barsHTML;
-    svg.setAttribute('viewBox', `0 0 ${chartRight} 260`);
-  } else {
-    console.log('SVG not found');
+  // Destruir gráfico anterior se existir
+  if (barChartInstance) {
+    barChartInstance.destroy();
+  }
+  
+  // Renderizar gráfico de barras com Chart.js
+  const barCtx = document.getElementById('barChart');
+  if (barCtx) {
+    barChartInstance = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: monthNames,
+        datasets: [
+          {
+            label: 'Receitas',
+            data: incomeData,
+            backgroundColor: '#00c853',
+            borderRadius: 4,
+            barPercentage: 0.4
+          },
+          {
+            label: 'Despesas',
+            data: expenseData,
+            backgroundColor: '#ff5722',
+            borderRadius: 4,
+            barPercentage: 0.4
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#888', font: { weight: 600 } }
+          },
+          y: {
+            grid: { color: 'rgba(185, 196, 255, 0.1)' },
+            ticks: { color: '#888' }
+          }
+        }
+      }
+    });
   }
   
   // Totais do mês selecionado para Ativos
@@ -529,40 +551,49 @@ function renderChart() {
   const assetsBalance = document.getElementById('assetsBalance');
   const assetsPatrimony = document.getElementById('assetsPatrimony');
   
-  if (assetsIncome) {
-    assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
-  }
+  if (assetsIncome) assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
   if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
   if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
   if (assetsPatrimony) assetsPatrimony.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
   
-  console.log('All assets updated');
-  
-  console.log('Chart rendered, records:', records.length, 'barsHTML length:', barsHTML.length);
-  
+  // Atualizar donut chart
   updateDonut(totalIncome, totalExpense);
 }
 
+// ================================================
+// FUNÇÃO: updateDonut
+// ================================================
 function updateDonut(income, expense) {
-  const donut = document.querySelector('.donut');
-  if (!donut) return;
+  const donutCtx = document.getElementById('donutChart');
+  if (!donutCtx) return;
   
-  const total = income + expense;
-  if (total === 0) {
-    donut.style.background = `
-      radial-gradient(circle at center, #141f4f 0 42%, transparent 43%),
-      conic-gradient(#555 0 100%)
-    `;
-    return;
+  // Destruir gráfico anterior se existir
+  if (donutChartInstance) {
+    donutChartInstance.destroy();
   }
   
-  const incomePercent = (income / total) * 100;
-  const expensePercent = (expense / total) * 100;
+  const total = income + expense;
   
-  donut.style.background = `
-    radial-gradient(circle at center, #141f4f 0 42%, transparent 43%),
-    conic-gradient(#00c853 0 ${incomePercent}%, #ff5722 ${incomePercent}% 100%)
-  `;
+  donutChartInstance = new Chart(donutCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Receitas', 'Despesas'],
+      datasets: [{
+        data: total > 0 ? [income, expense] : [1, 0],
+        backgroundColor: total > 0 ? ['#00c853', '#ff5722'] : ['#555', '#333'],
+        borderWidth: 0,
+        cutout: '65%'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: true }
+      }
+    }
+  });
 }
 
 // ================================================
