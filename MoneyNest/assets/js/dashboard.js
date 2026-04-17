@@ -104,20 +104,22 @@ function loadRevenueGoal() {
   const currency = settings.currency || 'BRL';
   const symbol = currencies[currency].symbol;
   
-  // Calcular total de receitas (todas)
+  // Calcular saldo (receitas - despesas)
   const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const totalExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  const balance = totalIncome - totalExpense;
   
-  console.log('[DEBUG loadRevenueGoal] Records:', records.length, 'Total Income:', totalIncome, 'Goal:', goal);
+  console.log('[DEBUG loadRevenueGoal] Records:', records.length, 'Balance:', balance, 'Goal:', goal);
   
   document.getElementById('goalAmount').textContent = formatCurrency(goal);
-  document.getElementById('currentRevenue').textContent = formatCurrency(totalIncome);
+  document.getElementById('currentRevenue').textContent = formatCurrency(balance);
   document.getElementById('goalInput').placeholder = '0,00';
   document.getElementById('goalInput').min = '0';
   
   const percentEl = document.querySelector('.percent');
   let percent = 0;
   if (goal > 0) {
-    percent = Math.min(Math.round((totalIncome / goal) * 100), 100);
+    percent = Math.min(Math.round((balance / goal) * 100), 100);
   }
   percentEl.textContent = percent + '%';
   
@@ -296,16 +298,16 @@ function updateDashboardWithRecords() {
     patrimonyEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalPatrimony)}`;
   }
    
-   // Meta de receita (usar totais de todos os registos)
+   // Meta de receita (usar saldo)
   const goalAmount = settings.revenueGoal || 0;
-  const progressPercent = goalAmount > 0 ? Math.min(Math.round((totalAllIncome / goalAmount) * 100), 100) : 0;
+  const progressPercent = goalAmount > 0 ? Math.min(Math.round((balance / goalAmount) * 100), 100) : 0;
   
   const currentRevenueEl = document.getElementById('currentRevenue');
   const goalAmountEl = document.getElementById('goalAmount');
   const percentEl = document.querySelector('.percent');
   const progressFill = document.getElementById('progressFill');
   
-  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(totalAllIncome);
+  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(balance);
   if (goalAmountEl) goalAmountEl.textContent = formatCurrencyValue(goalAmount);
   if (percentEl) percentEl.textContent = progressPercent + '%';
   if (progressFill) progressFill.style.width = progressPercent + '%';
