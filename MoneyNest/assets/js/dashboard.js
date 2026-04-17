@@ -239,12 +239,22 @@ function applySettings() {
     
     // Adicionar click handler para selecionar mês
     li.onclick = function() {
+      const wasSameMonth = selectedMonth === index;
       selectedMonth = index;
       selectedYear = new Date().getFullYear();
       
       // Atualizar visual
       mesesSidebar.forEach(m => m.classList.remove('active'));
       li.classList.add('active');
+      
+      // Resetar meta de receita se mudou de mês
+      if (!wasSameMonth) {
+        const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+        settings.revenueGoal = 0;
+        localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+        const goalInput = document.getElementById('goalInput');
+        if (goalInput) goalInput.value = '';
+      }
       
       // Recarregar dados
       updateDashboardWithRecords();
