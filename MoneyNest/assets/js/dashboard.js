@@ -649,17 +649,37 @@ function loadRecordCategories() {
   const categories = settings.categories || getDefaultCategories();
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
-  const select = document.getElementById('recordCategory');
+  const dropdown = document.getElementById('recordCategoryDropdown');
+  const customSelect = document.getElementById('recordCategoryCustomSelect');
   
-  select.innerHTML = '';
   const catList = currentRecordType === 'income' ? categories.income : categories.expense;
   
-  catList.forEach(cat => {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    select.appendChild(option);
-  });
+  if (dropdown) {
+    dropdown.innerHTML = '';
+    
+    catList.forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'custom-select-option';
+      div.dataset.value = cat;
+      div.textContent = cat;
+      div.onclick = function() {
+        selectCategoryCustomOption('record', cat, cat);
+        onCategoryChange('record');
+      };
+      dropdown.appendChild(div);
+    });
+    
+    // Set first category as default if none selected
+    if (catList.length > 0) {
+      const trigger = customSelect.querySelector('.custom-select-trigger');
+      const valueSpan = trigger.querySelector('.custom-select-value');
+      if (valueSpan && !valueSpan.textContent || valueSpan.textContent === 'Selecione...') {
+        valueSpan.textContent = catList[0];
+        const firstOpt = dropdown.querySelector('.custom-select-option');
+        if (firstOpt) firstOpt.classList.add('selected');
+      }
+    }
+  }
   
   // Atualizar símbolo da moeda no modal
   const modalCurrencyIcon = document.querySelector('#recordModal .input-icon');
@@ -700,7 +720,7 @@ function onCategoryChange(modal) {
   const category = categorySelect.value;
   if (!category) return;
   
-  const categoryLower = category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const categoryLower = category.toLowerCase();
   console.log('onCategoryChange:', modal, 'category:', category, 'lower:', categoryLower);
   
   // Verificar se a categoria é PETS
@@ -725,7 +745,7 @@ function onCategoryChange(modal) {
  */
 function addRecord() {
   const amount = parseFloat(document.getElementById('recordAmount').value) || 0;
-  const category = document.getElementById('recordCategory').value;
+  const category = getCategoryCustomSelectValue('record');
   const date = document.getElementById('recordDate').value;
   
   // Verificar se é PETS para usar o custom select ou input
@@ -866,20 +886,36 @@ function loadEditRecordCategories(type, selectedCategory) {
   const categories = settings.categories || getDefaultCategories();
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
-  const select = document.getElementById('editRecordCategory');
+  const dropdown = document.getElementById('editRecordCategoryDropdown');
+  const customSelect = document.getElementById('editRecordCategoryCustomSelect');
   
-  select.innerHTML = '';
   const catList = type === 'income' ? categories.income : categories.expense;
   
-  catList.forEach(cat => {
-    const option = document.createElement('option');
-    option.value = cat;
-    option.textContent = cat;
-    if (cat === selectedCategory) {
-      option.selected = true;
+  if (dropdown) {
+    dropdown.innerHTML = '';
+    
+    catList.forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'custom-select-option';
+      div.dataset.value = cat;
+      div.textContent = cat;
+      if (cat === selectedCategory) {
+        div.classList.add('selected');
+      }
+      div.onclick = function() {
+        selectCategoryCustomOption('edit', cat, cat);
+        onCategoryChange('edit');
+      };
+      dropdown.appendChild(div);
+    });
+    
+    // Set selected category display
+    if (selectedCategory) {
+      const trigger = customSelect.querySelector('.custom-select-trigger');
+      const valueSpan = trigger.querySelector('.custom-select-value');
+      if (valueSpan) valueSpan.textContent = selectedCategory;
     }
-    select.appendChild(option);
-  });
+  }
   
   // Atualizar símbolo da moeda no modal
   const modalCurrencyIcon = document.querySelector('#editModal .input-icon');
@@ -893,7 +929,7 @@ function loadEditRecordCategories(type, selectedCategory) {
  */
 function saveEditRecord() {
   const amount = parseFloat(document.getElementById('editRecordAmount').value) || 0;
-  const category = document.getElementById('editRecordCategory').value;
+  const category = getCategoryCustomSelectValue('edit');
   const date = document.getElementById('editRecordDate').value;
   const typeBtn = document.querySelector('#editModal .type-btn.active');
   const type = typeBtn ? typeBtn.dataset.type : 'expense';
@@ -1084,10 +1120,8 @@ function selectCustomOption(selectId, value, text) {
   
   const trigger = select.querySelector('.custom-select-trigger');
   const valueSpan = trigger.querySelector('.custom-select-value');
-  const hiddenInput = select.querySelector('input[type="hidden"]');
   
   if (valueSpan) valueSpan.textContent = text;
-  if (hiddenInput) hiddenInput.value = value;
   
   select.querySelectorAll('.custom-select-option').forEach(opt => {
     opt.classList.remove('selected');
@@ -1105,6 +1139,58 @@ function selectCustomOption(selectId, value, text) {
     const textInput = document.getElementById('editRecordDescription');
     if (textInput) textInput.value = value;
   }
+}
+
+function selectCategoryCustomOption(modal, value, text) {
+  let selectId, textInputId;
+  
+  if (modal === 'record') {
+    selectId = 'recordCategoryCustomSelect';
+    textInputId = 'recordCategory';
+  } else {
+    selectId = 'editRecordCategoryCustomSelect';
+    textInputId = 'editRecordCategory';
+  }
+  
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  
+  const trigger = select.querySelector('.custom-select-trigger');
+  const valueSpan = trigger.querySelector('.custom-select-value');
+  
+  if (valueSpan) valueSpan.textContent = text;
+  
+  select.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  
+  const selectedOpt = select.querySelector(`[data-value="${value}"]`);
+  if (selectedOpt) selectedOpt.classList.add('selected');
+  
+  select.classList.remove('open');
+  
+  // Update hidden text input for compatibility
+  const textInput = document.getElementById(textInputId);
+  if (textInput) {
+    textInput.value = value;
+  }
+}
+
+function getCategoryCustomSelectValue(modal) {
+  if (modal === 'record') {
+    const select = document.getElementById('recordCategoryCustomSelect');
+    if (select) {
+      const selected = select.querySelector('.custom-select-option.selected');
+      return selected ? selected.dataset.value : '';
+    }
+  } else {
+    const select = document.getElementById('editRecordCategoryCustomSelect');
+    if (select) {
+      const selected = select.querySelector('.custom-select-option.selected');
+      return selected ? selected.dataset.value : '';
+    }
+  }
+  return '';
 }
 
 document.addEventListener('click', function(e) {

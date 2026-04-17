@@ -315,8 +315,14 @@
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-input" id="recordCategory" onchange="onCategoryChange('record')">
-          </select>
+          <div class="custom-select" id="recordCategoryCustomSelect">
+            <div class="custom-select-trigger" onclick="toggleCustomSelect('recordCategoryCustomSelect')">
+              <span class="custom-select-value">Selecione...</span>
+              <span class="custom-select-arrow">▼</span>
+            </div>
+            <div class="custom-select-dropdown" id="recordCategoryDropdown">
+            </div>
+          </div>
         </div>
         <div class="form-group" id="recordDescriptionTextGroup">
           <label class="form-label">Descrição</label>
@@ -380,8 +386,14 @@
         </div>
         <div class="form-group">
           <label class="form-label">Categoria</label>
-          <select class="form-input" id="editRecordCategory" onchange="onCategoryChange('edit')">
-          </select>
+          <div class="custom-select" id="editRecordCategoryCustomSelect">
+            <div class="custom-select-trigger" onclick="toggleCustomSelect('editRecordCategoryCustomSelect')">
+              <span class="custom-select-value">Selecione...</span>
+              <span class="custom-select-arrow">▼</span>
+            </div>
+            <div class="custom-select-dropdown" id="editRecordCategoryDropdown">
+            </div>
+          </div>
         </div>
         <div class="form-group" id="editDescriptionTextGroup">
           <label class="form-label">Descrição</label>
