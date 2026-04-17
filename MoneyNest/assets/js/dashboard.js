@@ -1218,7 +1218,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="user-info">
           <span class="user-name">${user.firstName} ${user.lastName}</span>
         </div>
-        <div class="user-avatar">${user.firstName.charAt(0).toUpperCase()}</div>
+        <a href="settings.html" class="user-avatar">${user.firstName.charAt(0).toUpperCase()}</a>
         <button class="btn-logout" onclick="logout()">${t.logout}</button>
       </div>
     `;

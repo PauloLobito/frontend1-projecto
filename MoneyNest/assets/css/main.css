@@ -1112,6 +1112,17 @@ h1 {
   font-weight: 800;
   color: #fff;
   box-shadow: 0 4px 12px rgba(24, 210, 235, .3);
+  text-decoration: none;
+}
+
+a.user-avatar {
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+a.user-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(24, 210, 235, .4);
 }
 
 .btn-logout {
