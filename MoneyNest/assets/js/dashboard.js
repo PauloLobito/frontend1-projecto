@@ -831,6 +831,8 @@ function addRecord() {
   closeRecordModal();
   loadRecords();
   updateDashboardWithRecords();
+  loadRevenueGoal();
+  renderChart();
 }
 
 // ================================================
@@ -1017,6 +1019,8 @@ function saveEditRecord() {
   closeEditModal();
   loadRecords();
   updateDashboardWithRecords();
+  loadRevenueGoal();
+  renderChart();
 }
 
 /**
@@ -1136,6 +1140,8 @@ function deleteRecord(id) {
     localStorage.setItem('moneynest_settings', JSON.stringify(settings));
     loadRecords();
     updateDashboardWithRecords();
+    loadRevenueGoal();
+    renderChart();
   }
 }
 
