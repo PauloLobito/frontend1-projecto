@@ -350,7 +350,12 @@ function updateDashboardWithRecords() {
     expenseByCategory[r.category] = (expenseByCategory[r.category] || 0) + r.amount;
   });
   
+  console.log('expenseByCategory:', expenseByCategory);
+  console.log('monthlyRecords:', monthlyRecords);
+  
   const expenseList = document.getElementById('expensesList');
+  console.log('expenseList found:', !!expenseList);
+  
   if (expenseList) {
     expenseList.innerHTML = '';
     
@@ -358,6 +363,7 @@ function updateDashboardWithRecords() {
     const colors = ['icon-purple', 'icon-pink', 'icon-orange', 'icon-green', 'icon-blue'];
     
     const entries = Object.entries(expenseByCategory);
+    console.log('entries:', entries);
     
     if (entries.length === 0) {
       expenseList.innerHTML = '<div class="list-item"><div class="item-meta"><div class="item-name" style="color:var(--muted)">Sem despesas este mês</div></div></div>';
