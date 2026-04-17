@@ -373,9 +373,9 @@ function updateDashboardWithRecords() {
   // Atualizar "Receitas e Despesas" (totais do gráfico)
   const chartHeader = document.querySelector('.chart-header');
   if (chartHeader) {
-    const totals = chartHeader.querySelectorAll('div[style*="color"]');
-    if (totals[0]) totals[0].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
-    if (totals[1]) totals[1].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
+    const valueDivs = chartHeader.querySelectorAll('div > div');
+    if (valueDivs[0]) valueDivs[0].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
+    if (valueDivs[1]) valueDivs[1].innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
   }
   
   // Renderizar gráfico de barras "Receitas e Despesas"
