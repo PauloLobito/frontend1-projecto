@@ -202,6 +202,14 @@ function applySettings() {
       
       // Recarregar dados
       updateDashboardWithRecords();
+      loadRevenueGoal();
+      renderChart();
+      
+      // Atualizar registos na tab relatórios se estiver ativa
+      const reportsView = document.getElementById('reportsView');
+      if (reportsView && reportsView.style.display !== 'none') {
+        loadRecords();
+      }
     };
   });
 
@@ -1083,18 +1091,24 @@ function loadRecords() {
   const currencySymbol = currencies[currency]?.symbol || 'R$';
   const list = document.getElementById('recordsList');
   
-  // Filtrar registos
-  let filteredRecords = records;
+  // Filtrar registos do mês selecionado
+  const monthlyRecords = records.filter(r => {
+    const recordDate = new Date(r.date);
+    return recordDate.getMonth() === selectedMonth && recordDate.getFullYear() === selectedYear;
+  });
+  
+  // Filtrar registos (por tipo)
+  let filteredRecords = monthlyRecords;
   if (currentFilter !== 'all') {
-    filteredRecords = records.filter(r => r.type === currentFilter);
+    filteredRecords = monthlyRecords.filter(r => r.type === currentFilter);
   }
   
   // Ordenar por data (mais recente primeiro)
   filteredRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
   
-  // Calcular totais
-  const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
-  const totalExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  // Calcular totais do mês
+  const totalIncome = monthlyRecords.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const totalExpense = monthlyRecords.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
   const balance = totalIncome - totalExpense;
   
   document.getElementById('totalIncome').textContent = formatCurrencyValue(totalIncome);
