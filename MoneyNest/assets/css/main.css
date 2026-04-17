@@ -585,6 +585,29 @@ h1 {
   padding: 16px;
 }
 
+.bar-chart-container {
+  position: relative;
+  height: 220px;
+  width: 100%;
+}
+
+.bar-chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.donut-container {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.donut-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -658,14 +681,6 @@ h1 {
   gap: 12px;
   align-items: center;
   min-height: 300px;
-}
-
-.donut {
-  width: 210px;
-  height: 210px;
-  border-radius: 50%;
-  margin: 0 auto;
-  box-shadow: inset 0 0 0 14px rgba(255,255,255,.02);
 }
 
 .asset-list {
@@ -889,13 +904,14 @@ h1 {
     overflow-x: auto;
   }
 
-  .chart-wrap svg {
-    min-width: 500px;
+  .bar-chart-container {
+    height: 180px;
+    min-width: 400px;
   }
 
-  .chart-wrap svg text {
-    fill: var(--muted);
-    font-size: 10px;
+  .donut-container {
+    width: 140px;
+    height: 140px;
   }
 
   .assets-legend {

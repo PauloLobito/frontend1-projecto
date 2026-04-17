@@ -151,7 +151,9 @@
                 <div style="color: var(--green);"><span class="currency-symbol">R$</span> <span id="chartIncomeTotal">0</span></div>
               </div>
             </div>
-            <canvas id="barChart" width="760" height="220"></canvas>
+            <div class="bar-chart-container">
+              <canvas id="barChart"></canvas>
+            </div>
           </div>
         </article>
 
@@ -164,7 +166,9 @@
             <span class="legend-item"><span class="legend-color" style="background:#9c27b0"></span> Património</span>
           </div>
           <div class="assets-layout">
-            <canvas id="donutChart" width="180" height="180"></canvas>
+            <div class="donut-container">
+              <canvas id="donutChart"></canvas>
+            </div>
             <div class="asset-list">
               <div><span class="asset-label"><span class="legend-color small" style="background:#00c853"></span> Receitas</span><strong id="assetsIncome"><span class="currency-symbol">R$</span> 0</strong></div>
               <div><span class="asset-label"><span class="legend-color small" style="background:#ff5722"></span> Despesas</span><strong id="assetsExpense"><span class="currency-symbol">R$</span> 0</strong></div>

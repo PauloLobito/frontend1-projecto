@@ -587,11 +587,7 @@ function updateDonut(income, expense) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
-      plugins: {
-        legend: { display: false },
-        tooltip: { enabled: true }
-      }
+      maintainAspectRatio: false
     }
   });
 }
