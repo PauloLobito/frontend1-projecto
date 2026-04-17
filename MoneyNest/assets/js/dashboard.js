@@ -350,30 +350,36 @@ function updateDashboardWithRecords() {
     expenseByCategory[r.category] = (expenseByCategory[r.category] || 0) + r.amount;
   });
   
-  const expenseList = document.querySelector('.list');
+  const expenseList = document.getElementById('expensesList');
   if (expenseList) {
     expenseList.innerHTML = '';
     
     const icons = ['⌂', '👥', '🚗', '🍽️', '💊', '🎮', '✏️', '📱', '🐕', '🏥', '🛒', '📚'];
     const colors = ['icon-purple', 'icon-pink', 'icon-orange', 'icon-green', 'icon-blue'];
     
-    Object.entries(expenseByCategory).forEach(([category, amount], index) => {
-      if (amount > 0) {
-        const icon = icons[index % icons.length];
-        const color = colors[index % colors.length];
-        
-        const item = document.createElement('div');
-        item.className = 'list-item';
-        item.innerHTML = `
-          <div class="icon-box ${color}">${icon}</div>
-          <div class="item-meta">
-            <div class="item-name">${category}</div>
-            <div class="item-amount"><span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}</div>
-          </div>
-        `;
-        expenseList.appendChild(item);
-      }
-    });
+    const entries = Object.entries(expenseByCategory);
+    
+    if (entries.length === 0) {
+      expenseList.innerHTML = '<div class="list-item"><div class="item-meta"><div class="item-name" style="color:var(--muted)">Sem despesas este mês</div></div></div>';
+    } else {
+      entries.forEach(([category, amount], index) => {
+        if (amount > 0) {
+          const icon = icons[index % icons.length];
+          const color = colors[index % colors.length];
+          
+          const item = document.createElement('div');
+          item.className = 'list-item';
+          item.innerHTML = `
+            <div class="icon-box ${color}">${icon}</div>
+            <div class="item-meta">
+              <div class="item-name">${category}</div>
+              <div class="item-amount"><span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}</div>
+            </div>
+          `;
+          expenseList.appendChild(item);
+        }
+      });
+    }
   }
   
   // Atualizar "Receitas e Despesas" (totais do gráfico)
