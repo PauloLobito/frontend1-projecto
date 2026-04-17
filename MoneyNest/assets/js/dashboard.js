@@ -136,7 +136,9 @@ function loadIncomeCategories() {
 function loadRevenueGoal() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
-  const goal = settings.revenueGoal || 0;
+  const monthlyGoals = settings.monthlyGoals || {};
+  const monthKey = `${selectedYear}-${selectedMonth}`;
+  const goal = monthlyGoals[monthKey] || 0;
   const currency = settings.currency || 'BRL';
   const symbol = currencies[currency].symbol;
   
@@ -188,7 +190,10 @@ function setRevenueGoal() {
   }
   
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
-  settings.revenueGoal = value;
+  const monthlyGoals = settings.monthlyGoals || {};
+  const monthKey = `${selectedYear}-${selectedMonth}`;
+  monthlyGoals[monthKey] = value;
+  settings.monthlyGoals = monthlyGoals;
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   
   input.value = '';
@@ -247,14 +252,11 @@ function applySettings() {
       mesesSidebar.forEach(m => m.classList.remove('active'));
       li.classList.add('active');
       
-      // Resetar meta de receita se mudou de mês
-      if (!wasSameMonth) {
-        const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
-        settings.revenueGoal = 0;
-        localStorage.setItem('moneynest_settings', JSON.stringify(settings));
-        const goalInput = document.getElementById('goalInput');
-        if (goalInput) goalInput.value = '';
-      }
+      // Carregar meta de receita do mês selecionado
+      const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+      const monthlyGoals = settings.monthlyGoals || {};
+      const goalInput = document.getElementById('goalInput');
+      if (goalInput) goalInput.value = '';
       
       // Recarregar dados
       updateDashboardWithRecords();
