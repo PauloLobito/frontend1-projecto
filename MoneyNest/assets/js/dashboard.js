@@ -9,6 +9,10 @@ const currencies = {
   'USD': { symbol: '$', name: 'Dólar' }
 };
 
+// Mês selecionado no sidebar
+let selectedMonth = new Date().getMonth();
+let selectedYear = new Date().getFullYear();
+
 // ================================================
 // FUNÇÃO: applyTheme
 // ================================================
@@ -172,16 +176,29 @@ function applySettings() {
     li.textContent = translations[lang].months[index];
   });
 
-  // Destaca o mês atual na sidebar
-  const hoje = new Date();
+  // Destaca o mês selecionado na sidebar
   mesesSidebar.forEach((li, index) => {
     li.classList.remove('active');
-    if (index === hoje.getMonth()) {
+    if (index === selectedMonth) {
       li.classList.add('active');
     }
+    
+    // Adicionar click handler para selecionar mês
+    li.onclick = function() {
+      selectedMonth = index;
+      selectedYear = new Date().getFullYear();
+      
+      // Atualizar visual
+      mesesSidebar.forEach(m => m.classList.remove('active'));
+      li.classList.add('active');
+      
+      // Recarregar dados
+      updateDashboardWithRecords();
+    };
   });
 
   // Data atual formatada
+  const hoje = new Date();
   const diaSemana = t.dias[hoje.getDay()];
   const dia = hoje.getDate();
   const mes = t.meses[hoje.getMonth()];
@@ -237,15 +254,10 @@ function updateDashboardWithRecords() {
   const currencySymbol = currencies[currency]?.symbol || 'R$';
   console.log('records:', records.length);
   
-  // Obter mês e ano atuais
-  const hoje = new Date();
-  const currentMonth = hoje.getMonth();
-  const currentYear = hoje.getFullYear();
-  
-  // Filtrar registos do mês atual
+  // Filtrar registos do mês selecionado
   const monthlyRecords = records.filter(r => {
     const recordDate = new Date(r.date);
-    return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+    return recordDate.getMonth() === selectedMonth && recordDate.getFullYear() === selectedYear;
   });
   
   // Calcular totais mensais
@@ -397,13 +409,9 @@ function updatePetsExpenses() {
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
   
-  const hoje = new Date();
-  const currentMonth = hoje.getMonth();
-  const currentYear = hoje.getFullYear();
-  
   const monthlyRecords = records.filter(r => {
     const recordDate = new Date(r.date);
-    return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+    return recordDate.getMonth() === selectedMonth && recordDate.getFullYear() === selectedYear;
   });
   
   const petsDescriptions = ['Consulta Veterinária', 'Ração', 'Petiscos', 'Banho e Hospedagem'];
