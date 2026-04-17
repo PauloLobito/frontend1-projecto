@@ -504,63 +504,54 @@ function renderChart() {
   
   // Renderizar gráfico de barras com Chart.js
   const barCtx = document.getElementById('barChart');
-  const chartWrap = document.querySelector('.chart-wrap');
-  const barContainer = document.querySelector('.bar-chart-container');
-  
-  // Se não há registos em nenhum mês, esconder gráfico
-  const hasAnyData = monthlyData.some(m => m.income > 0 || m.expense > 0);
-  
-  if (!barCtx || !chartWrap) return;
-  
-  if (!hasAnyData) {
-    chartWrap.style.display = 'none';
-    return;
-  }
-  
-  chartWrap.style.display = 'block';
-  if (barContainer) barContainer.style.display = 'block';
-  barCtx.style.display = 'block';
-  
-  barChartInstance = new Chart(barCtx, {
-    type: 'bar',
-    data: {
-      labels: monthNames,
-      datasets: [
-        {
-          label: 'Receitas',
-          data: incomeData,
-          backgroundColor: '#00c853',
-          borderRadius: 4,
-          barPercentage: 0.4
-        },
-        {
-          label: 'Despesas',
-          data: expenseData,
-          backgroundColor: '#ff5722',
-          borderRadius: 4,
-          barPercentage: 0.4
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false }
+  if (barCtx) {
+    // Converter 0 para null para ocultar barras sem dados
+    const incomeChartData = incomeData.map(v => v > 0 ? v : null);
+    const expenseChartData = expenseData.map(v => v > 0 ? v : null);
+    
+    barChartInstance = new Chart(barCtx, {
+      type: 'bar',
+      data: {
+        labels: monthNames,
+        datasets: [
+          {
+            label: 'Receitas',
+            data: incomeChartData,
+            backgroundColor: '#00c853',
+            borderRadius: 4,
+            barPercentage: 0.4,
+            skipNull: true
+          },
+          {
+            label: 'Despesas',
+            data: expenseChartData,
+            backgroundColor: '#ff5722',
+            borderRadius: 4,
+            barPercentage: 0.4,
+            skipNull: true
+          }
+        ]
       },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: { color: '#888', font: { weight: 600 } }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
         },
-        y: {
-          grid: { color: 'rgba(185, 196, 255, 0.1)' },
-          ticks: { color: '#888' },
-          beginAtZero: true
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#888', font: { weight: 600 } }
+          },
+          y: {
+            grid: { color: 'rgba(185, 196, 255, 0.1)' },
+            ticks: { color: '#888' },
+            beginAtZero: true
+          }
         }
       }
-    }
-  });
+    });
+  }
   
   // Totais do mês selecionado para Ativos
   const selectedMonthData = monthlyData[selectedMonth];
