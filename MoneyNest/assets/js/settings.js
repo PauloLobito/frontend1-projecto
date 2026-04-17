@@ -640,6 +640,7 @@ function saveSettings() {
   
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   applyLanguageSettings();
+  applyTheme(settings.theme);
   
   // Feedback visual de sucesso
   const btn = document.querySelector('.btn-save');
