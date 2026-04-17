@@ -255,8 +255,10 @@ function updateDashboardWithRecords() {
   console.log('records:', records.length);
   
   // Filtrar registos do mês selecionado
+  console.log('Filtering for month:', selectedMonth, 'year:', selectedYear);
   const monthlyRecords = records.filter(r => {
     const recordDate = new Date(r.date);
+    console.log('Record:', r.date, '-> month:', recordDate.getMonth(), 'year:', recordDate.getFullYear());
     return recordDate.getMonth() === selectedMonth && recordDate.getFullYear() === selectedYear;
   });
   
