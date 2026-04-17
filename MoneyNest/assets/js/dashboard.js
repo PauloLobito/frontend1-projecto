@@ -100,25 +100,20 @@ function loadRevenueGoal() {
   const currency = settings.currency || 'BRL';
   const symbol = currencies[currency].symbol;
   
-  // Calcular receitas do mês atual
-  const hoje = new Date();
-  const currentMonth = hoje.getMonth();
-  const currentYear = hoje.getFullYear();
-  
-  const monthlyIncome = records.filter(r => {
-    const d = new Date(r.date);
-    return r.type === 'income' && d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-  }).reduce((sum, r) => sum + r.amount, 0);
+  // Calcular saldo disponível (total de todos os registos)
+  const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const totalExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  const balance = totalIncome - totalExpense;
   
   document.getElementById('goalAmount').textContent = formatCurrency(goal);
-  document.getElementById('currentRevenue').textContent = formatCurrency(monthlyIncome);
+  document.getElementById('currentRevenue').textContent = formatCurrency(balance);
   document.getElementById('goalInput').placeholder = '0,00';
   document.getElementById('goalInput').min = '0';
   
   const percentEl = document.querySelector('.percent');
   let percent = 0;
   if (goal > 0) {
-    percent = Math.min(Math.round((monthlyIncome / goal) * 100), 100);
+    percent = Math.min(Math.round((balance / goal) * 100), 100);
   }
   percentEl.textContent = percent + '%';
   
