@@ -645,9 +645,8 @@ function onCategoryChange(modal) {
   const categoryLower = category.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   console.log('onCategoryChange:', modal, 'category:', category, 'lower:', categoryLower);
   
-  // Verificar se a categoria é relacionada a pets/animais
-  const petKeywords = ['pet', 'pets', 'animal', 'animais', 'cao', 'gato', 'passeio', 'veterin', 'alimentacao', 'alimentos'];
-  const isPets = petKeywords.some(keyword => categoryLower.includes(keyword));
+  // Verificar se a categoria é PETS
+  const isPets = categoryLower === 'pets' || categoryLower === 'pet';
   console.log('isPets:', isPets, 'textGroup:', textGroup, 'selectGroup:', selectGroup);
   
   if (isPets) {
