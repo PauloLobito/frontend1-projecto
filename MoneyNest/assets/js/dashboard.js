@@ -262,33 +262,35 @@ function updateDashboardWithRecords() {
     return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
   });
   
-  // Calcular totais
+  // Calcular totais mensais
   const totalIncome = monthlyRecords.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
   const totalExpense = monthlyRecords.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
-  const balance = totalIncome - totalExpense;
+  
+  // Calcular totais de todos os registos
+  const totalAllIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const totalAllExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  const balance = totalAllIncome - totalAllExpense;
   
   // Atualizar valores no dashboard
-  // Saldo disponível
+  // Saldo disponível (total de todos os registos)
   const balanceEl = document.querySelector('.balance');
   if (balanceEl) {
     balanceEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(balance)}`;
   }
   
-  // Gastos (despesas)
+  // Gastos (despesas mensais)
   const gastosEl = document.querySelector('.mini-value');
   if (gastosEl) {
     gastosEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
   }
   
-  // Receita total
+  // Receita total (mensal)
   const revenueEl = document.querySelectorAll('.mini-value')[1];
   if (revenueEl) {
     revenueEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
   }
   
   // Património Total (todos os registos)
-  const totalAllIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
-  const totalAllExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
   const totalPatrimony = totalAllIncome - totalAllExpense;
   const patrimonyEl = document.querySelector('.hero .value');
   if (patrimonyEl) {
