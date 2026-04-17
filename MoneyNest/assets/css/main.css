@@ -835,6 +835,11 @@ h1 {
   h1 { font-size: 34px; }
   .balance { font-size: 34px; }
   .mini-value, .percent, .progress-total, .hero .value { font-size: 28px; }
+
+  .chart-wrap svg text {
+    fill: var(--muted);
+    text-decoration: none;
+  }
 }
 
 .auth-header {
