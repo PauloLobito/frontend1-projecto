@@ -16,6 +16,36 @@ let currentCategoryType = 'income';
 // FUNÇÕES: CUSTOM SELECT (para settings)
 // ================================================
 
+function toggleCustomSelect(id) {
+  const select = document.getElementById(id);
+  if (!select) return;
+  
+  document.querySelectorAll('.custom-select.open').forEach(el => {
+    if (el.id !== id) el.classList.remove('open');
+  });
+  
+  select.classList.toggle('open');
+}
+
+function selectCustomOption(selectId, value, text) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  
+  const trigger = select.querySelector('.custom-select-trigger');
+  const valueSpan = trigger.querySelector('.custom-select-value');
+  
+  if (valueSpan) valueSpan.textContent = text;
+  
+  select.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  
+  const selectedOpt = select.querySelector(`[data-value="${value}"]`);
+  if (selectedOpt) selectedOpt.classList.add('selected');
+  
+  select.classList.remove('open');
+}
+
 function getCustomSelectValue(id) {
   const select = document.getElementById(id);
   if (select) {
