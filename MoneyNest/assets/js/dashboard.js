@@ -373,6 +373,55 @@ function updateDashboardWithRecords() {
   
   // Renderizar gráfico de barras "Receitas e Despesas"
   renderChart();
+  
+  updatePetsExpenses();
+}
+
+// ================================================
+// FUNÇÃO: updatePetsExpenses
+// ================================================
+function updatePetsExpenses() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const records = settings.records || [];
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
+  
+  const hoje = new Date();
+  const currentMonth = hoje.getMonth();
+  const currentYear = hoje.getFullYear();
+  
+  const monthlyRecords = records.filter(r => {
+    const recordDate = new Date(r.date);
+    return recordDate.getMonth() === currentMonth && recordDate.getFullYear() === currentYear;
+  });
+  
+  const petsDescriptions = ['Consulta Veterinária', 'Ração', 'Petiscos', 'Banho e Hospedagem'];
+  
+  const petsValues = {
+    'Consulta Veterinária': 0,
+    'Ração': 0,
+    'Petiscos': 0,
+    'Banho e Hospedagem': 0
+  };
+  
+  monthlyRecords.filter(r => r.type === 'expense' && petsDescriptions.includes(r.description))
+    .forEach(r => {
+      petsValues[r.description] = (petsValues[r.description] || 0) + r.amount;
+    });
+  
+  const elements = {
+    'petsVetValue': petsValues['Consulta Veterinária'],
+    'petsFoodValue': petsValues['Ração'],
+    'petsTreatsValue': petsValues['Petiscos'],
+    'petsGroomValue': petsValues['Banho e Hospedagem']
+  };
+  
+  Object.entries(elements).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(value)}`;
+    }
+  });
 }
 
 // ================================================
