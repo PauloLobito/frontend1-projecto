@@ -646,7 +646,7 @@ function onCategoryChange(modal) {
   console.log('onCategoryChange:', modal, 'category:', category, 'lower:', categoryLower);
   
   // Verificar se a categoria é relacionada a pets/animais
-  const petKeywords = ['pet', 'pets', 'animal', 'animais', 'cao', 'gato', 'passeio', 'veterin'];
+  const petKeywords = ['pet', 'pets', 'animal', 'animais', 'cao', 'gato', 'passeio', 'veterin', 'alimentacao', 'alimentos'];
   const isPets = petKeywords.some(keyword => categoryLower.includes(keyword));
   console.log('isPets:', isPets, 'textGroup:', textGroup, 'selectGroup:', selectGroup);
   
