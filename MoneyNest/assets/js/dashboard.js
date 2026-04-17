@@ -195,22 +195,13 @@ function applySettings() {
   document.querySelectorAll('.tab')[1].textContent = t.tabs[1];
   document.querySelector('.metric').textContent = t.heroTitle;
   document.querySelectorAll('h3')[0].textContent = t.expenses;
-  document.querySelectorAll('h3')[1].textContent = t.expensesList;
-  document.querySelectorAll('.item-name')[0].textContent = t.housing;
-  document.querySelectorAll('.item-name')[1].textContent = t.personal;
-  document.querySelectorAll('.item-name')[2].textContent = t.transport;
   document.querySelector('.progress-text').textContent = t.progressText;
   document.querySelectorAll('h3')[2].textContent = t.incomeSources;
-  document.querySelectorAll('.bar-label')[0].textContent = t.ecommerce;
-  document.querySelectorAll('.bar-label')[1].textContent = t.ads;
-  document.querySelectorAll('.bar-label')[2].textContent = t.store;
-  document.querySelectorAll('.bar-label')[3].textContent = t.salary;
   document.querySelectorAll('h3')[3].textContent = t.revenue;
   document.querySelectorAll('h3')[4].textContent = t.notification;
   document.querySelector('.notification').textContent = t.noNotification;
   document.querySelectorAll('h3')[5].textContent = t.incomeExpense;
   document.querySelectorAll('h3')[6].textContent = t.assets;
-  document.querySelectorAll('h3')[7].textContent = t.petExpenses;
   document.querySelector('.muted-link').textContent = t.petSummary;
   document.querySelectorAll('.expense-name')[0].textContent = t.vet;
   document.querySelectorAll('.expense-category')[0].textContent = t.categoryHealth;
@@ -350,11 +341,7 @@ function updateDashboardWithRecords() {
     expenseByCategory[r.category] = (expenseByCategory[r.category] || 0) + r.amount;
   });
   
-  console.log('expenseByCategory:', expenseByCategory);
-  console.log('monthlyRecords:', monthlyRecords);
-  
   const expenseList = document.getElementById('expensesList');
-  console.log('expenseList found:', !!expenseList);
   
   if (expenseList) {
     expenseList.innerHTML = '';
@@ -363,7 +350,6 @@ function updateDashboardWithRecords() {
     const colors = ['icon-purple', 'icon-pink', 'icon-orange', 'icon-green', 'icon-blue'];
     
     const entries = Object.entries(expenseByCategory);
-    console.log('entries:', entries);
     
     if (entries.length === 0) {
       expenseList.innerHTML = '<div class="list-item"><div class="item-meta"><div class="item-name" style="color:var(--muted)">Sem despesas este mês</div></div></div>';
