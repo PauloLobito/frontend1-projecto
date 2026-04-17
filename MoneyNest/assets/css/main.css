@@ -800,6 +800,10 @@ h1 {
     justify-content: center;
   }
 
+  .months li.active::before {
+    display: none;
+  }
+
   .sidebar-footer {
     display: none;
   }
