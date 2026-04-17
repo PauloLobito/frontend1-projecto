@@ -1587,3 +1587,167 @@ h1 {
 select.form-input {
   cursor: pointer;
 }
+
+/* ================================================
+   REPORTS RESPONSIVE
+   ================================================ */
+
+@media (max-width: 1024px) {
+  .reports-view {
+    padding: 0 16px;
+  }
+
+  .records-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .reports-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .btn-add-record {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .reports-view {
+    padding: 0 12px;
+  }
+
+  .reports-header h2 {
+    font-size: 22px;
+  }
+
+  .records-summary {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .summary-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .summary-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+  }
+
+  .summary-value {
+    font-size: 20px;
+  }
+
+  .records-section {
+    padding: 16px;
+  }
+
+  .records-filters {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+  }
+
+  .filter-btn {
+    padding: 8px 14px;
+    font-size: 12px;
+    flex: 1;
+    min-width: calc(33% - 8px);
+    text-align: center;
+  }
+
+  .record-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .record-info {
+    width: 100%;
+  }
+
+  .record-description {
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  .record-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .record-category {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .record-actions {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .record-value {
+    font-size: 16px;
+  }
+
+  .record-edit,
+  .record-delete {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .no-records {
+    padding: 40px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reports-view {
+    padding: 0 8px;
+  }
+
+  .reports-header h2 {
+    font-size: 18px;
+  }
+
+  .btn-add-record {
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+
+  .filter-btn {
+    min-width: calc(50% - 4px);
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .summary-label {
+    font-size: 11px;
+  }
+
+  .summary-value {
+    font-size: 18px;
+  }
+
+  .record-item {
+    padding: 12px;
+  }
+
+  .record-description {
+    font-size: 13px;
+  }
+
+  .record-value {
+    font-size: 14px;
+  }
+}
