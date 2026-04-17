@@ -475,6 +475,30 @@ function renderChart() {
   console.log('All assets updated');
   
   console.log('Chart rendered, records:', records.length, 'barsHTML length:', barsHTML.length);
+  
+  updateDonut(totalIncome, totalExpense);
+}
+
+function updateDonut(income, expense) {
+  const donut = document.querySelector('.donut');
+  if (!donut) return;
+  
+  const total = income + expense;
+  if (total === 0) {
+    donut.style.background = `
+      radial-gradient(circle at center, #141f4f 0 42%, transparent 43%),
+      conic-gradient(#555 0 100%)
+    `;
+    return;
+  }
+  
+  const incomePercent = (income / total) * 100;
+  const expensePercent = (expense / total) * 100;
+  
+  donut.style.background = `
+    radial-gradient(circle at center, #141f4f 0 42%, transparent 43%),
+    conic-gradient(#00c853 0 ${incomePercent}%, #ff5722 ${incomePercent}% 100%)
+  `;
 }
 
 // ================================================
