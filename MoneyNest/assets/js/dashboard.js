@@ -350,25 +350,31 @@ function updateDashboardWithRecords() {
     expenseByCategory[r.category] = (expenseByCategory[r.category] || 0) + r.amount;
   });
   
-  const listItems = document.querySelectorAll('.list-item');
-  
-  listItems.forEach((item, index) => {
-    const category = categories.expense[index] || '';
-    const amount = expenseByCategory[category] || 0;
+  const expenseList = document.querySelector('.list');
+  if (expenseList) {
+    expenseList.innerHTML = '';
     
-    if (amount > 0) {
-      item.style.display = '';
-      const itemName = item.querySelector('.item-name');
-      const itemAmount = item.querySelector('.item-amount');
-      
-      if (itemName) itemName.textContent = category;
-      if (itemAmount) {
-        itemAmount.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}`;
+    const icons = ['⌂', '👥', '🚗', '🍽️', '💊', '🎮', '✏️', '📱', '🐕', '🏥', '🛒', '📚'];
+    const colors = ['icon-purple', 'icon-pink', 'icon-orange', 'icon-green', 'icon-blue'];
+    
+    Object.entries(expenseByCategory).forEach(([category, amount], index) => {
+      if (amount > 0) {
+        const icon = icons[index % icons.length];
+        const color = colors[index % colors.length];
+        
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        item.innerHTML = `
+          <div class="icon-box ${color}">${icon}</div>
+          <div class="item-meta">
+            <div class="item-name">${category}</div>
+            <div class="item-amount"><span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(amount)}</div>
+          </div>
+        `;
+        expenseList.appendChild(item);
       }
-    } else {
-      item.style.display = 'none';
-    }
-  });
+    });
+  }
   
   // Atualizar "Receitas e Despesas" (totais do gráfico)
   const chartHeader = document.querySelector('.chart-header');
