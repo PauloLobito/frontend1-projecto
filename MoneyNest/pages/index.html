@@ -327,13 +327,19 @@
         </div>
         <div class="form-group" id="recordDescriptionSelectGroup" style="display: none;">
           <label class="form-label">Descrição</label>
-          <select class="form-input" id="recordDescriptionSelect">
-            <option value="">Selecione...</option>
-            <option value="Consulta Veterinária">Consulta Veterinária</option>
-            <option value="Ração">Ração</option>
-            <option value="Petiscos">Petiscos</option>
-            <option value="Banho e Hospedagem">Banho e Hospedagem</option>
-          </select>
+          <div class="custom-select" id="recordDescriptionCustomSelect">
+            <div class="custom-select-trigger" onclick="toggleCustomSelect('recordDescriptionCustomSelect')">
+              <span class="custom-select-value">Selecione...</span>
+              <span class="custom-select-arrow">▼</span>
+            </div>
+            <div class="custom-select-dropdown">
+              <div class="custom-select-option" data-value="" onclick="selectCustomOption('recordDescriptionCustomSelect', '', 'Selecione...')">Selecione...</div>
+              <div class="custom-select-option" data-value="Consulta Veterinária" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Consulta Veterinária', 'Consulta Veterinária')">🏥 Consulta Veterinária</div>
+              <div class="custom-select-option" data-value="Ração" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Ração', 'Ração')">🍖 Ração</div>
+              <div class="custom-select-option" data-value="Petiscos" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Petiscos', 'Petiscos')">🦴 Petiscos</div>
+              <div class="custom-select-option" data-value="Banho e Hospedagem" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Banho e Hospedagem', 'Banho e Hospedagem')">🛁 Banho e Hospedagem</div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">Data</label>
@@ -386,13 +392,19 @@
         </div>
         <div class="form-group" id="editDescriptionSelectGroup" style="display: none;">
           <label class="form-label">Descrição</label>
-          <select class="form-input" id="editRecordDescriptionSelect">
-            <option value="">Selecione...</option>
-            <option value="Consulta Veterinária">Consulta Veterinária</option>
-            <option value="Ração">Ração</option>
-            <option value="Petiscos">Petiscos</option>
-            <option value="Banho e Hospedagem">Banho e Hospedagem</option>
-          </select>
+          <div class="custom-select" id="editDescriptionCustomSelect">
+            <div class="custom-select-trigger" onclick="toggleCustomSelect('editDescriptionCustomSelect')">
+              <span class="custom-select-value">Selecione...</span>
+              <span class="custom-select-arrow">▼</span>
+            </div>
+            <div class="custom-select-dropdown">
+              <div class="custom-select-option" data-value="" onclick="selectCustomOption('editDescriptionCustomSelect', '', 'Selecione...')">Selecione...</div>
+              <div class="custom-select-option" data-value="Consulta Veterinária" onclick="selectCustomOption('editDescriptionCustomSelect', 'Consulta Veterinária', 'Consulta Veterinária')">🏥 Consulta Veterinária</div>
+              <div class="custom-select-option" data-value="Ração" onclick="selectCustomOption('editDescriptionCustomSelect', 'Ração', 'Ração')">🍖 Ração</div>
+              <div class="custom-select-option" data-value="Petiscos" onclick="selectCustomOption('editDescriptionCustomSelect', 'Petiscos', 'Petiscos')">🦴 Petiscos</div>
+              <div class="custom-select-option" data-value="Banho e Hospedagem" onclick="selectCustomOption('editDescriptionCustomSelect', 'Banho e Hospedagem', 'Banho e Hospedagem')">🛁 Banho e Hospedagem</div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">Data</label>

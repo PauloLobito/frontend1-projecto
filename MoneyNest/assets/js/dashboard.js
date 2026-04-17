@@ -600,6 +600,15 @@ function openRecordModal() {
   document.getElementById('recordAmount').value = '';
   document.getElementById('recordDescription').value = '';
   
+  // Reset custom select
+  const customSelect = document.getElementById('recordDescriptionCustomSelect');
+  if (customSelect) {
+    const trigger = customSelect.querySelector('.custom-select-trigger');
+    const valueSpan = trigger.querySelector('.custom-select-value');
+    if (valueSpan) valueSpan.textContent = 'Selecione...';
+    customSelect.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
+  }
+  
   setRecordType('expense');
   loadRecordCategories();
   
@@ -719,13 +728,19 @@ function addRecord() {
   const category = document.getElementById('recordCategory').value;
   const date = document.getElementById('recordDate').value;
   
-  // Verificar se é PETS para usar o select ou input
+  // Verificar se é PETS para usar o custom select ou input
   const categoryLower = category.toLowerCase();
-  const isPets = categoryLower.includes('pet') || categoryLower.includes('animais');
+  const isPets = categoryLower === 'pets' || categoryLower === 'pet';
   let description;
   
   if (isPets) {
-    description = document.getElementById('recordDescriptionSelect').value;
+    const customSelect = document.getElementById('recordDescriptionCustomSelect');
+    if (customSelect) {
+      const selectedOpt = customSelect.querySelector('.custom-select-option.selected');
+      description = selectedOpt ? selectedOpt.dataset.value : '';
+    } else {
+      description = '';
+    }
   } else {
     description = document.getElementById('recordDescription').value.trim();
   }
@@ -789,12 +804,25 @@ function openEditModal(id) {
   
   // Definir descrição no campo correto
   const categoryLower = record.category.toLowerCase();
-  const isPets = categoryLower.includes('pet') || categoryLower.includes('animais');
+  const isPets = categoryLower === 'pets' || categoryLower === 'pet';
   
   if (isPets) {
     document.getElementById('editDescriptionTextGroup').style.display = 'none';
     document.getElementById('editDescriptionSelectGroup').style.display = '';
-    document.getElementById('editRecordDescriptionSelect').value = record.description;
+    
+    // Set custom select value
+    const customSelect = document.getElementById('editDescriptionCustomSelect');
+    if (customSelect) {
+      const trigger = customSelect.querySelector('.custom-select-trigger');
+      const valueSpan = trigger.querySelector('.custom-select-value');
+      customSelect.querySelectorAll('.custom-select-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.dataset.value === record.description) {
+          opt.classList.add('selected');
+          if (valueSpan) valueSpan.textContent = opt.textContent;
+        }
+      });
+    }
   } else {
     document.getElementById('editDescriptionTextGroup').style.display = '';
     document.getElementById('editDescriptionSelectGroup').style.display = 'none';
@@ -870,13 +898,19 @@ function saveEditRecord() {
   const typeBtn = document.querySelector('#editModal .type-btn.active');
   const type = typeBtn ? typeBtn.dataset.type : 'expense';
   
-  // Verificar se é PETS para usar o select ou input
+  // Verificar se é PETS para usar o custom select ou input
   const categoryLower = category.toLowerCase();
-  const isPets = categoryLower.includes('pet') || categoryLower.includes('animais');
+  const isPets = categoryLower === 'pets' || categoryLower === 'pet';
   let description;
   
   if (isPets) {
-    description = document.getElementById('editRecordDescriptionSelect').value;
+    const customSelect = document.getElementById('editDescriptionCustomSelect');
+    if (customSelect) {
+      const selectedOpt = customSelect.querySelector('.custom-select-option.selected');
+      description = selectedOpt ? selectedOpt.dataset.value : '';
+    } else {
+      description = '';
+    }
   } else {
     description = document.getElementById('editRecordDescription').value.trim();
   }
@@ -1029,6 +1063,57 @@ function deleteRecord(id) {
     updateDashboardWithRecords();
   }
 }
+
+// ================================================
+// FUNÇÕES: CUSTOM SELECT
+// ================================================
+function toggleCustomSelect(id) {
+  const select = document.getElementById(id);
+  if (!select) return;
+  
+  document.querySelectorAll('.custom-select.open').forEach(el => {
+    if (el.id !== id) el.classList.remove('open');
+  });
+  
+  select.classList.toggle('open');
+}
+
+function selectCustomOption(selectId, value, text) {
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  
+  const trigger = select.querySelector('.custom-select-trigger');
+  const valueSpan = trigger.querySelector('.custom-select-value');
+  const hiddenInput = select.querySelector('input[type="hidden"]');
+  
+  if (valueSpan) valueSpan.textContent = text;
+  if (hiddenInput) hiddenInput.value = value;
+  
+  select.querySelectorAll('.custom-select-option').forEach(opt => {
+    opt.classList.remove('selected');
+  });
+  
+  const selectedOpt = select.querySelector(`[data-value="${value}"]`);
+  if (selectedOpt) selectedOpt.classList.add('selected');
+  
+  select.classList.remove('open');
+  
+  if (selectId === 'recordDescriptionCustomSelect') {
+    const textInput = document.getElementById('recordDescription');
+    if (textInput) textInput.value = value;
+  } else if (selectId === 'editDescriptionCustomSelect') {
+    const textInput = document.getElementById('editRecordDescription');
+    if (textInput) textInput.value = value;
+  }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select')) {
+    document.querySelectorAll('.custom-select.open').forEach(el => {
+      el.classList.remove('open');
+    });
+  }
+});
 
 // ================================================
 // EVENTO: DOMContentLoaded
