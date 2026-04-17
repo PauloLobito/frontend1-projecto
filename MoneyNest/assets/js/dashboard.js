@@ -246,19 +246,14 @@ function applySettings() {
  * Atualiza o dashboard com os dados dos registos
  */
 function updateDashboardWithRecords() {
-  console.log('updateDashboardWithRecords called');
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
   const categories = settings.categories || getDefaultCategories();
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
-  console.log('records:', records.length);
-  
   // Filtrar registos do mês selecionado
-  console.log('Filtering for month:', selectedMonth, 'year:', selectedYear);
   const monthlyRecords = records.filter(r => {
     const recordDate = new Date(r.date);
-    console.log('Record:', r.date, '-> month:', recordDate.getMonth(), 'year:', recordDate.getFullYear());
     return recordDate.getMonth() === selectedMonth && recordDate.getFullYear() === selectedYear;
   });
   
@@ -523,8 +518,10 @@ function renderChart() {
     console.log('SVG not found');
   }
   
-  const totalIncome = monthlyData.reduce((sum, d) => sum + d.income, 0);
-  const totalExpense = monthlyData.reduce((sum, d) => sum + d.expense, 0);
+  // Totais do mês selecionado para Ativos
+  const selectedMonthData = monthlyData[selectedMonth];
+  const totalIncome = selectedMonthData ? selectedMonthData.income : 0;
+  const totalExpense = selectedMonthData ? selectedMonthData.expense : 0;
   const totalBalance = totalIncome - totalExpense;
   
   const assetsIncome = document.getElementById('assetsIncome');
@@ -534,9 +531,6 @@ function renderChart() {
   
   if (assetsIncome) {
     assetsIncome.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
-    console.log('assetsIncome updated');
-  } else {
-    console.log('assetsIncome NOT FOUND');
   }
   if (assetsExpense) assetsExpense.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalExpense)}`;
   if (assetsBalance) assetsBalance.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalBalance)}`;
