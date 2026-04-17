@@ -1,21 +1,35 @@
-// ================================================
-// MONEY NEST - DASHBOARD JAVASCRIPT
-// ================================================
+/**
+ * ================================================
+ * MONEY NEST - DASHBOARD JAVASCRIPT
+ * ================================================
+ * Ficheiro principal do dashboard financeiro.
+ * Contém todas as funções para gerir registos,renderizar gráficos,
+ * atualizar valores e interagir com o localStorage.
+ */
 
-// Moedas disponíveis
+// ================================================
+// MOEDAS DISPONÍVEIS
+// ================================================
 const currencies = {
   'BRL': { symbol: 'R$', name: 'Real' },
   'EUR': { symbol: '€', name: 'Euro' },
   'USD': { symbol: '$', name: 'Dólar' }
 };
 
-// Mês selecionado no sidebar
+// ================================================
+// MÊS SELECIONADO NA SIDEBAR
+// ================================================
 let selectedMonth = new Date().getMonth();
 let selectedYear = new Date().getFullYear();
 
-// ================================================
-// FUNÇÃO: applyTheme
-// ================================================
+/**
+ * ================================================
+ * FUNÇÃO: applyTheme
+ * ================================================
+ * Aplica o tema visual (claro ou escuro) ao documento.
+ * @param {string} theme - Tema:'dark','light' ou 'auto'
+ * @returns {void}
+ */
 function applyTheme(theme) {
   const hour = new Date().getHours();
   const isDaytime = hour >= 6 && hour < 18;
@@ -33,9 +47,13 @@ function applyTheme(theme) {
   }
 }
 
-// ================================================
-// FUNÇÃO: loadAndApplyTheme
-// ================================================
+/**
+ * ================================================
+ * FUNÇÃO: loadAndApplyTheme
+ * ================================================
+ * Carrega o tema salvo nas definições e aplica ao iniciar.
+ * @returns {void}
+ */
 function loadAndApplyTheme() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const theme = settings.theme || 'dark';
@@ -51,9 +69,14 @@ function loadAndApplyTheme() {
   }
 }
 
-// ================================================
-// FUNÇÃO: formatCurrency
-// ================================================
+/**
+ * ================================================
+ * FUNÇÃO: formatCurrency
+ * ================================================
+ * Formata um valor numérico para dinheiro conforme a moeda definida.
+ * @param {number} value - Valor a formatar
+ * @returns {string} Valor formatado (ex:"1.234,56")
+ */
 function formatCurrency(value) {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const currency = settings.currency || 'BRL';
@@ -64,9 +87,13 @@ function formatCurrency(value) {
   }).format(value);
 }
 
-// ================================================
-// FUNÇÃO: getDefaultCategories
-// ================================================
+/**
+ * ================================================
+ * FUNÇÃO: getDefaultCategories
+ * ================================================
+ * Retorna as categorias padrão de receitas e despesas.
+ * @returns {Object} {income:[],expense:[]}
+ */
 function getDefaultCategories() {
   return {
     income: ['Salário', 'E-commerce', 'Anúncios', 'Loja', 'Freelance', 'Investimentos'],
@@ -74,9 +101,13 @@ function getDefaultCategories() {
   };
 }
 
-// ================================================
-// FUNÇÃO: loadIncomeCategories
-// ================================================
+/**
+ * ================================================
+ * FUNÇÃO: loadIncomeCategories
+ * ================================================
+ * Carrega as categorias de receitas para as barras do dashboard.
+ * @returns {void}
+ */
 function loadIncomeCategories() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const categories = settings.categories;
@@ -94,9 +125,14 @@ function loadIncomeCategories() {
   });
 }
 
-// ================================================
-// FUNÇÃO: loadRevenueGoal
-// ================================================
+/**
+ * ================================================
+ * FUNÇÃO: loadRevenueGoal
+ * ================================================
+ * Carrega e atualiza a meta de receita consoante o mês selecionado.
+ * Calcula o saldo mensal e atualiza a UI (percentagem,barra de progresso).
+ * @returns {void}
+ */
 function loadRevenueGoal() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
@@ -135,8 +171,13 @@ function loadRevenueGoal() {
   }
 }
 
-// ================================================
-// FUNÇÃO: setRevenueGoal
+/**
+ * ================================================
+ * FUNÇÃO: setRevenueGoal
+ * ================================================
+ * Define e guarda a meta de receita mensal.
+ * @returns {void}
+ */
 // ================================================
 function setRevenueGoal() {
   const input = document.getElementById('goalInput');
@@ -163,8 +204,13 @@ function setRevenueGoal() {
   }, 1500);
 }
 
-// ================================================
-// FUNÇÃO: applySettings
+/**
+ * ================================================
+ * FUNÇÃO: applySettings
+ * ================================================
+ * Aplica as definições de idioma, moeda e traduce a UI.
+ * @returns {void}
+ */
 // ================================================
 function applySettings() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
@@ -418,8 +464,13 @@ function updateDashboardWithRecords() {
   updatePetsExpenses();
 }
 
-// ================================================
-// FUNÇÃO: updatePetsExpenses
+/**
+ * ================================================
+ * FUNÇÃO: updatePetsExpenses
+ * ================================================
+ * Atualiza os valores de despesas com animais de estimação.
+ * @returns {void}
+ */
 // ================================================
 function updatePetsExpenses() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
@@ -461,8 +512,13 @@ function updatePetsExpenses() {
   });
 }
 
-// ================================================
-// FUNÇÃO: logout
+/**
+ * ================================================
+ * FUNÇÃO: logout
+ * ================================================
+ * Termina a sessão do utilizador e recarrega a página.
+ * @returns {void}
+ */
 // ================================================
 function logout() {
   localStorage.removeItem('moneynest_loggedIn');
@@ -478,8 +534,13 @@ function logout() {
 let barChartInstance = null;
 let donutChartInstance = null;
 
-// ================================================
-// FUNÇÃO: renderChart
+/**
+ * ================================================
+ * FUNÇÃO: renderChart
+ * ================================================
+ * Renderiza o gráfico de barras com dados mensais.
+ * @returns {void}
+ */
 // ================================================
 function renderChart() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
@@ -593,8 +654,15 @@ function renderChart() {
   updateDonut(totalIncomeMonth, totalExpenseMonth);
 }
 
-// ================================================
-// FUNÇÃO: updateDonut
+/**
+ * ================================================
+ * FUNÇÃO: updateDonut
+ * ================================================
+ * Atualiza o gráfico doughnut com receitas e despesas.
+ * @param {number} income - Total de receitas
+ * @param {number} expense - Total de despesas
+ * @returns {void}
+ */
 // ================================================
 function updateDonut(income, expense) {
   const donutCtx = document.getElementById('donutChart');
@@ -1191,8 +1259,14 @@ function deleteRecord(id) {
   }
 }
 
-// ================================================
-// FUNÇÕES: CUSTOM SELECT
+/**
+ * ================================================
+ * FUNÇÕES: CUSTOM SELECT
+ * ================================================
+ * Alterna a visibilidade de um custom select.
+ * @param {string} id - ID do elemento select
+ * @returns {void}
+ */
 // ================================================
 function toggleCustomSelect(id) {
   const select = document.getElementById(id);
@@ -1205,6 +1279,13 @@ function toggleCustomSelect(id) {
   select.classList.toggle('open');
 }
 
+/**
+ * Seleciona uma opção num custom select.
+ * @param {string} selectId - ID do select
+ * @param {string} value - Valor da opção
+ * @param {string} text - Texto a exibir
+ * @returns {void}
+ */
 function selectCustomOption(selectId, value, text) {
   const select = document.getElementById(selectId);
   if (!select) return;
@@ -1232,6 +1313,13 @@ function selectCustomOption(selectId, value, text) {
   }
 }
 
+/**
+ * Seleciona uma categoria num custom select do modal.
+ * @param {string} modal - 'record' ou 'edit'
+ * @param {string} value - Valor da categoria
+ * @param {string} text - Texto a exibir
+ * @returns {void}
+ */
 function selectCategoryCustomOption(modal, value, text) {
   let selectId, textInputId;
   
@@ -1267,6 +1355,11 @@ function selectCategoryCustomOption(modal, value, text) {
   }
 }
 
+/**
+ * Obtém o valor seleccionado num custom select de categoria.
+ * @param {string} modal - 'record' ou 'edit'
+ * @returns {string} Valor seleccionados
+ */
 function getCategoryCustomSelectValue(modal) {
   if (modal === 'record') {
     const select = document.getElementById('recordCategoryCustomSelect');
