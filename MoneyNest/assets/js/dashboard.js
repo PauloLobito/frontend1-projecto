@@ -107,6 +107,8 @@ function loadRevenueGoal() {
   // Calcular total de receitas (todas)
   const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
   
+  console.log('[DEBUG loadRevenueGoal] Records:', records.length, 'Total Income:', totalIncome, 'Goal:', goal);
+  
   document.getElementById('goalAmount').textContent = formatCurrency(goal);
   document.getElementById('currentRevenue').textContent = formatCurrency(totalIncome);
   document.getElementById('goalInput').placeholder = '0,00';
@@ -249,6 +251,10 @@ function updateDashboardWithRecords() {
   const categories = settings.categories || getDefaultCategories();
   const currency = settings.currency || 'BRL';
   const currencySymbol = currencies[currency]?.symbol || 'R$';
+  
+  console.log('[DEBUG] Records found:', records.length);
+  console.log('[DEBUG] Records:', JSON.stringify(records, null, 2));
+  
   // Filtrar registos do mês selecionado
   const monthlyRecords = records.filter(r => {
     const recordDate = new Date(r.date);
@@ -826,7 +832,9 @@ function addRecord() {
     settings.records = [];
   }
   settings.records.push(record);
+  console.log('[DEBUG addRecord] Saving record:', JSON.stringify(record));
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
+  console.log('[DEBUG addRecord] Saved, total records:', settings.records.length);
   
   closeRecordModal();
   loadRecords();
