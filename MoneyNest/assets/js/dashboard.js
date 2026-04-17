@@ -696,28 +696,22 @@ function loadRecordCategories() {
  * @param {string} modal - 'record' ou 'edit'
  */
 function onCategoryChange(modal) {
-  let categorySelect, textGroup, selectGroup, textInput, selectInput;
+  let category, textGroup, selectGroup, textInput, selectInput;
   
   if (modal === 'record') {
-    categorySelect = document.getElementById('recordCategory');
+    category = getCategoryCustomSelectValue('record');
     textGroup = document.getElementById('recordDescriptionTextGroup');
     selectGroup = document.getElementById('recordDescriptionSelectGroup');
     textInput = document.getElementById('recordDescription');
     selectInput = document.getElementById('recordDescriptionSelect');
   } else {
-    categorySelect = document.getElementById('editRecordCategory');
+    category = getCategoryCustomSelectValue('edit');
     textGroup = document.getElementById('editDescriptionTextGroup');
     selectGroup = document.getElementById('editDescriptionSelectGroup');
     textInput = document.getElementById('editRecordDescription');
     selectInput = document.getElementById('editRecordDescriptionSelect');
   }
   
-  if (!categorySelect) {
-    console.log('onCategoryChange: categorySelect not found');
-    return;
-  }
-  
-  const category = categorySelect.value;
   if (!category) return;
   
   const categoryLower = category.toLowerCase();
