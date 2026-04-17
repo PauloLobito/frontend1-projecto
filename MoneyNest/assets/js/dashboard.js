@@ -505,6 +505,10 @@ function renderChart() {
   // Renderizar gráfico de barras com Chart.js
   const barCtx = document.getElementById('barChart');
   if (barCtx) {
+    // Converter 0 para null para ocultar barras sem dados
+    const incomeChartData = incomeData.map(v => v > 0 ? v : null);
+    const expenseChartData = expenseData.map(v => v > 0 ? v : null);
+    
     barChartInstance = new Chart(barCtx, {
       type: 'bar',
       data: {
@@ -512,17 +516,19 @@ function renderChart() {
         datasets: [
           {
             label: 'Receitas',
-            data: incomeData,
+            data: incomeChartData,
             backgroundColor: '#00c853',
             borderRadius: 4,
-            barPercentage: 0.4
+            barPercentage: 0.4,
+            skipNull: true
           },
           {
             label: 'Despesas',
-            data: expenseData,
+            data: expenseChartData,
             backgroundColor: '#ff5722',
             borderRadius: 4,
-            barPercentage: 0.4
+            barPercentage: 0.4,
+            skipNull: true
           }
         ]
       },
@@ -539,7 +545,8 @@ function renderChart() {
           },
           y: {
             grid: { color: 'rgba(185, 196, 255, 0.1)' },
-            ticks: { color: '#888' }
+            ticks: { color: '#888' },
+            beginAtZero: true
           }
         }
       }
@@ -585,13 +592,21 @@ function updateDonut(income, expense) {
   
   const total = income + expense;
   
+  // Se não há dados, não mostrar gráfico
+  if (total === 0) {
+    donutCtx.style.display = 'none';
+    return;
+  }
+  
+  donutCtx.style.display = 'block';
+  
   donutChartInstance = new Chart(donutCtx, {
     type: 'doughnut',
     data: {
       labels: ['Receitas', 'Despesas'],
       datasets: [{
-        data: total > 0 ? [income, expense] : [1, 0],
-        backgroundColor: total > 0 ? ['#00c853', '#ff5722'] : ['#555', '#333'],
+        data: [income, expense],
+        backgroundColor: ['#00c853', '#ff5722'],
         borderWidth: 0,
         cutout: '65%'
       }]
