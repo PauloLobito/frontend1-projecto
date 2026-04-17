@@ -104,12 +104,18 @@ function loadRevenueGoal() {
   const currency = settings.currency || 'BRL';
   const symbol = currencies[currency].symbol;
   
-  // Calcular saldo (receitas - despesas)
-  const totalIncome = records.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
-  const totalExpense = records.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
-  const balance = totalIncome - totalExpense;
+  // Filtrar registos do mês selecionado
+  const monthlyRecords = records.filter(r => {
+    const recordDate = new Date(r.date);
+    return recordDate.getMonth() === selectedMonth && recordDate.getFullYear() === selectedYear;
+  });
   
-  console.log('[DEBUG loadRevenueGoal] Records:', records.length, 'Balance:', balance, 'Goal:', goal);
+  // Calcular saldo do mês selecionado
+  const monthlyIncome = monthlyRecords.filter(r => r.type === 'income').reduce((sum, r) => sum + r.amount, 0);
+  const monthlyExpense = monthlyRecords.filter(r => r.type === 'expense').reduce((sum, r) => sum + r.amount, 0);
+  const balance = monthlyIncome - monthlyExpense;
+  
+  console.log('[DEBUG loadRevenueGoal] Month:', selectedMonth, 'Balance:', balance, 'Goal:', goal);
   
   document.getElementById('goalAmount').textContent = formatCurrency(goal);
   document.getElementById('currentRevenue').textContent = formatCurrency(balance);
@@ -291,23 +297,24 @@ function updateDashboardWithRecords() {
     revenueEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
   }
   
-  // Património Total (todos os registos)
+   // Património Total (todos os registos)
   const totalPatrimony = totalAllIncome - totalAllExpense;
   const patrimonyEl = document.querySelector('.hero .value');
   if (patrimonyEl) {
     patrimonyEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalPatrimony)}`;
   }
    
-   // Meta de receita (usar saldo)
+   // Meta de receita (usar saldo mensal)
+  const monthlyBalance = totalIncome - totalExpense;
   const goalAmount = settings.revenueGoal || 0;
-  const progressPercent = goalAmount > 0 ? Math.min(Math.round((balance / goalAmount) * 100), 100) : 0;
+  const progressPercent = goalAmount > 0 ? Math.min(Math.round((monthlyBalance / goalAmount) * 100), 100) : 0;
   
   const currentRevenueEl = document.getElementById('currentRevenue');
   const goalAmountEl = document.getElementById('goalAmount');
   const percentEl = document.querySelector('.percent');
   const progressFill = document.getElementById('progressFill');
   
-  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(balance);
+  if (currentRevenueEl) currentRevenueEl.textContent = formatCurrencyValue(monthlyBalance);
   if (goalAmountEl) goalAmountEl.textContent = formatCurrencyValue(goalAmount);
   if (percentEl) percentEl.textContent = progressPercent + '%';
   if (progressFill) progressFill.style.width = progressPercent + '%';
