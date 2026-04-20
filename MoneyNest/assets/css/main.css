@@ -992,6 +992,19 @@ h1 {
     margin-left: 0;
     justify-content: center;
   }
+
+  .income-bars {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .bar-col {
+    min-height: 120px;
+  }
+
+  .bar-fill {
+    width: 80%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1041,6 +1054,19 @@ h1 {
 
   .percent, .progress-card h3 {
     text-align: left;
+  }
+
+  .income-bars {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .bar-col {
+    min-height: 120px;
+  }
+
+  .bar-fill {
+    width: 80%;
   }
 }
 
