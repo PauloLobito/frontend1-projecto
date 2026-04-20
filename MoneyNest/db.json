@@ -1,0 +1,26 @@
+{
+  "records": [
+    {
+      "id": 1,
+      "type": "income",
+      "amount": 900,
+      "description": "Salário",
+      "category": "Salário",
+      "date": "2026-04-01"
+    },
+    {
+      "id": 2,
+      "type": "expense",
+      "amount": 400,
+      "description": "Renda",
+      "category": "Habitação",
+      "date": "2026-04-01"
+    }
+  ],
+  "settings": {
+    "currency": "BRL",
+    "language": "pt-PT",
+    "theme": "dark",
+    "monthlyGoals": {}
+  }
+}
