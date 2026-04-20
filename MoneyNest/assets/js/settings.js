@@ -541,35 +541,35 @@ function applyLanguageSettings() {
   document.querySelectorAll('.settings-section h2')[3].textContent = '🎨 ' + t.appearance;
   document.querySelectorAll('.settings-section h2')[4].textContent = '🌐 ' + t.language;
 
-  // Itens de definições
+  // Itens de definições - com verificação
   const sections = document.querySelectorAll('.setting-item');
-  sections[0].querySelector('.setting-label').textContent = t.name;
-  sections[0].querySelector('.setting-desc').textContent = t.nameDesc;
-  sections[1].querySelector('.setting-label').textContent = t.email;
-  sections[1].querySelector('.setting-desc').textContent = t.emailDesc;
-  sections[2].querySelector('.setting-label').textContent = t.currency;
-  sections[2].querySelector('.setting-desc').textContent = t.currencyDesc;
-  sections[3].querySelector('.setting-label').textContent = t.notifEmail;
-  sections[3].querySelector('.setting-desc').textContent = t.notifEmailDesc;
-  sections[4].querySelector('.setting-label').textContent = t.notifExpense;
-  sections[4].querySelector('.setting-desc').textContent = t.notifExpenseDesc;
-  sections[5].querySelector('.setting-label').textContent = t.notifReport;
-  sections[5].querySelector('.setting-desc').textContent = t.notifReportDesc;
-  sections[6].querySelector('.setting-label').textContent = t.twoFactor;
-  sections[6].querySelector('.setting-desc').textContent = t.twoFactorDesc;
-  sections[7].querySelector('.setting-label').textContent = t.sessionLock;
-  sections[7].querySelector('.setting-desc').textContent = t.sessionLockDesc;
-  sections[8].querySelector('.setting-label').textContent = t.changePassword;
-  sections[8].querySelector('.setting-desc').textContent = t.changePasswordDesc;
-  sections[8].querySelector('.btn-change').textContent = t.changeBtn;
-  sections[9].querySelector('.setting-label').textContent = t.theme;
-  sections[9].querySelector('.setting-desc').textContent = t.themeDesc;
-  sections[10].querySelector('.setting-label').textContent = t.ecoMode;
-  sections[10].querySelector('.setting-desc').textContent = t.ecoModeDesc;
-  sections[11].querySelector('.setting-label').textContent = t.interfaceLang;
-  sections[11].querySelector('.setting-desc').textContent = t.interfaceLangDesc;
-  sections[12].querySelector('.setting-label').textContent = t.dateFormat;
-  sections[12].querySelector('.setting-desc').textContent = t.dateFormatDesc;
+  if (sections[0]) { sections[0].querySelector('.setting-label').textContent = t.name; }
+  if (sections[0]) { sections[0].querySelector('.setting-desc').textContent = t.nameDesc; }
+  if (sections[1]) { sections[1].querySelector('.setting-label').textContent = t.email; }
+  if (sections[1]) { sections[1].querySelector('.setting-desc').textContent = t.emailDesc; }
+  if (sections[2]) { sections[2].querySelector('.setting-label').textContent = t.currency; }
+  if (sections[2]) { sections[2].querySelector('.setting-desc').textContent = t.currencyDesc; }
+  if (sections[3]) { sections[3].querySelector('.setting-label').textContent = t.notifEmail; }
+  if (sections[3]) { sections[3].querySelector('.setting-desc').textContent = t.notifEmailDesc; }
+  if (sections[4]) { sections[4].querySelector('.setting-label').textContent = t.notifExpense; }
+  if (sections[4]) { sections[4].querySelector('.setting-desc').textContent = t.notifExpenseDesc; }
+  if (sections[5]) { sections[5].querySelector('.setting-label').textContent = t.notifReport; }
+  if (sections[5]) { sections[5].querySelector('.setting-desc').textContent = t.notifReportDesc; }
+  if (sections[6]) { sections[6].querySelector('.setting-label').textContent = t.twoFactor; }
+  if (sections[6]) { sections[6].querySelector('.setting-desc').textContent = t.twoFactorDesc; }
+  if (sections[7]) { sections[7].querySelector('.setting-label').textContent = t.sessionLock; }
+  if (sections[7]) { sections[7].querySelector('.setting-desc').textContent = t.sessionLockDesc; }
+  if (sections[8]) { sections[8].querySelector('.setting-label').textContent = t.changePassword; }
+  if (sections[8]) { sections[8].querySelector('.setting-desc').textContent = t.changePasswordDesc; }
+  if (sections[8] && sections[8].querySelector('.btn-change')) { sections[8].querySelector('.btn-change').textContent = t.changeBtn; }
+  if (sections[9]) { sections[9].querySelector('.setting-label').textContent = t.theme; }
+  if (sections[9]) { sections[9].querySelector('.setting-desc').textContent = t.themeDesc; }
+  if (sections[10]) { sections[10].querySelector('.setting-label').textContent = t.ecoMode; }
+  if (sections[10]) { sections[10].querySelector('.setting-desc').textContent = t.ecoModeDesc; }
+  if (sections[11]) { sections[11].querySelector('.setting-label').textContent = t.interfaceLang; }
+  if (sections[11]) { sections[11].querySelector('.setting-desc').textContent = t.interfaceLangDesc; }
+  if (sections[12]) { sections[12].querySelector('.setting-label').textContent = t.dateFormat; }
+  if (sections[12]) { sections[12].querySelector('.setting-desc').textContent = t.dateFormatDesc; }
 
   // Meses no sidebar
   document.querySelectorAll('.months li').forEach((li, index) => {
