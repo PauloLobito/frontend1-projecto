@@ -991,6 +991,8 @@ h1 {
   .auth-header {
     margin-left: 0;
     justify-content: center;
+    width: 100%;
+    text-align: center;
   }
 
   .income-bars {
