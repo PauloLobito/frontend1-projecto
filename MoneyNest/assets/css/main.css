@@ -995,6 +995,14 @@ h1 {
     text-align: center;
   }
 
+  .user-profile {
+    justify-content: space-between;
+  }
+
+  .btn-logout {
+    margin-left: auto;
+  }
+
   .income-bars {
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
@@ -1169,11 +1177,13 @@ h1 {
 .user-profile {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 16px;
   padding: 8px 16px;
   background: linear-gradient(135deg, rgba(24,210,235,.1), rgba(124,77,255,.1));
   border: 1px solid var(--line);
   border-radius: 16px;
+  width: 100%;
 }
 
 .user-info {
