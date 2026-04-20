@@ -951,13 +951,121 @@ function addRecord() {
   loadRecords();
   updateDashboardWithRecords();
   loadRevenueGoal();
-renderChart();
-      checkNotifications();
-    };
-
-  // Check notifications after any record change
-  checkNotifications();
+  renderChart();
 }
+
+// ================================================
+// VARIÁVEL: editingRecordId
+// ================================================
+let editingRecordId = null;
+
+// ================================================
+// FUNÇÕES: EDITAR REGISTOS
+// ================================================
+
+/**
+ * Abre o modal para editar um registo
+ * @param {number} id - ID do registo a editar
+ */
+function openEditModal(id) {
+  const modal = document.getElementById('editModal');
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const record = settings.records.find(r => r.id === id);
+  
+  if (!record) return;
+  
+  editingRecordId = id;
+  
+  document.getElementById('editRecordAmount').value = record.amount;
+  document.getElementById('editRecordDate').value = record.date;
+  
+  setEditRecordType(record.type);
+  loadEditRecordCategories(record.type, record.category);
+  
+  // Definir descrição no campo correto
+  const categoryLower = record.category.toLowerCase();
+  const isPets = categoryLower === 'pets' || categoryLower === 'pet';
+  
+  if (isPets) {
+    document.getElementById('editDescriptionTextGroup').style.display = 'none';
+    document.getElementById('editDescriptionSelectGroup').style.display = '';
+    
+    // Set custom select value
+    const customSelect = document.getElementById('editDescriptionCustomSelect');
+    if (customSelect) {
+      const trigger = customSelect.querySelector('.custom-select-trigger');
+      const valueSpan = trigger.querySelector('.custom-select-value');
+      customSelect.querySelectorAll('.custom-select-option').forEach(opt => {
+        opt.classList.remove('selected');
+        if (opt.dataset.value === record.description) {
+          opt.classList.add('selected');
+          if (valueSpan) valueSpan.textContent = opt.textContent;
+        }
+      });
+    }
+  } else {
+    document.getElementById('editDescriptionTextGroup').style.display = '';
+    document.getElementById('editDescriptionSelectGroup').style.display = 'none';
+    document.getElementById('editRecordDescription').value = record.description;
+  }
+  
+  modal.classList.add('active');
+}
+
+/**
+ * Fecha o modal de edição
+ */
+function closeEditModal() {
+  document.getElementById('editModal').classList.remove('active');
+  editingRecordId = null;
+}
+
+/**
+ * Define o tipo de registo no modal de edição
+ * @param {string} type - Tipo (income ou expense)
+ */
+function setEditRecordType(type) {
+  const buttons = document.querySelectorAll('#editModal .type-btn');
+  buttons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.type === type) {
+      btn.classList.add('active');
+    }
+  });
+  
+  loadEditRecordCategories(type);
+}
+
+/**
+ * Carrega as categorias no select do modal de edição
+ * @param {string} type - Tipo de registo
+ * @param {string} selectedCategory - Categoria selecionada
+ */
+function loadEditRecordCategories(type, selectedCategory) {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const categories = settings.categories || getDefaultCategories();
+  const currency = settings.currency || 'BRL';
+  const currencySymbol = currencies[currency]?.symbol || 'R$';
+  const dropdown = document.getElementById('editRecordCategoryDropdown');
+  const customSelect = document.getElementById('editRecordCategoryCustomSelect');
+  
+  const catList = type === 'income' ? categories.income : categories.expense;
+  
+  if (dropdown) {
+    dropdown.innerHTML = '';
+    
+    catList.forEach(cat => {
+      const div = document.createElement('div');
+      div.className = 'custom-select-option';
+      div.dataset.value = cat;
+      div.textContent = cat;
+      if (cat === selectedCategory) {
+        div.classList.add('selected');
+      }
+      div.onclick = function() {
+        selectCategoryCustomOption('edit', cat, cat);
+        onCategoryChange('edit');
+      };
       dropdown.appendChild(div);
     });
     
@@ -1342,14 +1450,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-document.getElementById('recordAmount').addEventListener('keydown', function(e) {
+  document.getElementById('recordAmount').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') addRecord();
   });
-
+  
   document.getElementById('editRecordAmount').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') saveEditRecord();
   });
 
   // Inicializar sistema de notificações
-  initNotifications();
+  if (typeof initNotifications === 'function') {
+    initNotifications();
+  }
 });
