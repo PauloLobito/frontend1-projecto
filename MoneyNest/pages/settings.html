@@ -134,8 +134,10 @@
             <div class="setting-item" style="flex-direction:column;align-items:flex-start;margin-top:16px;">
               <span class="setting-label">Notificações Personalizadas</span>
               <span class="setting-desc" style="margin-bottom:12px;">Crie lembretes automáticos</span>
-              <button class="btn-confirm" onclick="openCustomNotificationModal()">+ Criar Notificação</button>
-              <button class="btn-small" onclick="listCustomNotifications()" style="margin-top:8px;">Ver Todas</button>
+              <div style="display:flex;gap:12px;width:100%;">
+                <button class="btn-confirm" onclick="openCustomNotificationModal()" style="flex:1;">+ Nova Notificação</button>
+                <button class="btn-outline" onclick="listCustomNotifications()" style="flex:1;">Ver Todas</button>
+              </div>
             </div>
           </section>
 

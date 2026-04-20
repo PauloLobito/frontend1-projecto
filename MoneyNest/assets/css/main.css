@@ -1722,6 +1722,24 @@ a.user-avatar:hover {
   box-shadow: 0 8px 24px rgba(24,210,235,.3);
 }
 
+.btn-outline {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.btn-outline:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
 select.form-input {
   cursor: pointer;
 }
