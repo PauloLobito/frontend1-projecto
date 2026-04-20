@@ -832,15 +832,14 @@ function loadRecordCategories() {
       dropdown.appendChild(div);
     });
     
-    // Set first category as default if none selected
-    if (catList.length > 0) {
+    // Always set first category as default when switching types
+    if (catList.length > 0 && customSelect) {
       const trigger = customSelect.querySelector('.custom-select-trigger');
       const valueSpan = trigger.querySelector('.custom-select-value');
-      if (valueSpan && !valueSpan.textContent || valueSpan.textContent === 'Selecione...') {
-        valueSpan.textContent = catList[0];
-        const firstOpt = dropdown.querySelector('.custom-select-option');
-        if (firstOpt) firstOpt.classList.add('selected');
-      }
+      valueSpan.textContent = catList[0];
+      dropdown.querySelectorAll('.custom-select-option').forEach(opt => opt.classList.remove('selected'));
+      const firstOpt = dropdown.querySelector('.custom-select-option');
+      if (firstOpt) firstOpt.classList.add('selected');
     }
   }
   
