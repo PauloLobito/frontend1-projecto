@@ -345,10 +345,10 @@ function updateDashboardWithRecords() {
   const balance = totalAllIncome - totalAllExpense;
   
   // Atualizar valores no dashboard
-  // Saldo disponível (total de todos os registos)
+  // Saldo disponível (do mês selecionado)
   const balanceEl = document.querySelector('.balance');
   if (balanceEl) {
-    balanceEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(balance)}`;
+    balanceEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome - totalExpense)}`;
   }
   
   // Gastos (despesas mensais)
@@ -363,7 +363,7 @@ function updateDashboardWithRecords() {
     revenueEl.innerHTML = `<span class="currency-symbol">${currencySymbol}</span> ${formatCurrencyValue(totalIncome)}`;
   }
   
-   // Património Total (todos os registos)
+   // Património Total (todos os registos累积)
   const totalPatrimony = totalAllIncome - totalAllExpense;
   const patrimonyEl = document.querySelector('.hero .value');
   if (patrimonyEl) {
