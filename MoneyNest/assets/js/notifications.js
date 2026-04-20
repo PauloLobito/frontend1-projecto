@@ -6,31 +6,49 @@
  * com base nos registos financeiros.
  */
 
+// Helper para formatar moeda
+function formatCurrencyLocal(value) {
+  return new Intl.NumberFormat('pt-BR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value);
+}
+
 let notifications = [];
 
 /**
  * Inicializar sistema de notificações
  */
 function initNotifications() {
+  console.log('[Notifications] Inicializando...');
   const stored = localStorage.getItem('moneynest_notifications');
   notifications = stored ? JSON.parse(stored) : [];
+  console.log('[Notifications] Guardadas:', notifications.length);
   checkNotifications();
   renderNotifications();
+  console.log('[Notifications] Inicializado!');
 }
 
 /**
  * Verificar condições para gerar notificações
  */
 function checkNotifications() {
+  // Use global selectedMonth/selectedYear or fallback to current date
+  const month = typeof selectedMonth !== 'undefined' ? selectedMonth : new Date().getMonth();
+  const year = typeof selectedYear !== 'undefined' ? selectedYear : new Date().getFullYear();
+  
+  console.log('[Notifications] Verificando para mês:', month, 'ano:', year);
+  
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
+  console.log('[Notifications] Registos found:', records.length);
   const monthlyGoals = settings.monthlyGoals || {};
-  const monthKey = `${selectedYear}-${selectedMonth}`;
+  const monthKey = `${year}-${month}`;
   const goal = monthlyGoals[monthKey] || 0;
   
   const currentMonthRecords = records.filter(r => {
     const d = new Date(r.date);
-    return d.getMonth() === selectedMonth && d.getFullYear() === selectedYear;
+    return d.getMonth() === month && d.getFullYear() === year;
   });
   
   const income = currentMonthRecords.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
@@ -50,7 +68,7 @@ function checkNotifications() {
         id: Date.now(),
         type: 'goal_reached',
         title: '🎯 Meta Atingida!',
-        message: `Parabéns! Atingiu a meta de ${formatCurrency(goal)} este mês.`,
+        message: `Parabéns! Atingiu a meta de R$ ${formatCurrencyLocal(goal)} este mês.`,
         date: today,
         read: false,
         monthKey
@@ -86,7 +104,7 @@ function checkNotifications() {
         id: Date.now(),
         type: 'negative_balance',
         title: '💸 Saldo Negativo',
-        message: `Atenção! O saldo deste mês está negativo (${formatCurrency(balance)}).`,
+        message: `Atenção! O saldo deste mês está negativo (R$ ${formatCurrencyLocal(balance)}).`,
         date: today,
         read: false,
         monthKey
@@ -104,7 +122,7 @@ function checkNotifications() {
         id: Date.now(),
         type: 'first_income',
         title: '💰 Primeira Receita!',
-        message: `Receita de ${formatCurrency(income)} registrada. Bem-vindo!`,
+        message: `Receita de R$ ${formatCurrencyLocal(income)} registrada. Bem-vindo!`,
         date: today,
         read: false,
         monthKey
