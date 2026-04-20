@@ -134,8 +134,9 @@
 
         <article class="card">
           <h3>Notificação</h3>
-          <div class="notification-badge">💬</div>
+          <div class="notification-badge" onclick="listCustomNotifications()" title="Ver notificações">💬</div>
           <div class="notification">Sem notificações no momento.</div>
+          <button class="btn-small" onclick="openCustomNotificationModal()" style="margin-top:8px;">+ Nova</button>
         </article>
 
         <article class="card wide">
@@ -408,6 +409,35 @@
       <div class="modal-footer">
         <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
         <button class="btn-confirm" onclick="saveEditRecord()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Notification Modal -->
+  <div class="modal-overlay" id="customNotificationModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Criar Notificação</h2>
+        <button class="modal-close" onclick="closeCustomNotificationModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Mensagem</label>
+          <div class="input-wrapper">
+            <input type="text" class="form-input" id="customNotificationMessage" placeholder="Ex: Verificar despesas esta semana">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Quando?</label>
+          <select class="form-input" id="customNotificationCondition">
+            <option value="daily">Todos os dias</option>
+            <option value="month_start">Início do mês</option>
+            <option value="month_end">Final do mês</option>
+            <option value="balance_negative">Quando saldo negativo</option>
+            <option value="balance_positive">Quando saldo positivo</option>
+          </select>
+        </div>
+        <button class="btn-confirm" onclick="createCustomNotification()">Criar</button>
       </div>
     </div>
   </div>
