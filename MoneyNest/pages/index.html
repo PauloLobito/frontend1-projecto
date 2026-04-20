@@ -278,10 +278,10 @@
       </div>
       <div class="modal-body">
         <div class="record-type-selector">
-          <button class="type-btn active" data-type="expense" onclick="setRecordType('expense')">
+          <button class="type-btn active" data-type="expense" onclick="setRecordType('expense');loadRecordCategories();">
             <span class="type-icon">📉</span> Despesa
           </button>
-          <button class="type-btn" data-type="income" onclick="setRecordType('income')">
+          <button class="type-btn" data-type="income" onclick="setRecordType('income');loadRecordCategories();">
             <span class="type-icon">📈</span> Receita
           </button>
         </div>
@@ -349,10 +349,10 @@
       </div>
       <div class="modal-body">
         <div class="record-type-selector">
-          <button class="type-btn" data-type="expense" onclick="setEditRecordType('expense')">
+          <button class="type-btn" data-type="expense" onclick="setEditRecordType('expense');loadEditRecordCategories('expense','');">
             <span class="type-icon">📉</span> Despesa
           </button>
-          <button class="type-btn" data-type="income" onclick="setEditRecordType('income')">
+          <button class="type-btn" data-type="income" onclick="setEditRecordType('income');loadEditRecordCategories('income','');">
             <span class="type-icon">📈</span> Receita
           </button>
         </div>
