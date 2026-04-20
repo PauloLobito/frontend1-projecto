@@ -20,22 +20,29 @@ let notifications = [];
  * Inicializar sistema de notificações
  */
 function initNotifications() {
-  console.log('[Notifications] Inicializando...');
-  const stored = localStorage.getItem('moneynest_notifications');
-  notifications = stored ? JSON.parse(stored) : [];
-  console.log('[Notifications] Guardadas:', notifications.length);
-  checkNotifications();
-  renderNotifications();
-  console.log('[Notifications] Inicializado!');
+  try {
+    console.log('[Notifications] Inicializando...');
+    const stored = localStorage.getItem('moneynest_notifications');
+    notifications = stored ? JSON.parse(stored) : [];
+    console.log('[Notifications] Guardadas:', notifications.length);
+    
+    checkNotifications();
+    renderNotifications();
+    
+    console.log('[Notifications] Inicializado!');
+  } catch (e) {
+    console.error('[Notifications] Erro:', e);
+  }
 }
 
 /**
  * Verificar condições para gerar notificações
  */
 function checkNotifications() {
-  // Use global selectedMonth/selectedYear or fallback to current date
-  const month = typeof selectedMonth !== 'undefined' ? selectedMonth : new Date().getMonth();
-  const year = typeof selectedYear !== 'undefined' ? selectedYear : new Date().getFullYear();
+  // Usar sempre o mês atual como fallback
+  const now = new Date();
+  const month = now.getMonth();
+  const year = now.getFullYear();
   
   console.log('[Notifications] Verificando para mês:', month, 'ano:', year);
   
