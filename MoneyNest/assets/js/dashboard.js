@@ -198,6 +198,7 @@ function setRevenueGoal() {
   
   input.value = '';
   loadRevenueGoal();
+  if (typeof refreshNotificationDisplay === 'function') refreshNotificationDisplay();
   
   const btn = document.querySelector('.btn-set-goal');
   const originalText = btn.textContent;
@@ -261,6 +262,7 @@ function applySettings() {
       // Recarregar dados
       updateDashboardWithRecords();
       loadRevenueGoal();
+  if (typeof refreshNotificationDisplay === 'function') refreshNotificationDisplay();
       renderChart();
       
       // Atualizar registos na tab relatórios se estiver ativa
@@ -951,6 +953,7 @@ function addRecord() {
   loadRecords();
   updateDashboardWithRecords();
   loadRevenueGoal();
+  if (typeof refreshNotificationDisplay === 'function') refreshNotificationDisplay();
   renderChart();
 }
 
@@ -1139,6 +1142,7 @@ function saveEditRecord() {
   loadRecords();
   updateDashboardWithRecords();
   loadRevenueGoal();
+  if (typeof refreshNotificationDisplay === 'function') refreshNotificationDisplay();
   renderChart();
 }
 
@@ -1266,6 +1270,7 @@ function deleteRecord(id) {
     loadRecords();
     updateDashboardWithRecords();
     loadRevenueGoal();
+  if (typeof refreshNotificationDisplay === 'function') refreshNotificationDisplay();
     renderChart();
   }
 }
@@ -1430,6 +1435,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Carregar meta de receita
   loadRevenueGoal();
+  if (typeof refreshNotificationDisplay === 'function') refreshNotificationDisplay();
   
   // Carregar categorias de receita
   loadIncomeCategories();

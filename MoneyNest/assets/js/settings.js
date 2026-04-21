@@ -734,3 +734,10 @@ document.addEventListener('click', function(e) {
 if (typeof initNotifications === 'function') {
   initNotifications();
 }
+
+// Called from dashboard when records change
+function refreshNotificationDisplay() {
+  if (typeof renderNotifications === 'function') {
+    renderNotifications();
+  }
+}
