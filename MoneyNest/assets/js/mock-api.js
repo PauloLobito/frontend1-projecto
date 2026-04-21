@@ -13,7 +13,7 @@
  */
 
 const API_BASE = 'http://localhost:3000';
-const USE_MOCK_API = false; // Set to true para usar json-server
+const USE_MOCK_API = true; // Set to true para usar json-server
 
 /**
  * Fetch com fallback para localStorage
