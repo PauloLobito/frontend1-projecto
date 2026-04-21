@@ -209,6 +209,13 @@ function createCustomNotification() {
   alert('Notificação criada!');
 }
 
+// Called from dashboard when records change - this is triggered automatically
+function refreshNotificationDisplay() {
+  console.log('[refreshNotificationDisplay] Refreshing...');
+  checkConditions();
+  renderNotifications();
+}
+
 function listCustomNotifications() {
   const stored = localStorage.getItem('moneynest_custom_notifications');
   customNotifications = stored ? JSON.parse(stored) : [];
