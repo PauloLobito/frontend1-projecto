@@ -1,18 +1,91 @@
 /**
  * ================================================
- * MONEY NEST - NOTIFICATIONS SYSTEM (só personalizadas)
+ * MONEY NEST - NOTIFICATIONS SYSTEM (com condições)
  * ================================================
  */
 
 let notifications = [];
+let customNotifications = [];
 
 function initNotifications() {
   try {
     const stored = localStorage.getItem('moneynest_notifications');
     notifications = stored ? JSON.parse(stored) : [];
+    
+    const storedCustom = localStorage.getItem('moneynest_custom_notifications');
+    customNotifications = storedCustom ? JSON.parse(storedCustom) : [];
+    
+    checkConditions();
     renderNotifications();
   } catch (e) {
     console.error('[Notifications] Erro:', e);
+  }
+}
+
+function checkConditions() {
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const records = settings.records || [];
+  const now = new Date();
+  const month = now.getMonth();
+  const year = now.getFullYear();
+  const today = now.toISOString().split('T')[0];
+  const day = now.getDate();
+  
+  const monthRecords = records.filter(r => {
+    const d = new Date(r.date);
+    return d.getMonth() === month && d.getFullYear() === year;
+  });
+  
+  const income = monthRecords.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
+  const expenses = monthRecords.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
+  const balance = income - expenses;
+  
+  const newNotifications = [];
+  
+  customNotifications.forEach(custom => {
+    if (custom.triggered) return;
+    
+    let shouldTrigger = false;
+    const alreadyShown = notifications.some(n => n.customId === custom.id && n.date === today);
+    if (alreadyShown) return;
+    
+    switch (custom.condition) {
+      case 'daily':
+        shouldTrigger = true;
+        break;
+      case 'month_start':
+        shouldTrigger = day === 1;
+        break;
+      case 'month_end':
+        shouldTrigger = day >= 25;
+        break;
+      case 'balance_negative':
+        shouldTrigger = balance < 0;
+        break;
+      case 'balance_positive':
+        shouldTrigger = balance > 0 && income > 0;
+        break;
+    }
+    
+    if (shouldTrigger) {
+      newNotifications.push({
+        id: Date.now(),
+        type: 'custom',
+        title: '🔔 Lembrete',
+        message: custom.message,
+        date: today,
+        read: false,
+        customId: custom.id
+      });
+      custom.triggered = true;
+    }
+  });
+  
+  if (newNotifications.length > 0) {
+    notifications = [...notifications, ...newNotifications];
+    if (notifications.length > 10) notifications = notifications.slice(-10);
+    localStorage.setItem('moneynest_notifications', JSON.stringify(notifications));
+    localStorage.setItem('moneynest_custom_notifications', JSON.stringify(customNotifications));
   }
 }
 
@@ -53,10 +126,14 @@ function createCustomNotification() {
   const message = document.getElementById('customNotificationMessage').value.trim();
   const selectEl = document.getElementById('notificationConditionSelect');
   let condition = 'daily';
+  let conditionText = 'Todos os dias';
   
   if (selectEl) {
     const selected = selectEl.querySelector('.custom-select-option.selected');
-    condition = selected ? selected.dataset.value : 'daily';
+    if (selected) {
+      condition = selected.dataset.value;
+      conditionText = selected.textContent;
+    }
   }
   
   if (!message) {
@@ -64,40 +141,44 @@ function createCustomNotification() {
     return;
   }
   
-  const now = new Date();
-  notifications.push({
+  const customNotif = {
     id: Date.now(),
-    type: 'custom',
-    title: '🔔 Lembrete',
     message: message,
     condition: condition,
-    date: now.toISOString().split('T')[0],
-    read: false,
-    triggered: false
-  });
+    conditionText: conditionText,
+    triggered: false,
+    createdAt: new Date().toISOString().split('T')[0]
+  };
   
-  localStorage.setItem('moneynest_notifications', JSON.stringify(notifications));
+  customNotifications.push(customNotif);
+  localStorage.setItem('moneynest_custom_notifications', JSON.stringify(customNotifications));
+  
   document.getElementById('customNotificationMessage').value = '';
   closeCustomNotificationModal();
+  
+  checkConditions();
   renderNotifications();
   alert('Notificação criada!');
 }
 
 function listCustomNotifications() {
-  if (notifications.length === 0) {
+  if (customNotifications.length === 0) {
     alert('Não tem notificações.');
     return;
   }
   
-  let list = 'Notificações:\n\n';
-  notifications.forEach((n, i) => {
-    list += `${i + 1}. ${n.message}\n`;
+  let list = 'Notificações Criadas:\n\n';
+  customNotifications.forEach((n, i) => {
+    const status = n.triggered ? '✅' : '⏳';
+    list += `${i + 1}. ${n.message}\n   ${status} ${n.conditionText}\n`;
   });
-  list += '\nQuer eliminar todas?';
+  list += '\n\nQuer eliminar todas?';
   
   if (confirm(list)) {
+    customNotifications = [];
     notifications = [];
-    localStorage.setItem('moneynest_notifications', JSON.stringify(notifications));
+    localStorage.setItem('moneynest_custom_notifications', JSON.stringify([]));
+    localStorage.setItem('moneynest_notifications', JSON.stringify([]));
     renderNotifications();
   }
 }
