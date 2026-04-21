@@ -51,7 +51,13 @@ function closeCustomNotificationModal() {
 
 function createCustomNotification() {
   const message = document.getElementById('customNotificationMessage').value.trim();
-  const condition = document.getElementById('customNotificationCondition').value;
+  const selectEl = document.getElementById('notificationConditionSelect');
+  let condition = 'daily';
+  
+  if (selectEl) {
+    const selected = selectEl.querySelector('.custom-select-option.selected');
+    condition = selected ? selected.dataset.value : 'daily';
+  }
   
   if (!message) {
     alert('Escreva uma mensagem!');
