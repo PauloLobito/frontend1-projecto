@@ -43,11 +43,29 @@ function checkConditions() {
   const newNotifications = [];
   
   customNotifications.forEach(custom => {
-    if (custom.triggered) return;
-    
     let shouldTrigger = false;
-    const alreadyShown = notifications.some(n => n.customId === custom.id && n.date === today);
-    if (alreadyShown) return;
+    
+    switch (custom.condition) {
+      case 'daily':
+        shouldTrigger = true;
+        break;
+      case 'month_start':
+        shouldTrigger = day === 1;
+        break;
+      case 'month_end':
+        shouldTrigger = day >= 25;
+        break;
+      case 'balance_negative':
+        shouldTrigger = balance < 0;
+        break;
+      case 'balance_positive':
+        shouldTrigger = balance > 0;
+        break;
+    }
+    
+    if (shouldTrigger) {
+      const alreadyShown = notifications.some(n => n.customId === custom.id && n.date === today);
+      if (alreadyShown) return;
     
     switch (custom.condition) {
       case 'daily':
@@ -95,11 +113,40 @@ function renderNotifications() {
   
   if (!container) return;
   
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const records = settings.records || [];
+  const now = new Date();
+  const month = now.getMonth();
+  const year = now.getFullYear();
+  
+  const monthRecords = records.filter(r => {
+    const d = new Date(r.date);
+    return d.getMonth() === month && d.getFullYear() === year;
+  });
+  
+  const income = monthRecords.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
+  const expenses = monthRecords.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
+  const balance = income - expenses;
+  
+  const activeNotifications = notifications.filter(n => {
+    const custom = customNotifications.find(c => c.id === n.customId);
+    if (!custom) return false;
+    
+    switch (custom.condition) {
+      case 'daily': return true;
+      case 'month_start': return now.getDate() === 1;
+      case 'month_end': return now.getDate() >= 25;
+      case 'balance_negative': return balance < 0;
+      case 'balance_positive': return balance > 0;
+      default: return true;
+    }
+  });
+  
+  const unreadCount = activeNotifications.filter(n => !n.read).length;
   if (badge) badge.textContent = unreadCount > 0 ? `🔔(${unreadCount})` : '💬';
   
-  if (notifications.length > 0) {
-    const latest = notifications[notifications.length - 1];
+  if (activeNotifications.length > 0) {
+    const latest = activeNotifications[activeNotifications.length - 1];
     container.innerHTML = `
       <div class="notification-item ${latest.read ? 'read' : 'unread'}">
         <strong>${latest.title}</strong>
@@ -108,7 +155,7 @@ function renderNotifications() {
       </div>
     `;
   } else {
-    container.textContent = 'Sem notificações.';
+    container.textContent = 'Sem notificações ativas.';
   }
 }
 
