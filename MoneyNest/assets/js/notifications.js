@@ -43,6 +43,9 @@ function checkConditions() {
   const newNotifications = [];
   
   customNotifications.forEach(custom => {
+    const alreadyShown = notifications.some(n => n.customId === custom.id && n.date === today);
+    if (alreadyShown) return;
+    
     let shouldTrigger = false;
     
     switch (custom.condition) {
@@ -60,28 +63,6 @@ function checkConditions() {
         break;
       case 'balance_positive':
         shouldTrigger = balance > 0;
-        break;
-    }
-    
-    if (shouldTrigger) {
-      const alreadyShown = notifications.some(n => n.customId === custom.id && n.date === today);
-      if (alreadyShown) return;
-    
-    switch (custom.condition) {
-      case 'daily':
-        shouldTrigger = true;
-        break;
-      case 'month_start':
-        shouldTrigger = day === 1;
-        break;
-      case 'month_end':
-        shouldTrigger = day >= 25;
-        break;
-      case 'balance_negative':
-        shouldTrigger = balance < 0;
-        break;
-      case 'balance_positive':
-        shouldTrigger = balance > 0 && income > 0;
         break;
     }
     
