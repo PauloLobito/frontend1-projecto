@@ -99,6 +99,10 @@ function checkConditions() {
 }
 
 function renderNotifications() {
+  console.log('[renderNotifications] Running...');
+  console.log('[renderNotifications] notifications:', notifications.length);
+  console.log('[renderNotifications] customNotifications:', customNotifications.length);
+  
   const container = document.querySelector('.notification');
   const badge = document.querySelector('.notification-badge');
   
