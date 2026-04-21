@@ -729,3 +729,8 @@ document.addEventListener('click', function(e) {
     });
   }
 });
+
+// Inicializar sistema de notificações nas definições
+if (typeof initNotifications === 'function') {
+  initNotifications();
+}
