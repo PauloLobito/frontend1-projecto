@@ -23,8 +23,15 @@ function initNotifications() {
 }
 
 function checkConditions() {
+  console.log('[checkConditions] Starting...');
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const records = settings.records || [];
+  const customStored = localStorage.getItem('moneynest_custom_notifications');
+  customNotifications = customStored ? JSON.parse(customStored) : [];
+  
+  console.log('[checkConditions] customNotifications:', customNotifications.length);
+  console.log('[checkConditions] notifications:', notifications.length);
+  
   const now = new Date();
   const month = now.getMonth();
   const year = now.getFullYear();
@@ -39,6 +46,9 @@ function checkConditions() {
   const income = monthRecords.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
   const expenses = monthRecords.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
   const balance = income - expenses;
+  
+  console.log('[checkConditions] Balance:', balance, 'Income:', income, 'Expenses:', expenses);
+  console.log('[checkConditions] Custom notifications to check:', customNotifications.length);
   
   const newNotifications = [];
   
@@ -190,6 +200,11 @@ function createCustomNotification() {
 }
 
 function listCustomNotifications() {
+  const stored = localStorage.getItem('moneynest_custom_notifications');
+  customNotifications = stored ? JSON.parse(stored) : [];
+  
+  console.log('[listCustomNotifications] Loaded:', customNotifications.length);
+  
   if (customNotifications.length === 0) {
     alert('Não tem notificações.');
     return;
