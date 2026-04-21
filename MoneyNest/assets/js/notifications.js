@@ -9,11 +9,17 @@ let customNotifications = [];
 
 function initNotifications() {
   try {
+    console.log('[initNotifications] Checking localStorage...');
+    console.log('[initNotifications] Keys:', Object.keys(localStorage).filter(k => k.includes('moneynest')));
+    
     const stored = localStorage.getItem('moneynest_notifications');
     notifications = stored ? JSON.parse(stored) : [];
     
     const storedCustom = localStorage.getItem('moneynest_custom_notifications');
+    console.log('[initNotifications] Raw custom data:', storedCustom);
     customNotifications = storedCustom ? JSON.parse(storedCustom) : [];
+    
+    console.log('[initNotifications] Loaded notifications:', notifications.length, 'custom:', customNotifications.length);
     
     checkConditions();
     renderNotifications();
