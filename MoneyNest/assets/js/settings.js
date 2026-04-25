@@ -12,6 +12,25 @@ let isEditingProfile = false;
 // Tipo de categoria atual (income = receita, expense = despesa)
 let currentCategoryType = 'income';
 
+function hasSwal() {
+  return typeof Swal !== 'undefined';
+}
+
+function swalConfirm(config) {
+  if (hasSwal()) {
+    return Swal.fire(config).then(result => result.isConfirmed);
+  }
+  return Promise.resolve(confirm(config.text || 'Tem certeza?'));
+}
+
+function swalAlert(config) {
+  if (hasSwal()) {
+    return Swal.fire(config);
+  }
+  alert(config.title || config.text || 'Operação concluída.');
+  return Promise.resolve();
+}
+
 // ================================================
 // FUNÇÕES: CUSTOM SELECT (para settings)
 // ================================================
@@ -19,30 +38,30 @@ let currentCategoryType = 'income';
 function toggleCustomSelect(id) {
   const select = document.getElementById(id);
   if (!select) return;
-  
+
   document.querySelectorAll('.custom-select.open').forEach(el => {
     if (el.id !== id) el.classList.remove('open');
   });
-  
+
   select.classList.toggle('open');
 }
 
 function selectCustomOption(selectId, value, text) {
   const select = document.getElementById(selectId);
   if (!select) return;
-  
+
   const trigger = select.querySelector('.custom-select-trigger');
   const valueSpan = trigger.querySelector('.custom-select-value');
-  
+
   if (valueSpan) valueSpan.textContent = text;
-  
+
   select.querySelectorAll('.custom-select-option').forEach(opt => {
     opt.classList.remove('selected');
   });
-  
+
   const selectedOpt = select.querySelector(`[data-value="${value}"]`);
   if (selectedOpt) selectedOpt.classList.add('selected');
-  
+
   select.classList.remove('open');
 }
 
@@ -58,10 +77,10 @@ function getCustomSelectValue(id) {
 function setCustomSelectValue(id, value) {
   const select = document.getElementById(id);
   if (!select) return;
-  
+
   const trigger = select.querySelector('.custom-select-trigger');
   const valueSpan = trigger.querySelector('.custom-select-value');
-  
+
   select.querySelectorAll('.custom-select-option').forEach(opt => {
     opt.classList.remove('selected');
     if (opt.dataset.value === value) {
@@ -94,30 +113,30 @@ function loadCategories() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
-  
+
   let categories = settings.categories;
   if (!categories) {
     categories = getDefaultCategories();
     settings.categories = categories;
     localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   }
-  
+
   const incomeList = document.getElementById('incomeCategoryList');
   const expenseList = document.getElementById('expenseCategoryList');
-  
+
   incomeList.innerHTML = '';
   expenseList.innerHTML = '';
-  
+
   categories.income.forEach((cat, index) => {
     const tag = createCategoryTag(cat, 'income', index);
     incomeList.appendChild(tag);
   });
-  
+
   categories.expense.forEach((cat, index) => {
     const tag = createCategoryTag(cat, 'expense', index);
     expenseList.appendChild(tag);
   });
-  
+
   if (document.getElementById('incomeCategoriesTitle')) {
     document.getElementById('incomeCategoriesTitle').textContent = t.incomeCategories;
   }
@@ -152,10 +171,10 @@ function openAddCategoryModal(type) {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
-  
+
   currentCategoryType = type;
   document.getElementById('newCategoryName').value = '';
-  
+
   if (type === 'income') {
     document.getElementById('categoryModalTitle').textContent = t.addIncomeCategory;
     document.getElementById('categoryTypeInfo').textContent = t.incomeTypeInfo;
@@ -163,15 +182,15 @@ function openAddCategoryModal(type) {
     document.getElementById('categoryModalTitle').textContent = t.addExpenseCategory;
     document.getElementById('categoryTypeInfo').textContent = t.expenseTypeInfo;
   }
-  
+
   document.getElementById('categoryNameLabel').textContent = t.categoryName;
   document.getElementById('newCategoryName').placeholder = t.categoryPlaceholder;
-  
+
   const cancelBtn = modal.querySelector('.btn-cancel');
   const confirmBtn = modal.querySelector('.btn-confirm');
   cancelBtn.textContent = t.cancel || 'Cancelar';
   confirmBtn.textContent = t.addCategory || 'Adicionar';
-  
+
   modal.classList.add('active');
   document.getElementById('newCategoryName').focus();
 }
@@ -193,31 +212,31 @@ function addCategory() {
   let settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
-  
+
   // Validação: nome vazio
   if (!name) {
     input.style.borderColor = 'var(--red)';
     setTimeout(() => { input.style.borderColor = ''; }, 2000);
     return;
   }
-  
+
   let categories = settings.categories;
   if (!categories) {
     categories = getDefaultCategories();
     settings.categories = categories;
   }
-  
+
   // Validação: categoria duplicada
   if (categories[currentCategoryType].some(c => c.toLowerCase() === name.toLowerCase())) {
     input.style.borderColor = 'var(--red)';
     setTimeout(() => { input.style.borderColor = ''; }, 2000);
     return;
   }
-  
+
   categories[currentCategoryType].push(name);
   settings.categories = categories;
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
-  
+
   closeCategoryModal();
   loadCategories();
 }
@@ -227,20 +246,44 @@ function addCategory() {
  * @param {string} type - Tipo de categoria (income ou expense)
  * @param {number} index - Índice da categoria a eliminar
  */
-function deleteCategory(type, index) {
+async function deleteCategory(type, index) {
+  const settingsWithLang = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
+  const lang = settingsWithLang.language || 'pt-PT';
+  const t = translations[lang];
+
   let settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   let categories = settings.categories;
-  
+
   if (!categories) {
     categories = getDefaultCategories();
     settings.categories = categories;
   }
-  
+
   if (categories[type] && categories[type][index] !== undefined) {
+    const categoryName = categories[type][index];
+    const confirmed = await swalConfirm({
+      icon: 'warning',
+      title: t.deleteCategoryTitle || 'Tem certeza?',
+      text: `${t.deleteCategoryText || 'Deseja eliminar esta categoria?'} (${categoryName})`,
+      showCancelButton: true,
+      confirmButtonText: t.deleteCategoryConfirm || 'Sim, eliminar',
+      cancelButtonText: t.cancel || 'Cancelar',
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      reverseButtons: true
+    });
+
+    if (!confirmed) return;
+
     categories[type].splice(index, 1);
     settings.categories = categories;
     localStorage.setItem('moneynest_settings', JSON.stringify(settings));
     loadCategories();
+
+    swalAlert({
+      icon: 'success',
+      title: t.deleteCategorySuccess || 'Categoria eliminada'
+    });
   }
 }
 
@@ -256,7 +299,7 @@ function loadUserProfile() {
   const loggedInUser = localStorage.getItem('moneynest_loggedIn');
   const nameInput = document.getElementById('settingName');
   const emailInput = document.getElementById('settingEmail');
-  
+
   if (loggedInUser) {
     const user = JSON.parse(loggedInUser);
     nameInput.value = `${user.firstName} ${user.lastName}`;
@@ -276,11 +319,11 @@ function toggleEditProfile() {
   const emailInput = document.getElementById('settingEmail');
   const editBtns = document.querySelectorAll('.btn-edit');
   const loggedInUser = localStorage.getItem('moneynest_loggedIn');
-  
+
   if (!loggedInUser) return;
-  
+
   isEditingProfile = !isEditingProfile;
-  
+
   if (isEditingProfile) {
     nameInput.disabled = false;
     emailInput.disabled = false;
@@ -308,20 +351,20 @@ function saveProfileChanges() {
   const emailInput = document.getElementById('settingEmail');
   const editBtns = document.querySelectorAll('.btn-edit');
   const loggedInUser = localStorage.getItem('moneynest_loggedIn');
-  
+
   if (!loggedInUser) return;
-  
+
   const user = JSON.parse(loggedInUser);
   const nameParts = nameInput.value.trim().split(' ');
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
-  
+
   user.firstName = firstName;
   user.lastName = lastName;
   user.email = emailInput.value.trim();
-  
+
   localStorage.setItem('moneynest_loggedIn', JSON.stringify(user));
-  
+
   const users = JSON.parse(localStorage.getItem('moneynest_users') || '[]');
   const userIndex = users.findIndex(u => u.email === user.email);
   if (userIndex !== -1) {
@@ -330,7 +373,7 @@ function saveProfileChanges() {
     users[userIndex].email = emailInput.value.trim();
     localStorage.setItem('moneynest_users', JSON.stringify(users));
   }
-  
+
   nameInput.disabled = true;
   emailInput.disabled = true;
   editBtns.forEach(btn => {
@@ -338,7 +381,7 @@ function saveProfileChanges() {
     btn.classList.remove('active');
   });
   isEditingProfile = false;
-  
+
   // Feedback visual de sucesso
   const btn = document.querySelector('.btn-save');
   const originalText = btn.textContent;
@@ -379,20 +422,20 @@ function openPasswordModal() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
-  
+
   document.getElementById('currentPassword').value = '';
   document.getElementById('newPassword').value = '';
   document.getElementById('confirmPassword').value = '';
   document.getElementById('modalMessage').className = 'modal-message';
   document.getElementById('modalMessage').textContent = '';
-  
+
   document.getElementById('modalTitle').textContent = t.changePassword;
   document.getElementById('currentPassLabel').textContent = t.currentPassword || 'Palavra-passe atual';
   document.getElementById('newPassLabel').textContent = t.newPassword || 'Nova palavra-passe';
   document.getElementById('confirmPassLabel').textContent = t.confirmPassword || 'Confirmar nova palavra-passe';
   document.getElementById('cancelBtn').textContent = t.cancel || 'Cancelar';
   document.getElementById('confirmBtn').textContent = t.confirm || 'Alterar';
-  
+
   modal.classList.add('active');
 }
 
@@ -412,59 +455,59 @@ function submitPasswordChange() {
   const newPassword = document.getElementById('newPassword').value;
   const confirmPassword = document.getElementById('confirmPassword').value;
   const messageEl = document.getElementById('modalMessage');
-  
+
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
-  
+
   messageEl.className = 'modal-message';
-  
+
   const users = JSON.parse(localStorage.getItem('moneynest_users') || '[]');
   const loggedInUser = JSON.parse(localStorage.getItem('moneynest_loggedIn'));
-  
+
   // Verificar se está logado
   if (!loggedInUser) {
     messageEl.textContent = t.notLoggedIn || 'Precisa de iniciar sessão para alterar a palavra-passe.';
     messageEl.classList.add('error');
     return;
   }
-  
+
   const userIndex = users.findIndex(u => u.email === loggedInUser.email);
   if (userIndex === -1) {
     messageEl.textContent = t.userNotFound || 'Utilizador não encontrado.';
     messageEl.classList.add('error');
     return;
   }
-  
+
   const user = users[userIndex];
-  
+
   // Verificar palavra-passe atual
   if (user.password !== currentPassword) {
     messageEl.textContent = t.wrongPassword || 'Palavra-passe atual incorreta.';
     messageEl.classList.add('error');
     return;
   }
-  
+
   // Verificar tamanho mínimo
   if (newPassword.length < 6) {
     messageEl.textContent = t.passwordTooShort || 'A nova palavra-passe deve ter pelo menos 6 caracteres.';
     messageEl.classList.add('error');
     return;
   }
-  
+
   // Verificar se coincidem
   if (newPassword !== confirmPassword) {
     messageEl.textContent = t.passwordMismatch || 'As palavras-passe não coincidem.';
     messageEl.classList.add('error');
     return;
   }
-  
+
   users[userIndex].password = newPassword;
   localStorage.setItem('moneynest_users', JSON.stringify(users));
-  
+
   messageEl.textContent = t.passwordChanged || 'Palavra-passe alterada com sucesso!';
   messageEl.classList.add('success');
-  
+
   setTimeout(() => { closePasswordModal(); }, 1500);
 }
 
@@ -502,7 +545,7 @@ function loadAndApplyTheme() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const theme = settings.theme || 'dark';
   applyTheme(theme);
-  
+
   // Atualizar tema automático a cada minuto
   if (theme === 'auto') {
     setInterval(() => {
@@ -576,11 +619,6 @@ function applyLanguageSettings() {
     li.textContent = t.months[index];
   });
 
-  // Confirmação em PT
-  if (lang === 'pt-PT' || lang === 'pt-BR') {
-    document.querySelector('.btn-reset').setAttribute('onclick', "if(confirm('" + t.resetConfirm + "')){localStorage.removeItem('moneynest_settings');location.reload();}");
-  }
-
   // Títulos das categorias
   if (document.getElementById('incomeCategoriesTitle')) {
     document.getElementById('incomeCategoriesTitle').textContent = t.incomeCategories;
@@ -637,11 +675,11 @@ function saveSettings() {
     language: getCustomSelectValue('settingLangCustom'),
     dateFormat: getCustomSelectValue('settingDateFormatCustom')
   };
-  
+
   localStorage.setItem('moneynest_settings', JSON.stringify(settings));
   applyLanguageSettings();
   applyTheme(settings.theme);
-  
+
   // Feedback visual de sucesso
   const btn = document.querySelector('.btn-save');
   const originalText = btn.textContent;
@@ -661,11 +699,22 @@ function resetSettings() {
   const settings = JSON.parse(localStorage.getItem('moneynest_settings') || '{}');
   const lang = settings.language || 'pt-PT';
   const t = translations[lang];
-  
-  if (confirm(t.resetConfirm)) {
+
+  swalConfirm({
+    icon: 'warning',
+    title: t.reset || 'Restaurar padrão',
+    text: t.resetConfirm || 'Tem certeza que deseja restaurar as configurações?',
+    showCancelButton: true,
+    confirmButtonText: t.confirm || 'Confirmar',
+    cancelButtonText: t.cancel || 'Cancelar',
+    confirmButtonColor: '#28a745',
+    cancelButtonColor: '#d33',
+    reverseButtons: true
+  }).then(confirmed => {
+    if (!confirmed) return;
     localStorage.removeItem('moneynest_settings');
     location.reload();
-  }
+  });
 }
 
 // ================================================
@@ -673,14 +722,14 @@ function resetSettings() {
 // ================================================
 
 // Inicialização quando a página carrega
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // Carregar dados iniciais
   loadSettings();
   loadUserProfile();
   loadAndApplyTheme();
   applyLanguageSettings();
   loadCategories();
-  
+
   // Destacar mês atual no sidebar
   const hoje = new Date();
   document.querySelectorAll('.months li').forEach((li, index) => {
@@ -689,31 +738,31 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Listeners: teclado no perfil
-  document.getElementById('settingName').addEventListener('keydown', function(e) {
+  document.getElementById('settingName').addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && isEditingProfile) saveProfileChanges();
   });
 
-  document.getElementById('settingEmail').addEventListener('keydown', function(e) {
+  document.getElementById('settingEmail').addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && isEditingProfile) saveProfileChanges();
   });
 
   // Listener: fechar modal de palavra-passe ao clicar fora
-  document.getElementById('passwordModal').addEventListener('click', function(e) {
+  document.getElementById('passwordModal').addEventListener('click', function (e) {
     if (e.target === this) closePasswordModal();
   });
 
   // Listener: fechar modal de categoria ao clicar fora
-  document.getElementById('categoryModal').addEventListener('click', function(e) {
+  document.getElementById('categoryModal').addEventListener('click', function (e) {
     if (e.target === this) closeCategoryModal();
   });
 
   // Listener: adicionar categoria com Enter
-  document.getElementById('newCategoryName').addEventListener('keydown', function(e) {
+  document.getElementById('newCategoryName').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') addCategory();
   });
 
   // Listener: ESC fecha modais
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
       closePasswordModal();
       closeCategoryModal();
@@ -722,7 +771,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Click outside to close custom selects
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
   if (!e.target.closest('.custom-select')) {
     document.querySelectorAll('.custom-select.open').forEach(el => {
       el.classList.remove('open');

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07102b" />
   <title>MoneyNest - Dashboard Financeiro</title>
+  <link rel="manifest" href="../manifest.webmanifest" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/main.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
+
 <body>
   <div class="app">
     <aside class="sidebar">
@@ -32,7 +36,13 @@
       </ul>
 
       <div class="sidebar-footer">
-        <a href="settings.html" class="settings-icon">⚙️</a>
+        <div class="sidebar-links">
+          <a href="settings.html" class="settings-icon" title="Definicoes">⚙️</a>
+          <a href="https://github.com/your-user/moneynest" class="sidebar-link" target="_blank"
+            rel="noopener noreferrer">Repo</a>
+          <a href="https://your-user.github.io/moneynest/" class="sidebar-link" target="_blank"
+            rel="noopener noreferrer">Online</a>
+        </div>
       </div>
     </aside>
 
@@ -67,7 +77,8 @@
           <h3>Gastos</h3>
           <div class="mini-value"><span class="currency-symbol">R$</span> 0</div>
           <svg class="sparkline" viewBox="0 0 260 80" fill="none">
-            <path d="M4 48 C 28 34, 42 68, 60 52 S 92 10, 112 34 S 142 64, 164 54 S 194 42, 216 48 S 242 50, 256 46" stroke="#ff5b72" stroke-width="4" stroke-linecap="round"/>
+            <path d="M4 48 C 28 34, 42 68, 60 52 S 92 10, 112 34 S 142 64, 164 54 S 194 42, 216 48 S 242 50, 256 46"
+              stroke="#ff5b72" stroke-width="4" stroke-linecap="round" />
           </svg>
         </article>
 
@@ -84,9 +95,13 @@
               <div style="font-size: 28px; font-weight: 800; margin-top: 2px;">Meta de Receita</div>
               <div class="progress-text">Progresso do mês</div>
             </div>
-            <div class="progress-total"><span class="currency-symbol">R$</span> <span id="currentRevenue">0</span> <span style="color: var(--muted); font-size: 18px;">/ <span class="currency-symbol">R$</span><span id="goalAmount">0</span></span></div>
+            <div class="progress-total"><span class="currency-symbol">R$</span> <span id="currentRevenue">0</span> <span
+                style="color: var(--muted); font-size: 18px;">/ <span class="currency-symbol">R$</span><span
+                  id="goalAmount">0</span></span></div>
           </div>
-          <div class="track"><div class="fill" id="progressFill"></div></div>
+          <div class="track">
+            <div class="fill" id="progressFill"></div>
+          </div>
           <div class="goal-setting">
             <label class="goal-label">Definir meta:</label>
             <div class="goal-input-wrapper">
@@ -127,8 +142,10 @@
           <h3>Receita</h3>
           <div class="mini-value"><span class="currency-symbol">R$</span> 0</div>
           <svg class="sparkline" viewBox="0 0 260 80" fill="none">
-            <path d="M4 62 C 20 50, 35 18, 52 12 S 84 26, 98 54 S 132 72, 154 34 S 186 8, 204 32 S 232 58, 256 28" stroke="#ff8a2a" stroke-width="4" stroke-linecap="round"/>
-            <path d="M4 70 C 18 58, 34 28, 52 20 S 88 34, 106 56 S 146 70, 164 42 S 204 24, 222 36 S 240 44, 256 40" stroke="#7c4dff" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+            <path d="M4 62 C 20 50, 35 18, 52 12 S 84 26, 98 54 S 132 72, 154 34 S 186 8, 204 32 S 232 58, 256 28"
+              stroke="#ff8a2a" stroke-width="4" stroke-linecap="round" />
+            <path d="M4 70 C 18 58, 34 28, 52 20 S 88 34, 106 56 S 146 70, 164 42 S 204 24, 222 36 S 240 44, 256 40"
+              stroke="#7c4dff" stroke-width="3" stroke-linecap="round" opacity=".55" />
           </svg>
         </article>
 
@@ -147,8 +164,10 @@
                 <span class="income">Receitas</span>
               </div>
               <div style="display:flex; gap:26px; font-weight:800;">
-                <div style="color: var(--orange);"><span class="currency-symbol">R$</span> <span id="chartExpenseTotal">0</span></div>
-                <div style="color: var(--green);"><span class="currency-symbol">R$</span> <span id="chartIncomeTotal">0</span></div>
+                <div style="color: var(--orange);"><span class="currency-symbol">R$</span> <span
+                    id="chartExpenseTotal">0</span></div>
+                <div style="color: var(--green);"><span class="currency-symbol">R$</span> <span
+                    id="chartIncomeTotal">0</span></div>
               </div>
             </div>
             <div class="bar-chart-container">
@@ -170,10 +189,14 @@
               <canvas id="donutChart"></canvas>
             </div>
             <div class="asset-list">
-              <div><span class="asset-label"><span class="legend-color small" style="background:#00c853"></span> Receitas</span><strong id="assetsIncome"><span class="currency-symbol">R$</span> 0</strong></div>
-              <div><span class="asset-label"><span class="legend-color small" style="background:#ff5722"></span> Despesas</span><strong id="assetsExpense"><span class="currency-symbol">R$</span> 0</strong></div>
-              <div><span class="asset-label"><span class="legend-color small" style="background:#2196f3"></span> Saldo</span><strong id="assetsBalance"><span class="currency-symbol">R$</span> 0</strong></div>
-              <div><span class="asset-label"><span class="legend-color small" style="background:#9c27b0"></span> Património</span><strong id="assetsPatrimony"><span class="currency-symbol">R$</span> 0</strong></div>
+              <div><span class="asset-label"><span class="legend-color small" style="background:#00c853"></span>
+                  Receitas</span><strong id="assetsIncome"><span class="currency-symbol">R$</span> 0</strong></div>
+              <div><span class="asset-label"><span class="legend-color small" style="background:#ff5722"></span>
+                  Despesas</span><strong id="assetsExpense"><span class="currency-symbol">R$</span> 0</strong></div>
+              <div><span class="asset-label"><span class="legend-color small" style="background:#2196f3"></span>
+                  Saldo</span><strong id="assetsBalance"><span class="currency-symbol">R$</span> 0</strong></div>
+              <div><span class="asset-label"><span class="legend-color small" style="background:#9c27b0"></span>
+                  Património</span><strong id="assetsPatrimony"><span class="currency-symbol">R$</span> 0</strong></div>
             </div>
           </div>
         </article>
@@ -227,27 +250,30 @@
             </button>
           </div>
         </div>
-        
+
         <div class="records-summary">
           <div class="summary-card income">
             <div class="summary-icon">📈</div>
             <div class="summary-info">
               <span class="summary-label">Total Receitas</span>
-              <span class="summary-value"><span class="currency-symbol">R$</span> <span id="totalIncome">0,00</span></span>
+              <span class="summary-value"><span class="currency-symbol">R$</span> <span
+                  id="totalIncome">0,00</span></span>
             </div>
           </div>
           <div class="summary-card expense">
             <div class="summary-icon">📉</div>
             <div class="summary-info">
               <span class="summary-label">Total Despesas</span>
-              <span class="summary-value"><span class="currency-symbol">R$</span> <span id="totalExpense">0,00</span></span>
+              <span class="summary-value"><span class="currency-symbol">R$</span> <span
+                  id="totalExpense">0,00</span></span>
             </div>
           </div>
           <div class="summary-card balance">
             <div class="summary-icon">💰</div>
             <div class="summary-info">
               <span class="summary-label">Balanço</span>
-              <span class="summary-value"><span class="currency-symbol">R$</span> <span id="totalBalance">0,00</span></span>
+              <span class="summary-value"><span class="currency-symbol">R$</span> <span
+                  id="totalBalance">0,00</span></span>
             </div>
           </div>
         </div>
@@ -258,13 +284,37 @@
             <button class="filter-btn" data-filter="income" onclick="filterRecords('income')">Receitas</button>
             <button class="filter-btn" data-filter="expense" onclick="filterRecords('expense')">Despesas</button>
           </div>
-          
+
           <div class="records-list" id="recordsList">
             <div class="no-records">
               <p>Ainda não há registos.</p>
               <p>Clique em "Adicionar" para criar o seu primeiro registo.</p>
             </div>
           </div>
+        </div>
+
+        <div class="records-section todo-section">
+          <div class="todo-section-header">
+            <h2>TODOs</h2>
+            <span id="todoCount" class="todo-count">0/0 concluidos</span>
+          </div>
+
+          <form id="todoForm" class="todo-form">
+            <div class="todo-form-grid">
+              <input type="text" class="form-input" id="todoTitle" placeholder="Titulo do TODO" required minlength="3"
+                maxlength="80">
+              <input type="date" class="form-input" id="todoDueDate" required>
+              <select class="form-input" id="todoPriority">
+                <option value="low">Prioridade baixa</option>
+                <option value="medium" selected>Prioridade media</option>
+                <option value="high">Prioridade alta</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-confirm todo-submit">Criar TODO</button>
+          </form>
+
+          <canvas id="todoStatusCanvas" width="340" height="40" aria-label="Resumo dos TODOs"></canvas>
+          <div id="todoList" class="todo-list"></div>
         </div>
       </section>
     </main>
@@ -318,11 +368,18 @@
               <span class="custom-select-arrow">▼</span>
             </div>
             <div class="custom-select-dropdown">
-              <div class="custom-select-option" data-value="" onclick="selectCustomOption('recordDescriptionCustomSelect', '', 'Selecione...')">Selecione...</div>
-              <div class="custom-select-option" data-value="Consulta Veterinária" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Consulta Veterinária', 'Consulta Veterinária')">🏥 Consulta Veterinária</div>
-              <div class="custom-select-option" data-value="Ração" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Ração', 'Ração')">🍖 Ração</div>
-              <div class="custom-select-option" data-value="Petiscos" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Petiscos', 'Petiscos')">🦴 Petiscos</div>
-              <div class="custom-select-option" data-value="Banho e Hospedagem" onclick="selectCustomOption('recordDescriptionCustomSelect', 'Banho e Hospedagem', 'Banho e Hospedagem')">🛁 Banho e Hospedagem</div>
+              <div class="custom-select-option" data-value=""
+                onclick="selectCustomOption('recordDescriptionCustomSelect', '', 'Selecione...')">Selecione...</div>
+              <div class="custom-select-option" data-value="Consulta Veterinária"
+                onclick="selectCustomOption('recordDescriptionCustomSelect', 'Consulta Veterinária', 'Consulta Veterinária')">
+                🏥 Consulta Veterinária</div>
+              <div class="custom-select-option" data-value="Ração"
+                onclick="selectCustomOption('recordDescriptionCustomSelect', 'Ração', 'Ração')">🍖 Ração</div>
+              <div class="custom-select-option" data-value="Petiscos"
+                onclick="selectCustomOption('recordDescriptionCustomSelect', 'Petiscos', 'Petiscos')">🦴 Petiscos</div>
+              <div class="custom-select-option" data-value="Banho e Hospedagem"
+                onclick="selectCustomOption('recordDescriptionCustomSelect', 'Banho e Hospedagem', 'Banho e Hospedagem')">
+                🛁 Banho e Hospedagem</div>
             </div>
           </div>
         </div>
@@ -378,7 +435,8 @@
           <label class="form-label">Descrição</label>
           <div class="input-wrapper">
             <span class="input-icon">📝</span>
-            <input type="text" class="form-input with-icon" id="editRecordDescription" placeholder="Descrição do registo">
+            <input type="text" class="form-input with-icon" id="editRecordDescription"
+              placeholder="Descrição do registo">
           </div>
         </div>
         <div class="form-group" id="editDescriptionSelectGroup" style="display: none;">
@@ -389,11 +447,18 @@
               <span class="custom-select-arrow">▼</span>
             </div>
             <div class="custom-select-dropdown">
-              <div class="custom-select-option" data-value="" onclick="selectCustomOption('editDescriptionCustomSelect', '', 'Selecione...')">Selecione...</div>
-              <div class="custom-select-option" data-value="Consulta Veterinária" onclick="selectCustomOption('editDescriptionCustomSelect', 'Consulta Veterinária', 'Consulta Veterinária')">🏥 Consulta Veterinária</div>
-              <div class="custom-select-option" data-value="Ração" onclick="selectCustomOption('editDescriptionCustomSelect', 'Ração', 'Ração')">🍖 Ração</div>
-              <div class="custom-select-option" data-value="Petiscos" onclick="selectCustomOption('editDescriptionCustomSelect', 'Petiscos', 'Petiscos')">🦴 Petiscos</div>
-              <div class="custom-select-option" data-value="Banho e Hospedagem" onclick="selectCustomOption('editDescriptionCustomSelect', 'Banho e Hospedagem', 'Banho e Hospedagem')">🛁 Banho e Hospedagem</div>
+              <div class="custom-select-option" data-value=""
+                onclick="selectCustomOption('editDescriptionCustomSelect', '', 'Selecione...')">Selecione...</div>
+              <div class="custom-select-option" data-value="Consulta Veterinária"
+                onclick="selectCustomOption('editDescriptionCustomSelect', 'Consulta Veterinária', 'Consulta Veterinária')">
+                🏥 Consulta Veterinária</div>
+              <div class="custom-select-option" data-value="Ração"
+                onclick="selectCustomOption('editDescriptionCustomSelect', 'Ração', 'Ração')">🍖 Ração</div>
+              <div class="custom-select-option" data-value="Petiscos"
+                onclick="selectCustomOption('editDescriptionCustomSelect', 'Petiscos', 'Petiscos')">🦴 Petiscos</div>
+              <div class="custom-select-option" data-value="Banho e Hospedagem"
+                onclick="selectCustomOption('editDescriptionCustomSelect', 'Banho e Hospedagem', 'Banho e Hospedagem')">
+                🛁 Banho e Hospedagem</div>
             </div>
           </div>
         </div>
@@ -412,6 +477,37 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="todoEditModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Editar TODO</h2>
+        <button class="modal-close" onclick="closeEditTodoModal()">&times;</button>
+      </div>
+      <form id="editTodoForm" class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="editTodoTitle">Titulo</label>
+          <input type="text" class="form-input" id="editTodoTitle" required minlength="3" maxlength="80">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editTodoDueDate">Data limite</label>
+          <input type="date" class="form-input" id="editTodoDueDate" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="editTodoPriority">Prioridade</label>
+          <select class="form-input" id="editTodoPriority">
+            <option value="low">Prioridade baixa</option>
+            <option value="medium">Prioridade media</option>
+            <option value="high">Prioridade alta</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" type="button" onclick="closeEditTodoModal()">Cancelar</button>
+          <button class="btn-confirm" type="submit">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Custom Notification Modal -->
   <div class="modal-overlay" id="customNotificationModal">
     <div class="modal">
@@ -423,7 +519,8 @@
         <div class="form-group">
           <label class="form-label">Mensagem</label>
           <div class="input-wrapper">
-            <input type="text" class="form-input" id="customNotificationMessage" placeholder="Ex: Verificar despesas esta semana">
+            <input type="text" class="form-input" id="customNotificationMessage"
+              placeholder="Ex: Verificar despesas esta semana">
           </div>
         </div>
         <div class="form-group">
@@ -441,8 +538,14 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../assets/js/mock-api.js"></script>
   <script src="../assets/js/translations.js"></script>
   <script src="../assets/js/dashboard.js"></script>
   <script src="../assets/js/notifications.js"></script>
+  <script src="../assets/js/todo-item.js"></script>
+  <script src="../assets/js/todo.js"></script>
+  <script src="../assets/js/pwa.js"></script>
 </body>
+
 </html>

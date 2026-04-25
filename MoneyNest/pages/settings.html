@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07102b" />
   <title>MoneyNest - Definições</title>
+  <link rel="manifest" href="../manifest.webmanifest" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/main.css">
   <link rel="stylesheet" href="../assets/css/settings.css">
 </head>
+
 <body>
   <div class="app">
     <aside class="sidebar">
@@ -30,7 +34,14 @@
       </ul>
 
       <div class="sidebar-footer">
-        <span style="color: var(--muted); font-size: 13px;">v1.0.0</span>
+        <div class="sidebar-links">
+          <a href="index.html" class="settings-icon" title="Dashboard">🏠</a>
+          <a href="https://github.com/your-user/moneynest" class="sidebar-link" target="_blank"
+            rel="noopener noreferrer">Repo</a>
+          <a href="https://your-user.github.io/moneynest/" class="sidebar-link" target="_blank"
+            rel="noopener noreferrer">Online</a>
+          <span style="color: var(--muted); font-size: 13px;">v1.0.0</span>
+        </div>
       </div>
     </aside>
 
@@ -53,7 +64,7 @@
         <div class="settings-content">
           <section class="settings-section" id="account">
             <h2>👤 Conta</h2>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Nome</span>
@@ -64,7 +75,7 @@
                 <button class="btn-edit" onclick="toggleEditProfile()" id="editNameBtn">✏️</button>
               </div>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Email</span>
@@ -75,7 +86,7 @@
                 <button class="btn-edit" onclick="toggleEditProfile()" id="editEmailBtn">✏️</button>
               </div>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Moeda</span>
@@ -87,9 +98,12 @@
                   <span class="custom-select-arrow">▼</span>
                 </div>
                 <div class="custom-select-dropdown">
-                  <div class="custom-select-option" data-value="BRL" onclick="selectCustomOption('settingCurrencyCustom', 'BRL', 'Real (R$)')">Real (R$)</div>
-                  <div class="custom-select-option" data-value="EUR" onclick="selectCustomOption('settingCurrencyCustom', 'EUR', 'Euro (€)')">Euro (€)</div>
-                  <div class="custom-select-option" data-value="USD" onclick="selectCustomOption('settingCurrencyCustom', 'USD', 'Dólar ($)')">Dólar ($)</div>
+                  <div class="custom-select-option" data-value="BRL"
+                    onclick="selectCustomOption('settingCurrencyCustom', 'BRL', 'Real (R$)')">Real (R$)</div>
+                  <div class="custom-select-option" data-value="EUR"
+                    onclick="selectCustomOption('settingCurrencyCustom', 'EUR', 'Euro (€)')">Euro (€)</div>
+                  <div class="custom-select-option" data-value="USD"
+                    onclick="selectCustomOption('settingCurrencyCustom', 'USD', 'Dólar ($)')">Dólar ($)</div>
                 </div>
               </div>
             </div>
@@ -97,7 +111,7 @@
 
           <section class="settings-section" id="notifications">
             <h2>🔔 Notificações</h2>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Notificações por email</span>
@@ -108,7 +122,7 @@
                 <span class="toggle-slider"></span>
               </label>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Alertas de despesas</span>
@@ -119,7 +133,7 @@
                 <span class="toggle-slider"></span>
               </label>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Relatórios mensais</span>
@@ -130,11 +144,12 @@
                 <span class="toggle-slider"></span>
               </label>
             </div>
-            
+
             <div class="notification-custom-section" style="margin-top:16px;width:100%;">
               <p style="margin-bottom:12px;color:var(--text-muted);font-size:14px;">Crie lembretes automáticos</p>
               <div style="display:flex;gap:12px;width:100%;">
-                <button class="btn-confirm" onclick="openCustomNotificationModal()" style="flex:1;">+ Nova Notificação</button>
+                <button class="btn-confirm" onclick="openCustomNotificationModal()" style="flex:1;">+ Nova
+                  Notificação</button>
                 <button class="btn-outline" onclick="listCustomNotifications()" style="flex:1;">Ver Todas</button>
               </div>
             </div>
@@ -142,7 +157,7 @@
 
           <section class="settings-section" id="security">
             <h2>🔒 Segurança</h2>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Autenticação de dois fatores</span>
@@ -153,7 +168,7 @@
                 <span class="toggle-slider"></span>
               </label>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Bloqueio de sessão</span>
@@ -164,7 +179,7 @@
                 <span class="toggle-slider"></span>
               </label>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Alterar palavra-passe</span>
@@ -176,7 +191,7 @@
 
           <section class="settings-section" id="appearance">
             <h2>🎨 Aspeto</h2>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Tema</span>
@@ -188,13 +203,16 @@
                   <span class="custom-select-arrow">▼</span>
                 </div>
                 <div class="custom-select-dropdown">
-                  <div class="custom-select-option" data-value="dark" onclick="selectCustomOption('settingThemeCustom', 'dark', 'Escuro')">Escuro</div>
-                  <div class="custom-select-option" data-value="light" onclick="selectCustomOption('settingThemeCustom', 'light', 'Claro')">Claro</div>
-                  <div class="custom-select-option" data-value="auto" onclick="selectCustomOption('settingThemeCustom', 'auto', 'Automático')">Automático</div>
+                  <div class="custom-select-option" data-value="dark"
+                    onclick="selectCustomOption('settingThemeCustom', 'dark', 'Escuro')">Escuro</div>
+                  <div class="custom-select-option" data-value="light"
+                    onclick="selectCustomOption('settingThemeCustom', 'light', 'Claro')">Claro</div>
+                  <div class="custom-select-option" data-value="auto"
+                    onclick="selectCustomOption('settingThemeCustom', 'auto', 'Automático')">Automático</div>
                 </div>
               </div>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Modo de economia</span>
@@ -209,7 +227,7 @@
 
           <section class="settings-section" id="language">
             <h2>🌐 Idioma</h2>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Idioma da interface</span>
@@ -221,14 +239,20 @@
                   <span class="custom-select-arrow">▼</span>
                 </div>
                 <div class="custom-select-dropdown">
-                  <div class="custom-select-option" data-value="pt-PT" onclick="selectCustomOption('settingLangCustom', 'pt-PT', 'Português (Portugal)')">Português (Portugal)</div>
-                  <div class="custom-select-option" data-value="pt-BR" onclick="selectCustomOption('settingLangCustom', 'pt-BR', 'Português (Brasil)')">Português (Brasil)</div>
-                  <div class="custom-select-option" data-value="en" onclick="selectCustomOption('settingLangCustom', 'en', 'English')">English</div>
-                  <div class="custom-select-option" data-value="es" onclick="selectCustomOption('settingLangCustom', 'es', 'Español')">Español</div>
+                  <div class="custom-select-option" data-value="pt-PT"
+                    onclick="selectCustomOption('settingLangCustom', 'pt-PT', 'Português (Portugal)')">Português
+                    (Portugal)</div>
+                  <div class="custom-select-option" data-value="pt-BR"
+                    onclick="selectCustomOption('settingLangCustom', 'pt-BR', 'Português (Brasil)')">Português (Brasil)
+                  </div>
+                  <div class="custom-select-option" data-value="en"
+                    onclick="selectCustomOption('settingLangCustom', 'en', 'English')">English</div>
+                  <div class="custom-select-option" data-value="es"
+                    onclick="selectCustomOption('settingLangCustom', 'es', 'Español')">Español</div>
                 </div>
               </div>
             </div>
-            
+
             <div class="setting-item">
               <div class="setting-info">
                 <span class="setting-label">Formato de data</span>
@@ -240,9 +264,12 @@
                   <span class="custom-select-arrow">▼</span>
                 </div>
                 <div class="custom-select-dropdown">
-                  <div class="custom-select-option" data-value="dd/mm/yyyy" onclick="selectCustomOption('settingDateFormatCustom', 'dd/mm/yyyy', 'DD/MM/YYYY')">DD/MM/YYYY</div>
-                  <div class="custom-select-option" data-value="mm/dd/yyyy" onclick="selectCustomOption('settingDateFormatCustom', 'mm/dd/yyyy', 'MM/DD/YYYY')">MM/DD/YYYY</div>
-                  <div class="custom-select-option" data-value="yyyy-mm-dd" onclick="selectCustomOption('settingDateFormatCustom', 'yyyy-mm-dd', 'YYYY-MM-DD')">YYYY-MM-DD</div>
+                  <div class="custom-select-option" data-value="dd/mm/yyyy"
+                    onclick="selectCustomOption('settingDateFormatCustom', 'dd/mm/yyyy', 'DD/MM/YYYY')">DD/MM/YYYY</div>
+                  <div class="custom-select-option" data-value="mm/dd/yyyy"
+                    onclick="selectCustomOption('settingDateFormatCustom', 'mm/dd/yyyy', 'MM/DD/YYYY')">MM/DD/YYYY</div>
+                  <div class="custom-select-option" data-value="yyyy-mm-dd"
+                    onclick="selectCustomOption('settingDateFormatCustom', 'yyyy-mm-dd', 'YYYY-MM-DD')">YYYY-MM-DD</div>
                 </div>
               </div>
             </div>
@@ -250,7 +277,7 @@
 
           <section class="settings-section" id="categories">
             <h2>📁 Categorias</h2>
-            
+
             <div class="category-section">
               <div class="category-header">
                 <span class="category-title" id="incomeCategoriesTitle">Receitas</span>
@@ -258,7 +285,7 @@
               </div>
               <div class="category-list" id="incomeCategoryList"></div>
             </div>
-            
+
             <div class="category-section">
               <div class="category-header">
                 <span class="category-title" id="expenseCategoriesTitle">Despesas</span>
@@ -351,7 +378,8 @@
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label">Mensagem</label>
-          <input type="text" class="form-input" id="customNotificationMessage" placeholder="Ex: Verificar despesas esta semana">
+          <input type="text" class="form-input" id="customNotificationMessage"
+            placeholder="Ex: Verificar despesas esta semana">
         </div>
         <div class="form-group">
           <label class="form-label">Quando?</label>
@@ -361,11 +389,21 @@
               <span class="custom-select-arrow">▼</span>
             </div>
             <div class="custom-select-dropdown">
-              <div class="custom-select-option" data-value="daily" onclick="selectCustomOption('notificationConditionSelect', 'daily', 'Todos os dias')">📅 Todos os dias</div>
-              <div class="custom-select-option" data-value="month_start" onclick="selectCustomOption('notificationConditionSelect', 'month_start', 'Início do mês')">🆕 Início do mês</div>
-              <div class="custom-select-option" data-value="month_end" onclick="selectCustomOption('notificationConditionSelect', 'month_end', 'Final do mês')">🈹 Final do mês</div>
-              <div class="custom-select-option" data-value="balance_negative" onclick="selectCustomOption('notificationConditionSelect', 'balance_negative', 'Saldo negativo')">📉 Saldo negativo</div>
-              <div class="custom-select-option" data-value="balance_positive" onclick="selectCustomOption('notificationConditionSelect', 'balance_positive', 'Saldo positivo')">📈 Saldo positivo</div>
+              <div class="custom-select-option" data-value="daily"
+                onclick="selectCustomOption('notificationConditionSelect', 'daily', 'Todos os dias')">📅 Todos os dias
+              </div>
+              <div class="custom-select-option" data-value="month_start"
+                onclick="selectCustomOption('notificationConditionSelect', 'month_start', 'Início do mês')">🆕 Início do
+                mês</div>
+              <div class="custom-select-option" data-value="month_end"
+                onclick="selectCustomOption('notificationConditionSelect', 'month_end', 'Final do mês')">🈹 Final do mês
+              </div>
+              <div class="custom-select-option" data-value="balance_negative"
+                onclick="selectCustomOption('notificationConditionSelect', 'balance_negative', 'Saldo negativo')">📉
+                Saldo negativo</div>
+              <div class="custom-select-option" data-value="balance_positive"
+                onclick="selectCustomOption('notificationConditionSelect', 'balance_positive', 'Saldo positivo')">📈
+                Saldo positivo</div>
             </div>
           </div>
         </div>
@@ -374,8 +412,11 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../assets/js/translations.js"></script>
   <script src="../assets/js/notifications.js"></script>
   <script src="../assets/js/settings.js"></script>
+  <script src="../assets/js/pwa.js"></script>
 </body>
+
 </html>

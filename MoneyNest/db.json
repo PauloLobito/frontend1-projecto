@@ -17,6 +17,17 @@
       "date": "2026-04-01"
     }
   ],
+  "todos": [
+    {
+      "id": 1,
+      "title": "Rever despesas da semana",
+      "dueDate": "2026-04-30",
+      "priority": "medium",
+      "completed": false,
+      "createdAt": "2026-04-25T09:00:00.000Z",
+      "updatedAt": "2026-04-25T09:00:00.000Z"
+    }
+  ],
   "settings": {
     "currency": "BRL",
     "language": "pt-PT",
