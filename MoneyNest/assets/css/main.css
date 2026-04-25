@@ -1470,68 +1470,6 @@ a.user-avatar:hover {
   padding: 24px;
 }
 
-.todo-section {
-  margin-top: 18px;
-}
-
-.todo-section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  gap: 10px;
-}
-
-.todo-section-header h2 {
-  font-size: 22px;
-  font-weight: 800;
-}
-
-.todo-count {
-  font-size: 12px;
-  color: var(--muted);
-  font-weight: 700;
-}
-
-.todo-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.todo-form-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 10px;
-}
-
-.todo-submit {
-  max-width: 180px;
-}
-
-#todoStatusCanvas {
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  border: 1px solid var(--line);
-}
-
-.todo-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.todo-empty {
-  color: var(--muted);
-  font-size: 14px;
-  text-align: center;
-  padding: 16px;
-  border: 1px dashed var(--line);
-  border-radius: 10px;
-}
-
 .records-filters {
   display: flex;
   gap: 12px;
@@ -2053,15 +1991,6 @@ select.form-input {
 
   .records-section {
     padding: 16px;
-  }
-
-  .todo-form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .todo-submit {
-    max-width: none;
-    width: 100%;
   }
 
   .records-filters {

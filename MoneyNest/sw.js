@@ -1,4 +1,4 @@
-const CACHE_NAME = 'moneynest-cache-v1';
+const CACHE_NAME = 'moneynest-cache-v2';
 const URLS_TO_CACHE = [
     './pages/index.html',
     './pages/settings.html',
@@ -12,8 +12,6 @@ const URLS_TO_CACHE = [
     './assets/js/auth.js',
     './assets/js/notifications.js',
     './assets/js/mock-api.js',
-    './assets/js/todo-item.js',
-    './assets/js/todo.js',
     './assets/js/pwa.js',
     './assets/js/translations.js',
     './manifest.webmanifest'

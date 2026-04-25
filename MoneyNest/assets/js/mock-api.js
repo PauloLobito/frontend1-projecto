@@ -8,10 +8,6 @@
  * - POST   /api/records     - Criar novo registo
  * - PUT    /api/records/:id - Atualizar registo
  * - DELETE /api/records/:id - Eliminar registo
- * - GET    /api/todos       - Listar todos os TODOs
- * - POST   /api/todos       - Criar TODO
- * - PUT    /api/todos/:id   - Atualizar TODO
- * - DELETE /api/todos/:id   - Eliminar TODO
  * - GET    /api/settings    - Obter definições
  * - PUT    /api/settings   - Atualizar definições
  */
@@ -62,53 +58,6 @@ function apiFallback(endpoint, options = {}) {
       localStorage.setItem('moneynest_settings', JSON.stringify(updated));
       return updated;
     }
-  }
-
-  // Todos endpoints
-  if (endpoint === '/api/todos' || endpoint.startsWith('/api/todos/')) {
-    let todos = JSON.parse(localStorage.getItem('moneynest_todos') || '[]');
-
-    if (method === 'GET') {
-      return todos;
-    }
-
-    if (method === 'POST') {
-      const todo = JSON.parse(options.body);
-      const newTodo = {
-        ...todo,
-        id: Date.now(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      todos.push(newTodo);
-      localStorage.setItem('moneynest_todos', JSON.stringify(todos));
-      return newTodo;
-    }
-
-    if (method === 'PUT') {
-      const id = parseInt(endpoint.split('/').pop(), 10);
-      const payload = JSON.parse(options.body);
-      const index = todos.findIndex(t => t.id === id);
-      if (index !== -1) {
-        todos[index] = {
-          ...todos[index],
-          ...payload,
-          updatedAt: new Date().toISOString()
-        };
-        localStorage.setItem('moneynest_todos', JSON.stringify(todos));
-        return todos[index];
-      }
-      return payload;
-    }
-
-    if (method === 'DELETE') {
-      const id = parseInt(endpoint.split('/').pop(), 10);
-      todos = todos.filter(t => t.id !== id);
-      localStorage.setItem('moneynest_todos', JSON.stringify(todos));
-      return { success: true };
-    }
-
-    return todos;
   }
 
   // Records endpoints
@@ -190,42 +139,6 @@ async function apiUpdateRecord(id, record) {
  */
 async function apiDeleteRecord(id) {
   return apiFetch(`/api/records/${id}`, {
-    method: 'DELETE'
-  });
-}
-
-/**
- * Obter todos os TODOs
- */
-async function apiGetTodos() {
-  return apiFetch('/api/todos');
-}
-
-/**
- * Criar TODO
- */
-async function apiCreateTodo(todo) {
-  return apiFetch('/api/todos', {
-    method: 'POST',
-    body: JSON.stringify(todo)
-  });
-}
-
-/**
- * Atualizar TODO
- */
-async function apiUpdateTodo(id, todo) {
-  return apiFetch(`/api/todos/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(todo)
-  });
-}
-
-/**
- * Eliminar TODO
- */
-async function apiDeleteTodo(id) {
-  return apiFetch(`/api/todos/${id}`, {
     method: 'DELETE'
   });
 }

@@ -280,7 +280,7 @@
 
         <div class="records-section">
           <div class="records-filters">
-            <button class="filter-btn active" data-filter="all" onclick="filterRecords('all')">Todos</button>
+            <button class="filter-btn active" data-filter="all" onclick="filterRecords('all')">Tudo</button>
             <button class="filter-btn" data-filter="income" onclick="filterRecords('income')">Receitas</button>
             <button class="filter-btn" data-filter="expense" onclick="filterRecords('expense')">Despesas</button>
           </div>
@@ -293,29 +293,6 @@
           </div>
         </div>
 
-        <div class="records-section todo-section">
-          <div class="todo-section-header">
-            <h2>TODOs</h2>
-            <span id="todoCount" class="todo-count">0/0 concluidos</span>
-          </div>
-
-          <form id="todoForm" class="todo-form">
-            <div class="todo-form-grid">
-              <input type="text" class="form-input" id="todoTitle" placeholder="Titulo do TODO" required minlength="3"
-                maxlength="80">
-              <input type="date" class="form-input" id="todoDueDate" required>
-              <select class="form-input" id="todoPriority">
-                <option value="low">Prioridade baixa</option>
-                <option value="medium" selected>Prioridade media</option>
-                <option value="high">Prioridade alta</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-confirm todo-submit">Criar TODO</button>
-          </form>
-
-          <canvas id="todoStatusCanvas" width="340" height="40" aria-label="Resumo dos TODOs"></canvas>
-          <div id="todoList" class="todo-list"></div>
-        </div>
       </section>
     </main>
   </div>
@@ -477,37 +454,6 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="todoEditModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Editar TODO</h2>
-        <button class="modal-close" onclick="closeEditTodoModal()">&times;</button>
-      </div>
-      <form id="editTodoForm" class="modal-body">
-        <div class="form-group">
-          <label class="form-label" for="editTodoTitle">Titulo</label>
-          <input type="text" class="form-input" id="editTodoTitle" required minlength="3" maxlength="80">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="editTodoDueDate">Data limite</label>
-          <input type="date" class="form-input" id="editTodoDueDate" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="editTodoPriority">Prioridade</label>
-          <select class="form-input" id="editTodoPriority">
-            <option value="low">Prioridade baixa</option>
-            <option value="medium">Prioridade media</option>
-            <option value="high">Prioridade alta</option>
-          </select>
-        </div>
-        <div class="modal-footer">
-          <button class="btn-cancel" type="button" onclick="closeEditTodoModal()">Cancelar</button>
-          <button class="btn-confirm" type="submit">Guardar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- Custom Notification Modal -->
   <div class="modal-overlay" id="customNotificationModal">
     <div class="modal">
@@ -526,7 +472,7 @@
         <div class="form-group">
           <label class="form-label">Quando?</label>
           <select class="form-input" id="customNotificationCondition">
-            <option value="daily">Todos os dias</option>
+            <option value="daily">Diariamente</option>
             <option value="month_start">Início do mês</option>
             <option value="month_end">Final do mês</option>
             <option value="balance_negative">Quando saldo negativo</option>
@@ -543,8 +489,6 @@
   <script src="../assets/js/translations.js"></script>
   <script src="../assets/js/dashboard.js"></script>
   <script src="../assets/js/notifications.js"></script>
-  <script src="../assets/js/todo-item.js"></script>
-  <script src="../assets/js/todo.js"></script>
   <script src="../assets/js/pwa.js"></script>
 </body>
 

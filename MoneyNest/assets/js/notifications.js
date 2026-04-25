@@ -198,7 +198,7 @@ function createCustomNotification() {
   const message = document.getElementById('customNotificationMessage').value.trim();
   const selectEl = document.getElementById('notificationConditionSelect');
   let condition = 'daily';
-  let conditionText = 'Todos os dias';
+  let conditionText = 'Diariamente';
 
   if (selectEl) {
     const selected = selectEl.querySelector('.custom-select-option.selected');

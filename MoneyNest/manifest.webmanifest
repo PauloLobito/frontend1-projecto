@@ -1,7 +1,7 @@
 {
     "name": "MoneyNest",
     "short_name": "MoneyNest",
-    "description": "Gestao financeira pessoal com dashboard, relatorios e TODOs.",
+    "description": "Gestao financeira pessoal com dashboard e relatorios.",
     "start_url": "./pages/index.html",
     "display": "standalone",
     "background_color": "#07102b",
