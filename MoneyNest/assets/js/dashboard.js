@@ -1209,22 +1209,26 @@ function loadRecords() {
     return;
   }
   
-  list.innerHTML = filteredRecords.map(record => `
-    <div class="record-item ${record.type}">
-      <div class="record-info">
-        <span class="record-description">${record.description}</span>
-        <div class="record-meta">
-          <span class="record-category">${record.category}</span>
-          <span>${formatDate(record.date)}</span>
-        </div>
-      </div>
-      <div class="record-actions">
-        <span class="record-value">${record.type === 'income' ? '+' : '-'}${currencySymbol} ${formatCurrencyValue(record.amount)}</span>
-        <button class="record-edit" onclick="openEditModal(${record.id})" title="Editar">✏️</button>
-        <button class="record-delete" onclick="deleteRecord(${record.id})" title="Eliminar">🗑️</button>
-      </div>
-    </div>
-  `).join('');
+  // Usar o Web Component <money-transaction-card> para cada registo.
+  // Limpamos a lista e adicionamos os elementos programaticamente
+  // para poder adicionar listeners nos eventos customizados do componente.
+  list.innerHTML = '';
+  filteredRecords.forEach(record => {
+    const card = document.createElement('money-transaction-card');
+    card.setAttribute('record-id',       record.id);
+    card.setAttribute('description',     record.description);
+    card.setAttribute('value',           record.amount);
+    card.setAttribute('date',            record.date);
+    card.setAttribute('category',        record.category);
+    card.setAttribute('type',            record.type);
+    card.setAttribute('currency-symbol', currencySymbol);
+
+    // Escutar eventos customizados emitidos pelo componente
+    card.addEventListener('record-edit',   e => openEditModal(e.detail.id));
+    card.addEventListener('record-delete', e => deleteRecord(e.detail.id));
+
+    list.appendChild(card);
+  });
 }
 
 /**
